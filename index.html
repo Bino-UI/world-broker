@@ -5,71 +5,87 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>THE GLOBAL BROKER v12.0</title>
     <style>
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background-color: #1a1a1a; color: #dcdcdc; font-family: 'Malgun Gothic', sans-serif; padding: 10px; margin: 0; transition: all 0.5s; }
-        
-        /* 🚨 CIA 모드 발동 시 화면 전체 붉은 경고등 효과 */
-        body.cia-mode { animation: ciaAlert 2s infinite; }
-        @keyframes ciaAlert {
-            0% { box-shadow: inset 0 0 0px red; border: 2px solid transparent; }
-            50% { box-shadow: inset 0 0 50px red; border: 2px solid red; }
-            100% { box-shadow: inset 0 0 0px red; border: 2px solid transparent; }
-        }
+       /* 👾 레트로 픽셀 아트 테마 CSS */
+@import url('https://cdn.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css');
 
-        .container { width: 100%; max-width: 100%; margin: 0 auto; background: #222; padding: 12px; border: 1px solid #555; border-radius: 8px; }
-        h1 { color: #ccaa00; text-align: center; font-size: 18px; border-bottom: 2px solid #555; padding-bottom: 8px; margin-top: 5px; margin-bottom: 12px; }
-        
-        .top-panel { display: flex; flex-direction: column; gap: 5px; background: #111; padding: 12px; border-radius: 5px; margin-bottom: 10px; border: 1px solid #444; }
-        .top-panel-row { display: flex; justify-content: space-between; align-items: center; width: 100%; }
-        .stat { font-size: 13px; font-weight: bold; color: #ffcc00; }
-        
-        /* 레벨 칭호 뱃지 */
-        .level-badge { background: #333; padding: 4px 8px; border-radius: 4px; color: #fff; font-size: 14px; border: 1px solid #ccaa00; text-shadow: 1px 1px 1px #000; }
-        .level-badge.illuminati { background: #4b0082; color: #e6e6fa; border-color: #9370db; box-shadow: 0 0 10px #9370db; }
+* { 
+    box-sizing: border-box; 
+    -webkit-tap-highlight-color: transparent; 
+    /* 모든 모서리를 도트 게임처럼 직각으로 깎아버림 */
+    border-radius: 0 !important; 
+    font-family: 'Galmuri11', sans-serif !important; /* 도트 폰트 강제 적용 */
+}
 
-        .faction-panel { display: flex; flex-direction: column; gap: 4px; background: #151515; padding: 10px; border-radius: 5px; margin-bottom: 12px; border: 1px dashed #555; font-size: 12px; }
-        .faction-row { display: flex; justify-content: space-between; }
-        
-        .nav-menu { display: flex; gap: 6px; margin-bottom: 12px; }
-        .nav-btn { flex: 1; background: #333; color: #fff; border: 1px solid #555; padding: 12px 2px; font-size: 13px; font-weight: bold; cursor: pointer; border-radius: 6px; transition: all 0.2s; text-align: center; }
-        .nav-btn.active { background: #ccaa00; color: #000; border-color: #ffea75; }
+body { background-color: #111; color: #ddd; padding: 10px; margin: 0; transition: all 0.5s; }
 
-        .game-panel { display: none; background: #2a2a2a; padding: 12px; border: 1px solid #444; border-radius: 5px; min-height: 300px; margin-bottom: 12px; }
-        .game-panel.active-view { display: block; }
+/* 🚨 CIA 모드 발동 시 화면 전체 붉은 경고등 효과 */
+body.cia-mode { animation: ciaAlert 1s infinite; }
+@keyframes ciaAlert {
+    0% { box-shadow: inset 0 0 0px red; border: 4px solid transparent; }
+    50% { box-shadow: inset 0 0 30px red; border: 4px solid red; }
+    100% { box-shadow: inset 0 0 0px red; border: 4px solid transparent; }
+}
 
-        .location-status { text-align: center; margin-bottom: 12px; font-size: 13px; color: #88ff88; font-weight: bold; background: #151515; padding: 10px; border-radius: 4px; border: 1px solid #333; }
-        
-        .item-list-grid { display: flex; flex-direction: column; gap: 10px; }
-        .item-card { background: #1e1e1e; border: 1px solid #444; padding: 12px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
-        .item-info { font-size: 13px; line-height: 1.4; }
-        
-        .btn-sm { background: #444; color: white; border: 1px solid #666; padding: 8px 12px; cursor: pointer; border-radius: 5px; font-weight: bold; font-size: 13px; }
-        .btn-buy { background: #005500; border-color: #00aa00; } 
-        .btn-sell { background: #660000; border-color: #aa0000; } 
-        .btn-action { background: #004488; border-color: #0066cc; }
+.container { width: 100%; max-width: 100%; margin: 0 auto; background: #222; padding: 12px; border: 4px solid #fff; box-shadow: 4px 4px 0px #000; }
+h1 { color: #ffcc00; text-align: center; font-size: 20px; border-bottom: 4px dashed #555; padding-bottom: 12px; margin-top: 5px; margin-bottom: 15px; text-shadow: 2px 2px 0px #000; }
 
-        .mission-card { background: #111; border-left: 4px solid #ccaa00; padding: 12px; margin-bottom: 10px; font-size: 13px; border-radius: 0 6px 6px 0; }
-        .complete-btn { background: #006600; color: white; width: 100%; border: none; padding: 12px; cursor: pointer; font-weight: bold; font-size: 14px; margin-top: 8px; border-radius: 5px; }
-        
-        /* 📦 물류 상하차 창고 UI */
-        .transfer-row { display: flex; align-items: center; justify-content: space-between; background: #151515; padding: 8px; border-radius: 4px; margin-bottom: 6px; border: 1px solid #333; font-size: 12px; }
-        .transfer-btns { display: flex; gap: 5px; }
-        .t-btn { background: #555; color: white; border: none; padding: 6px 10px; border-radius: 4px; font-weight: bold; }
+.top-panel { display: flex; flex-direction: column; gap: 5px; background: #000; padding: 12px; border: 2px solid #555; margin-bottom: 10px; }
+.top-panel-row { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+.stat { font-size: 14px; color: #ffcc00; }
 
-        .disabled { opacity: 0.15; pointer-events: none; filter: blur(0.8px); }
-        .banned-item { opacity: 0.4; border-color: #ff4444; background: #330000 !important; pointer-events: none; }
-        .category-header { color: #88ff88; font-size: 14px; font-weight: bold; margin: 15px 0 5px 0; border-bottom: 1px dashed #555; padding-bottom: 4px; width: 100%; }
+/* 레벨 칭호 뱃지 */
+.level-badge { background: #000; padding: 6px 10px; color: #fff; font-size: 14px; border: 2px solid #ccaa00; text-shadow: 2px 2px 0px #000; }
+.level-badge.illuminati { background: #300; color: #fcc; border-color: #f00; box-shadow: 0 0 10px #f00; }
 
-        #log { background: #000; color: #00ff00; padding: 10px; height: 110px; overflow-y: scroll; font-family: monospace; font-size: 12px; border: 1px solid #333; margin-top: 10px; line-height: 1.4; }
-        .turn-btn { background: #880000; color: white; width: 100%; padding: 16px; font-size: 16px; font-weight: bold; border: 2px solid #ff4444; cursor: pointer; border-radius: 6px; text-shadow: 1px 1px 2px #000; margin-bottom: 10px; }
-        
-        /* 모달 팝업 */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
-        .modal-box { background: #111; border: 2px solid #ff4444; border-radius: 8px; padding: 20px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 0 30px rgba(255,0,0,0.5); }
-        .modal-title { font-size: 20px; font-weight: bold; margin-bottom: 12px; }
-        .modal-text { color: #ddd; font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
-        .modal-btn { background: #444; color: #fff; border: 1px solid #777; padding: 14px; width: 100%; margin: 6px 0; cursor: pointer; border-radius: 6px; font-weight: bold; font-size: 14px; }
-        .modal-btn.danger { background: #880000; border-color: #ff4444; }
+.faction-panel { display: flex; flex-direction: column; gap: 4px; background: #000; padding: 10px; margin-bottom: 12px; border: 2px dashed #555; font-size: 12px; }
+.faction-row { display: flex; justify-content: space-between; }
+
+/* 메뉴 버튼 도트화 */
+.nav-menu { display: flex; gap: 6px; margin-bottom: 12px; }
+.nav-btn { flex: 1; background: #333; color: #fff; border: 2px solid #fff; padding: 14px 2px; font-size: 14px; cursor: pointer; text-align: center; box-shadow: 2px 2px 0px #000; }
+.nav-btn.active { background: #ccaa00; color: #000; border-color: #fff; font-weight: bold; }
+.nav-btn:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #000; } /* 누를 때 푹 들어가는 효과 */
+
+.game-panel { display: none; background: #000; padding: 12px; border: 2px solid #fff; min-height: 300px; margin-bottom: 12px; box-shadow: inset 0 0 10px #222; }
+.game-panel.active-view { display: block; }
+
+.location-status { text-align: center; margin-bottom: 15px; font-size: 14px; color: #0f0; background: #000; padding: 12px; border: 2px solid #0f0; box-shadow: 2px 2px 0px #005500; }
+
+.item-list-grid { display: flex; flex-direction: column; gap: 12px; }
+.item-card { background: #222; border: 2px solid #888; padding: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 3px 3px 0px #000; }
+.item-info { font-size: 13px; line-height: 1.6; }
+
+/* 레트로 버튼 디자인 */
+.btn-sm { background: #444; color: white; border: 2px solid #fff; padding: 10px 14px; cursor: pointer; font-size: 13px; box-shadow: 2px 2px 0px #000; }
+.btn-sm:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #000; }
+.btn-buy { background: #008800; } 
+.btn-sell { background: #880000; } 
+.btn-action { background: #004488; }
+
+.mission-card { background: #111; border-left: 6px solid #ccaa00; border-right: 2px solid #444; border-top: 2px solid #444; border-bottom: 2px solid #444; padding: 12px; margin-bottom: 12px; font-size: 13px; box-shadow: 3px 3px 0px #000; }
+.complete-btn { background: #006600; color: white; width: 100%; border: 2px solid #0f0; padding: 14px; cursor: pointer; font-size: 14px; margin-top: 10px; text-shadow: 1px 1px 0px #000; }
+
+.transfer-row { display: flex; align-items: center; justify-content: space-between; background: #111; padding: 10px; border: 2px solid #555; margin-bottom: 8px; font-size: 12px; }
+.transfer-btns { display: flex; gap: 5px; }
+.t-btn { background: #444; color: white; border: 2px solid #888; padding: 8px 12px; font-family: monospace !important; }
+.t-btn:active { background: #fff; color: #000; }
+
+.disabled { opacity: 0.2; pointer-events: none; }
+.banned-item { opacity: 0.5; border-color: #f00; background: #300 !important; }
+.category-header { color: #0f0; font-size: 15px; margin: 15px 0 8px 0; border-bottom: 2px dashed #0f0; padding-bottom: 4px; text-shadow: 1px 1px 0px #000; }
+
+#log { background: #000; color: #0f0; padding: 12px; height: 120px; overflow-y: scroll; font-size: 12px; border: 2px solid #0f0; margin-top: 10px; line-height: 1.6; box-shadow: inset 0 0 10px rgba(0,255,0,0.2); }
+.turn-btn { background: #a00; color: white; width: 100%; padding: 18px; font-size: 18px; border: 4px solid #f00; cursor: pointer; text-shadow: 2px 2px 0px #000; margin-bottom: 10px; box-shadow: 0 4px 0px #500; }
+.turn-btn:active { transform: translateY(4px); box-shadow: 0 0px 0px #500; }
+
+/* 모달 팝업 도트 스타일 */
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
+.modal-box { background: #000; border: 4px solid #f00; padding: 20px; width: 100%; max-width: 340px; text-align: center; box-shadow: 8px 8px 0px #500; }
+.modal-title { font-size: 22px; margin-bottom: 15px; text-shadow: 2px 2px 0px #000; }
+.modal-text { color: #fff; font-size: 14px; margin-bottom: 20px; line-height: 1.6; }
+.modal-btn { background: #222; color: #fff; border: 2px solid #fff; padding: 14px; width: 100%; margin: 6px 0; cursor: pointer; font-size: 15px; box-shadow: 2px 2px 0px #000; }
+.modal-btn:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #000; }
+.modal-btn.danger { background: #800; border-color: #f00; color: #fff; }
     </style>
 </head>
 <body>
