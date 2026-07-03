@@ -114,7 +114,7 @@
 </head>
 <body>
 
-<audio id="bgm-player" src="Sound/bgm.mp3" loop></audio>
+<audio id="bgm-player" src="bgm.mp3" loop preload="auto"></audio>
 
 <div id="tutorial-modal" class="modal-overlay">
     <div class="modal-box" style="border-color:#0f0; box-shadow: 8px 8px 0px #050;">
@@ -256,14 +256,13 @@
 </div>
 
 <script>
-    // 🌟 Sound 폴더 경로 업데이트 완료
     function playSfx(name) {
         if (name !== 'click') {
-            let clickAudio = new Audio('Sound/click.mp3');
+            let clickAudio = new Audio('click.mp3');
             clickAudio.play().catch(e => {}); 
         }
         if (name) {
-            let mainAudio = new Audio('Sound/' + name + '.mp3');
+            let mainAudio = new Audio(name + '.mp3');
             mainAudio.play().catch(e => {}); 
         }
     }
@@ -273,8 +272,6 @@
         document.getElementById(id).style.display = 'none';
     }
 
-    // 치트모드가 필요하면 이 주석을 풀고 아래를 주석처리
-    // let money = 300000; let powerReputation = 29; 
     let money = 35000; let powerReputation = 0; 
     
     let turn = 1, maxWeight = 20;
@@ -319,12 +316,32 @@
     function addLog(msg) { logEl.innerHTML += "<br>> " + msg; logEl.scrollTop = logEl.scrollHeight; }
     function getTruckWeight() { let w = 0; for(let k in truckInven) w += truckInven[k]; return w; }
 
+    /* =========================================
+       수정된 부분: BGM 토글 함수 강화 (재생 안정성 확보)
+       ========================================= */
     function toggleBGM() {
         const bgm = document.getElementById('bgm-player');
         const btn = document.getElementById('bgm-btn');
-        if (bgmPlaying) { bgm.pause(); btn.innerText = "🎵 BGM: OFF"; btn.style.background = "#333"; } 
-        else { bgm.play().catch(e => addLog("Sound/bgm.mp3 로드 대기중.")); btn.innerText = "🎵 BGM: ON"; btn.style.background = "#006600"; }
-        bgmPlaying = !bgmPlaying;
+        
+        bgm.volume = 0.5; // 강제로 볼륨 지정 (브라우저 캐시 음소거 현상 방지)
+
+        if (bgmPlaying) { 
+            bgm.pause(); 
+            btn.innerText = "🎵 BGM: OFF"; 
+            btn.style.background = "#333"; 
+            bgmPlaying = false;
+        } 
+        else { 
+            // Play가 정상적으로 실행된 후에만 UI를 변경하도록 보완
+            bgm.play().then(() => {
+                btn.innerText = "🎵 BGM: ON"; 
+                btn.style.background = "#006600";
+                bgmPlaying = true;
+            }).catch(e => {
+                addLog("🚨 bgm.mp3 로드 실패. 브라우저 보안 정책에 의해 차단되었습니다.");
+                console.error("BGM 에러:", e);
+            }); 
+        }
     }
 
     function switchTab(tabName) {
@@ -586,7 +603,7 @@
         if (interpolAnger >= 5) {
             interpolAnger = 5;
             resText += "<br><br><strong style='color:#f00;'>[위험] 인터폴 적색 수배가 내려졌습니다!</strong>";
-            showNewsModal("🚨 적색 수배 발령", resText, true, 'alert');
+            showNewsModal("🚨 적색 수배 발령", resText, true, 'alert'); 
         } else {
             showNewsModal(resTitle, resText, isDangerStyle, isDangerStyle ? 'fail' : 'success');
         }
@@ -821,6 +838,15 @@
     }
 
     generateMarketData(); updateUI();
+
+    /* =========================================
+       수정된 부분: 화면 첫 클릭 시 BGM 자동 재생 우회
+       ========================================= */
+    document.body.addEventListener('click', function() {
+        if (!bgmPlaying) {
+            toggleBGM();
+        }
+    }, { once: true });
 </script>
 
 </body>
