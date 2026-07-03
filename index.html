@@ -256,13 +256,14 @@
 </div>
 
 <script>
+    // 🌟 효과음 경로를 모두 Sound/ 폴더 안으로 수정했습니다.
     function playSfx(name) {
         if (name !== 'click') {
-            let clickAudio = new Audio('click.mp3');
+            let clickAudio = new Audio('Sound/click.mp3');
             clickAudio.play().catch(e => {}); 
         }
         if (name) {
-            let mainAudio = new Audio(name + '.mp3');
+            let mainAudio = new Audio('Sound/' + name + '.mp3');
             mainAudio.play().catch(e => {}); 
         }
     }
@@ -316,14 +317,11 @@
     function addLog(msg) { logEl.innerHTML += "<br>> " + msg; logEl.scrollTop = logEl.scrollHeight; }
     function getTruckWeight() { let w = 0; for(let k in truckInven) w += truckInven[k]; return w; }
 
-    /* =========================================
-       수정된 부분: BGM 토글 함수 강화 (재생 안정성 확보)
-       ========================================= */
     function toggleBGM() {
         const bgm = document.getElementById('bgm-player');
         const btn = document.getElementById('bgm-btn');
         
-        bgm.volume = 0.5; // 강제로 볼륨 지정 (브라우저 캐시 음소거 현상 방지)
+        bgm.volume = 0.5;
 
         if (bgmPlaying) { 
             bgm.pause(); 
@@ -332,7 +330,6 @@
             bgmPlaying = false;
         } 
         else { 
-            // Play가 정상적으로 실행된 후에만 UI를 변경하도록 보완
             bgm.play().then(() => {
                 btn.innerText = "🎵 BGM: ON"; 
                 btn.style.background = "#006600";
@@ -839,9 +836,6 @@
 
     generateMarketData(); updateUI();
 
-    /* =========================================
-       수정된 부분: 화면 첫 클릭 시 BGM 자동 재생 우회
-       ========================================= */
     document.body.addEventListener('click', function() {
         if (!bgmPlaying) {
             toggleBGM();
