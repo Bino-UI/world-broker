@@ -20,25 +20,29 @@
         .container { width: 100%; max-width: 100%; margin: 0 auto; background: #222; padding: 12px; border: 4px solid #fff; box-shadow: 4px 4px 0px #000; position: relative; }
         h1 { color: #ffcc00; text-align: center; font-size: 22px; border-bottom: 4px dashed #555; padding-bottom: 12px; margin-top: 5px; margin-bottom: 15px; text-shadow: 2px 2px 0px #000; }
 
-        /* 튜토리얼 전용 스타일 시작 */
+        /* 튜토리얼 전용 스타일 수정됨 (스크롤 문제 해결) */
         #vn-screen {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed; /* absolute에서 fixed로 변경하여 화면에 꽉 차게 고정 */
+            top: 0; left: 0; width: 100vw; height: 100vh;
             background: #000; z-index: 10000; display: flex; flex-direction: column;
-            justify-content: flex-end; padding: 20px; transition: opacity 1s ease-out;
-            overflow: hidden;
+            justify-content: flex-end; padding: 20px; padding-bottom: 40px; /* 모바일 하단바 여백 */
+            transition: opacity 1s ease-out; overflow: hidden;
         }
         
         #vn-bg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-size: cover; background-position: center;
-            filter: brightness(0.3) contrast(1.2); /* 텍스트 가독성을 위해 어둡게 처리 */
+            filter: brightness(0.3) contrast(1.2); 
             transition: background-image 0.5s ease-in-out;
             z-index: 1;
         }
 
         .vn-character {
-            position: absolute; top: 10%; left: 50%; transform: translateX(-50%);
-            width: 80%; max-width: 320px; image-rendering: pixelated; 
+            position: absolute; 
+            bottom: 160px; /* 대화창 바로 위에 위치하도록 bottom으로 기준 변경 */
+            left: 50%; transform: translateX(-50%);
+            width: 80%; max-width: 320px; max-height: 50vh; object-fit: contain;
+            image-rendering: pixelated; 
             filter: drop-shadow(0 0 20px rgba(0,0,0,0.8));
             animation: breathe 3s infinite ease-in-out;
             z-index: 2;
@@ -53,7 +57,7 @@
             background: rgba(10, 10, 10, 0.95); border: 4px solid #fff;
             padding: 20px; min-height: 140px; position: relative;
             box-shadow: 4px 4px 0 #000, inset 0 0 10px rgba(0,255,0,0.1);
-            cursor: pointer; z-index: 3;
+            cursor: pointer; z-index: 3; width: 100%; flex-shrink: 0;
         }
 
         .vn-name {
@@ -171,11 +175,11 @@
 
 <div class="container">
     
-    <!-- 튜토리얼 씬 레이어 (게임 시작 시 기본 표시) -->
+    <!-- 튜토리얼 씬 레이어 -->
     <div id="vn-screen" onclick="nextDialog()">
         <div id="vn-bg"></div>
-        <!-- 캐릭터 파일명 적용 (broker_senior.jpg) -->
-        <img src="broker_senior.jpg" class="vn-character" alt="브로커 선배" id="vn-char-img" onerror="this.src='42ca589e-f73a-44d3-8752-3ea5e3db6943.jpg'">
+        <!-- 확장자 .png로 완벽 수정 -->
+        <img src="broker_senior.png" class="vn-character" alt="브로커 선배" id="vn-char-img">
         
         <div class="vn-dialog-box">
             <div class="vn-name" id="vn-name">브로커 선배</div>
@@ -325,18 +329,18 @@
 
 <script>
     /* =========================================
-       튜토리얼 시스템 로직 (배경 전환 추가)
+       튜토리얼 시스템 로직 (배경 전환 및 .png 확장자 수정)
        ========================================= */
     const tutorialDialogs = [
         // 뒷골목 배경에서 시작
-        { name: "???", text: "신입이냐?", bg: "bg_alley.jpg" },
-        { name: "브로커 선배", text: "표정을 보아하니 아직 피비린내도 못 맡아본 애송이군.<br>내 밑으로 들어온 걸 환영한다.", bg: "bg_alley.jpg" },
-        { name: "브로커 선배", text: "착각하지 마라. 여긴 총알이 날아다니는 전장이 아니다.<br><strong style='color:#0f0;'>돈이 오가는 시장</strong>이지.", bg: "bg_alley.jpg" },
+        { name: "???", text: "신입이냐?", bg: "bg_alley.png" },
+        { name: "브로커 선배", text: "표정을 보아하니 아직 피비린내도 못 맡아본 애송이군.<br>내 밑으로 들어온 걸 환영한다.", bg: "bg_alley.png" },
+        { name: "브로커 선배", text: "착각하지 마라. 여긴 총알이 날아다니는 전장이 아니다.<br><strong style='color:#0f0;'>돈이 오가는 시장</strong>이지.", bg: "bg_alley.png" },
         // 폐창고 배경으로 전환
-        { name: "브로커 선배", text: "여기가 네가 앞으로 일할 거점이다.<br><strong>[암시장]</strong>에서 무기를 싸게 사서, <strong>[작전지도]</strong>를 통해 아프리카나 중동으로 날아가 비싸게 파는 거다.", bg: "bg_warehouse.jpg" },
-        { name: "브로커 선배", text: "중요한 건 <strong style='color:#fa0;'>'상하차'</strong>야.<br>산 무기는 일단 창고에 쌓인다. 네가 직접 트럭에 상차(싣기)를 해야 현지로 가져갈 수 있어.", bg: "bg_warehouse.jpg" },
-        { name: "브로커 선배", text: "그리고 명심해. 호위할 <strong>[용병]</strong> 없이 혼자 돌아다니다간 암살자의 표적이 되기 십상이다. 목숨값은 아끼지 마라.", bg: "bg_warehouse.jpg" },
-        { name: "브로커 선배", text: "진짜 브로커는 총을 파는 사람이 아니라...<br>세계를 움직이는 사람이다. <strong style='color:#f00;'>살아남아서 증명해 봐.</strong>", bg: "bg_warehouse.jpg" }
+        { name: "브로커 선배", text: "여기가 네가 앞으로 일할 거점이다.<br><strong>[암시장]</strong>에서 무기를 싸게 사서, <strong>[작전지도]</strong>를 통해 아프리카나 중동으로 날아가 비싸게 파는 거다.", bg: "bg_warehouse.png" },
+        { name: "브로커 선배", text: "중요한 건 <strong style='color:#fa0;'>'상하차'</strong>야.<br>산 무기는 일단 창고에 쌓인다. 네가 직접 트럭에 상차(싣기)를 해야 현지로 가져갈 수 있어.", bg: "bg_warehouse.png" },
+        { name: "브로커 선배", text: "그리고 명심해. 호위할 <strong>[용병]</strong> 없이 혼자 돌아다니다간 암살자의 표적이 되기 십상이다. 목숨값은 아끼지 마라.", bg: "bg_warehouse.png" },
+        { name: "브로커 선배", text: "진짜 브로커는 총을 파는 사람이 아니라...<br>세계를 움직이는 사람이다. <strong style='color:#f00;'>살아남아서 증명해 봐.</strong>", bg: "bg_warehouse.png" }
     ];
 
     let currentDialogIndex = 0;
@@ -376,7 +380,7 @@
         if (currentDialogIndex < tutorialDialogs.length) {
             let dialog = tutorialDialogs[currentDialogIndex];
             
-            // 배경 이미지가 지정되어 있다면 배경 변경
+            // 배경 이미지가 지정되어 있다면 배경 변경 (없으면 기존 배경 유지)
             if (dialog.bg) {
                 document.getElementById('vn-bg').style.backgroundImage = `url('${dialog.bg}')`;
             }
