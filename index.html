@@ -20,63 +20,75 @@
         .container { width: 100%; max-width: 100%; margin: 0 auto; background: #222; padding: 12px; border: 4px solid #fff; box-shadow: 4px 4px 0px #000; position: relative; }
         h1 { color: #ffcc00; text-align: center; font-size: 22px; border-bottom: 4px dashed #555; padding-bottom: 12px; margin-top: 5px; margin-bottom: 15px; text-shadow: 2px 2px 0px #000; }
 
-        /* 튜토리얼 전용 스타일 수정됨 (스크롤 문제 해결) */
+        /* 튜토리얼 VN(비주얼 노벨) 화면 전용 스타일 */
         #vn-screen {
-            position: fixed; /* absolute에서 fixed로 변경하여 화면에 꽉 차게 고정 */
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #000; z-index: 10000; display: flex; flex-direction: column;
-            justify-content: flex-end; padding: 20px; padding-bottom: 40px; /* 모바일 하단바 여백 */
-            transition: opacity 1s ease-out; overflow: hidden;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #000; z-index: 10000; display: flex; flex-direction: column;
+            justify-content: flex-end; transition: background-image 1s ease-in-out, opacity 1s ease-out;
+            background-size: cover; background-position: center;
         }
         
-        #vn-bg {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-size: cover; background-position: center;
-            filter: brightness(0.3) contrast(1.2); 
-            transition: background-image 0.5s ease-in-out;
-            z-index: 1;
-        }
-
         .vn-character {
-            position: absolute; 
-            bottom: 160px; /* 대화창 바로 위에 위치하도록 bottom으로 기준 변경 */
-            left: 50%; transform: translateX(-50%);
-            width: 80%; max-width: 320px; max-height: 50vh; object-fit: contain;
+            position: absolute; bottom: 150px; left: 50%; transform: translateX(-50%);
+            width: 160px; /* 모바일 화면에 맞게 크기 대폭 축소 */
             image-rendering: pixelated; 
-            filter: drop-shadow(0 0 20px rgba(0,0,0,0.8));
+            filter: drop-shadow(0 0 15px rgba(0,0,0,0.8));
             animation: breathe 3s infinite ease-in-out;
-            z-index: 2;
+            z-index: 10001;
         }
         
         @keyframes breathe {
             0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(-5px); }
+            50% { transform: translateX(-50%) translateY(-3px); }
+        }
+
+        .vn-dialog-container {
+            width: 100%; padding: 15px; z-index: 10002; margin-bottom: 10px;
         }
 
         .vn-dialog-box {
-            background: rgba(10, 10, 10, 0.95); border: 4px solid #fff;
-            padding: 20px; min-height: 140px; position: relative;
+            background: rgba(10, 10, 10, 0.95); border: 3px solid #fff;
+            padding: 20px 15px; min-height: 120px; position: relative;
             box-shadow: 4px 4px 0 #000, inset 0 0 10px rgba(0,255,0,0.1);
-            cursor: pointer; z-index: 3; width: 100%; flex-shrink: 0;
+            cursor: pointer;
         }
 
         .vn-name {
-            position: absolute; top: -16px; left: -4px;
-            background: #fff; color: #000; font-weight: bold; font-size: 16px;
-            padding: 4px 12px; border: 4px solid #000; box-shadow: 4px 4px 0 #000;
+            position: absolute; top: -14px; left: -3px;
+            background: #fff; color: #000; font-weight: bold; font-size: 14px;
+            padding: 4px 10px; border: 3px solid #000; box-shadow: 3px 3px 0 #000;
         }
 
         .vn-text {
-            color: #ddd; font-size: 15px; line-height: 1.6;
-            text-shadow: 1px 1px 0 #000; min-height: 48px;
+            color: #ddd; font-size: 14px; line-height: 1.6;
+            text-shadow: 1px 1px 0 #000; margin-top: 5px;
         }
         
         .vn-next-indicator {
-            position: absolute; bottom: 10px; right: 15px;
-            color: #ffcc00; font-size: 12px; animation: blink 1s infinite;
+            position: absolute; bottom: 8px; right: 12px;
+            color: #ffcc00; font-size: 11px; animation: blink 1s infinite;
         }
-        /* 튜토리얼 전용 스타일 끝 */
 
+        /* 인게임 가이드 하이라이트 스타일 */
+        @keyframes pulse-highlight {
+            0% { box-shadow: 0 0 0 0 rgba(0, 255, 0, 0.7); border-color: #0f0; }
+            70% { box-shadow: 0 0 0 6px rgba(0, 255, 0, 0); border-color: #fff; }
+            100% { box-shadow: 0 0 0 0 rgba(0, 255, 0, 0); border-color: #0f0; }
+        }
+        .highlight-pulse { 
+            animation: pulse-highlight 1.5s infinite !important; 
+            position: relative; z-index: 100;
+            color: #0f0 !important; font-weight: bold;
+        }
+
+        #in-game-guide-box {
+            display: none; position: fixed; top: 10px; left: 10px; right: 10px;
+            background: rgba(0, 50, 0, 0.9); border: 2px solid #0f0; color: #fff;
+            padding: 12px; z-index: 9000; box-shadow: 4px 4px 0px #000; font-size: 13px;
+            text-align: center; text-shadow: 1px 1px 0px #000;
+        }
+
+        /* 기존 게임 스타일들 */
         .top-panel { display: flex; flex-direction: column; gap: 5px; background: #000; padding: 12px; border: 2px solid #555; margin-bottom: 10px; }
         .top-panel-row { display: flex; justify-content: space-between; align-items: center; width: 100%; }
         .stat { font-size: 14px; color: #ffcc00; }
@@ -171,27 +183,29 @@
 </head>
 <body>
 
-<audio id="bgm-player" src="bgm.mp3" loop preload="auto"></audio>
+<audio id="bgm-player" src="./bgm.mp3" loop preload="auto"></audio>
 
 <div class="container">
     
     <!-- 튜토리얼 씬 레이어 -->
     <div id="vn-screen" onclick="nextDialog()">
-        <div id="vn-bg"></div>
-        <!-- 확장자 .png로 완벽 수정 -->
-        <img src="broker_senior.png" class="vn-character" alt="브로커 선배" id="vn-char-img">
+        <img src="./broker_senior.png" class="vn-character" alt="브로커 선배" onerror="this.src=''; this.alt='(이미지 로드 실패: broker_senior.png)'">
         
-        <div class="vn-dialog-box">
-            <div class="vn-name" id="vn-name">브로커 선배</div>
-            <div class="vn-text" id="vn-text">...</div>
-            <div class="vn-next-indicator">▼ Click</div>
+        <div class="vn-dialog-container">
+            <div class="vn-dialog-box">
+                <div class="vn-name" id="vn-name">이름</div>
+                <div class="vn-text" id="vn-text">...</div>
+                <div class="vn-next-indicator">▼ Click</div>
+            </div>
         </div>
     </div>
 
-    <!-- 기존 튜토리얼 모달 -->
+    <!-- 인게임 가이드 알림창 -->
+    <div id="in-game-guide-box">가이드 내용</div>
+
     <div id="tutorial-modal" class="modal-overlay">
         <div class="modal-box" style="border-color:#0f0; box-shadow: 8px 8px 0px #050;">
-            <div class="modal-title" style="color:#0f0;">📖 초보자 작전 가이드</div>
+            <div class="modal-title" style="color:#0f0;">📖 작전 가이드</div>
             <div class="modal-text">
                 <strong style="color:#fa0;">1. 기본 흐름</strong><br>
                 [거점]에서 무기와 용병을 사고, 턴을 넘겨 [아프리카/중동]으로 이동해 비싸게 팔거나 의뢰를 깨서 돈을 버는 게임입니다.<br><br>
@@ -204,7 +218,7 @@
                 <strong style="color:#fa0;">5. 호위 병력 (이벤트 대비)</strong><br>
                 게임을 진행하다 보면 암살자나 적의 기습에 대비해 항상 일정 수의 <strong>[용병]</strong>을 부대에 대기시켜 두어야 목숨을 부지할 수 있습니다.
             </div>
-            <button class="modal-btn" style="background:#004400;" onclick="closeModal('tutorial-modal')">확인 완료</button>
+            <button class="modal-btn" style="background:#004400;" onclick="closeModal('tutorial-modal')">확인</button>
         </div>
     </div>
 
@@ -329,18 +343,15 @@
 
 <script>
     /* =========================================
-       튜토리얼 시스템 로직 (배경 전환 및 .png 확장자 수정)
+       1. 튜토리얼 (스토리 연출) 시스템
        ========================================= */
+    // 여기에 스토리를 짜오시면 됩니다. bg는 배경 이미지 파일명입니다.
     const tutorialDialogs = [
-        // 뒷골목 배경에서 시작
-        { name: "???", text: "신입이냐?", bg: "bg_alley.png" },
-        { name: "브로커 선배", text: "표정을 보아하니 아직 피비린내도 못 맡아본 애송이군.<br>내 밑으로 들어온 걸 환영한다.", bg: "bg_alley.png" },
-        { name: "브로커 선배", text: "착각하지 마라. 여긴 총알이 날아다니는 전장이 아니다.<br><strong style='color:#0f0;'>돈이 오가는 시장</strong>이지.", bg: "bg_alley.png" },
-        // 폐창고 배경으로 전환
-        { name: "브로커 선배", text: "여기가 네가 앞으로 일할 거점이다.<br><strong>[암시장]</strong>에서 무기를 싸게 사서, <strong>[작전지도]</strong>를 통해 아프리카나 중동으로 날아가 비싸게 파는 거다.", bg: "bg_warehouse.png" },
-        { name: "브로커 선배", text: "중요한 건 <strong style='color:#fa0;'>'상하차'</strong>야.<br>산 무기는 일단 창고에 쌓인다. 네가 직접 트럭에 상차(싣기)를 해야 현지로 가져갈 수 있어.", bg: "bg_warehouse.png" },
-        { name: "브로커 선배", text: "그리고 명심해. 호위할 <strong>[용병]</strong> 없이 혼자 돌아다니다간 암살자의 표적이 되기 십상이다. 목숨값은 아끼지 마라.", bg: "bg_warehouse.png" },
-        { name: "브로커 선배", text: "진짜 브로커는 총을 파는 사람이 아니라...<br>세계를 움직이는 사람이다. <strong style='color:#f00;'>살아남아서 증명해 봐.</strong>", bg: "bg_warehouse.png" }
+        { name: "???", bg: "bg_alley.png", text: "신입이냐?" },
+        { name: "브로커 선배", bg: "bg_alley.png", text: "표정을 보아하니 아직 피비린내도 못 맡아본 애송이군.<br>내 밑으로 들어온 걸 환영한다." },
+        { name: "브로커 선배", bg: "bg_alley.png", text: "착각하지 마라. 여긴 총알이 날아다니는 전장이 아니다.<br><strong style='color:#0f0;'>돈이 오가는 시장</strong>이지." },
+        { name: "브로커 선배", bg: "bg_warehouse.png", text: "여기가 우리의 '비밀 거점'이다.<br>앞으로 여기서 무기를 매입하고, 현지로 가져갈 준비를 하게 될 거다." },
+        { name: "브로커 선배", bg: "bg_warehouse.png", text: "진짜 브로커는 총을 파는 사람이 아니라...<br>세계를 움직이는 사람이다. <strong style='color:#f00;'>살아남아서 증명해 봐.</strong>" }
     ];
 
     let currentDialogIndex = 0;
@@ -379,14 +390,15 @@
     function showCurrentDialog() {
         if (currentDialogIndex < tutorialDialogs.length) {
             let dialog = tutorialDialogs[currentDialogIndex];
-            
-            // 배경 이미지가 지정되어 있다면 배경 변경 (없으면 기존 배경 유지)
-            if (dialog.bg) {
-                document.getElementById('vn-bg').style.backgroundImage = `url('${dialog.bg}')`;
-            }
-
             document.getElementById('vn-name').innerText = dialog.name;
-            typeWriter(dialog.text, 'vn-text', 20); 
+            
+            // 대사에 맞춰 배경화면 부드럽게 변경
+            let vnScreen = document.getElementById('vn-screen');
+            if (dialog.bg) {
+                vnScreen.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.8)), url('./${dialog.bg}')`;
+            }
+            
+            typeWriter(dialog.text, 'vn-text', 25); // 타이핑 속도를 살짝 늦춤 (몰입감)
         } else {
             endTutorial();
         }
@@ -412,17 +424,74 @@
         vnScreen.style.opacity = '0';
         setTimeout(() => {
             vnScreen.style.display = 'none';
-            addLog("🟢 튜토리얼 종료. 암시장에 오신 것을 환영합니다.");
+            addLog("🟢 통신 종료. 작전 권한이 이양되었습니다.");
+            
+            // 튜토리얼 끝나자마자 인게임 가이드(버튼 깜빡임) 시작!
+            startInteractiveGuide();
         }, 1000);
     }
 
+    /* =========================================
+       2. 인게임 네비게이션 가이드 (반짝임 효과)
+       ========================================= */
+    let guideStep = 0;
+    
+    function startInteractiveGuide() {
+        advanceGuide(1); // 1단계 시작
+    }
+
+    function advanceGuide(step) {
+        guideStep = step;
+        let guideBox = document.getElementById('in-game-guide-box');
+        
+        // 기존 반짝임 모두 제거
+        document.querySelectorAll('.highlight-pulse').forEach(el => el.classList.remove('highlight-pulse'));
+
+        if (step === 1) {
+            guideBox.style.display = 'block';
+            guideBox.innerHTML = "☝️ 가장 먼저, 무기를 사기 위해 <strong>[💼 암시장]</strong> 탭을 누르세요.";
+            document.getElementById('menu-weapon').classList.add('highlight-pulse');
+        } 
+        else if (step === 2) {
+            guideBox.innerHTML = "☝️ 권총이나 AK-47의 <strong>[매입]</strong> 버튼을 1번 누르세요.";
+            // 첫 번째 매입 버튼에 반짝임 추가 (updateUI 후에 렌더링되므로 약간의 딜레이 필요)
+            setTimeout(() => {
+                let firstBuyBtn = document.querySelector('.btn-buy');
+                if(firstBuyBtn) firstBuyBtn.classList.add('highlight-pulse');
+            }, 100);
+        }
+        else if (step === 3) {
+            guideBox.innerHTML = "☝️ 무기를 샀습니다! 이제 <strong>[🗺️ 작전지도]</strong> 탭으로 돌아가세요.";
+            document.getElementById('menu-map').classList.add('highlight-pulse');
+        }
+        else if (step === 4) {
+            guideBox.innerHTML = "☝️ 방금 산 무기는 창고에 있습니다. 트럭으로 <strong>[상차 ▶]</strong> 하세요.";
+            setTimeout(() => {
+                let transferArea = document.getElementById('transfer-list');
+                if(transferArea) transferArea.classList.add('highlight-pulse');
+            }, 100);
+        }
+        else if (step === 5) {
+            guideBox.innerHTML = "☝️ 트럭에 무기를 실었습니다! 아래에서 <strong>[📍 아프리카 선택]</strong>을 누르세요.";
+            document.getElementById('btn-loc-africa').classList.add('highlight-pulse');
+        }
+        else if (step === 6) {
+            guideBox.innerHTML = "☝️ 목적지를 골랐습니다. 마지막으로 맨 아래 <strong>[출발]</strong> 버튼을 누르세요!";
+            document.getElementById('turn-action-btn').classList.add('highlight-pulse');
+        }
+        else if (step === 7) {
+            guideBox.style.display = 'none'; // 가이드 종료
+            addLog("🟢 기초 가이드가 모두 완료되었습니다. 행운을 빕니다!");
+        }
+    }
+
+    // 윈도우 로드 시 첫 대사 출력
     window.onload = () => {
         showCurrentDialog();
     };
 
-
     /* =========================================
-       기존 게임 로직
+       3. 기존 게임 로직 (가이드 연동 추가)
        ========================================= */
     function playSfx(name) {
         if (name !== 'click') {
@@ -441,13 +510,11 @@
     }
 
     let money = 35000; let powerReputation = 0; 
-    
     let turn = 1, maxWeight = 20;
     let currentLocation = 'basecamp', travelTimer = 0, selectedLocation = 'basecamp'; 
     let interpolAnger = 0, interpolSafeTurns = 0;
     let unBannedWeapon = null, ciaActive = false, spyTargetWeapon = null;
     let bgmPlaying = false;
-    
     let strikeEventTurns = 0, marketSurgeTurns = 0, totalWarTurns = 0, totalWarLoc = null;
 
     const levelTitles = ["", "풋내기", "뒷골목 무기상", "지역 무기상", "다크웹 거래상", "국제 무기상", "세계 암시장 연합장", "일루미나티"];
@@ -487,25 +554,9 @@
     function toggleBGM() {
         const bgm = document.getElementById('bgm-player');
         const btn = document.getElementById('bgm-btn');
-        
         bgm.volume = 0.5;
-
-        if (bgmPlaying) { 
-            bgm.pause(); 
-            btn.innerText = "🎵 BGM: OFF"; 
-            btn.style.background = "#333"; 
-            bgmPlaying = false;
-        } 
-        else { 
-            bgm.play().then(() => {
-                btn.innerText = "🎵 BGM: ON"; 
-                btn.style.background = "#006600";
-                bgmPlaying = true;
-            }).catch(e => {
-                addLog("🚨 bgm.mp3 로드 실패. 브라우저 보안 정책에 의해 차단되었습니다.");
-                console.error("BGM 에러:", e);
-            }); 
-        }
+        if (bgmPlaying) { bgm.pause(); btn.innerText = "🎵 BGM: OFF"; btn.style.background = "#333"; bgmPlaying = false; } 
+        else { bgm.play().then(() => { btn.innerText = "🎵 BGM: ON"; btn.style.background = "#006600"; bgmPlaying = true; }).catch(e => { console.error(e); }); }
     }
 
     function switchTab(tabName) {
@@ -513,6 +564,10 @@
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         document.getElementById('panel-' + tabName).classList.add('active-view');
         document.getElementById('menu-' + tabName).classList.add('active');
+        
+        // 가이드 연동
+        if (guideStep === 1 && tabName === 'weapon') advanceGuide(2);
+        if (guideStep === 3 && tabName === 'map') advanceGuide(4);
     }
 
     function moveItem(k, toTruck, isAll) {
@@ -525,6 +580,8 @@
             } else {
                 if (baseWarehouse[k] > 0 && getTruckWeight() < maxWeight) { baseWarehouse[k]--; truckInven[k]++; }
             }
+            // 가이드 연동 (상차 성공 시)
+            if (guideStep === 4) advanceGuide(5);
         } else {
             if (isAll) {
                 let amount = truckInven[k];
@@ -550,6 +607,9 @@
         if (targetLoc === 'midEast' && lvl < 3) { addLog("⚠️ 중동 항로 차단됨 (Lv.3 필요)"); return; }
         selectedLocation = targetLoc;
         updateUI();
+        
+        // 가이드 연동
+        if (guideStep === 5 && targetLoc === 'africa') advanceGuide(6);
     }
 
     function showNewsModal(title, text, isDanger = false, customSfx = 'telegram') {
@@ -791,6 +851,10 @@
             
             turn++;
             updateUI();
+            
+            // 가이드 종료 조건
+            if (guideStep === 6) advanceGuide(7);
+            
             return;
         }
 
@@ -939,6 +1003,9 @@
         playSfx('buy'); 
         let finalCost = (marketSurgeTurns > 0) ? Math.floor(buyPrices[k] * 1.2) : buyPrices[k];
         if (marketWeapons[k] > 0 && money >= finalCost) { money -= finalCost; marketWeapons[k]--; baseWarehouse[k]++; checkCIA(); updateUI(); } 
+        
+        // 가이드 연동
+        if (guideStep === 2) advanceGuide(3);
     }
 
     function sellWeapon(k, isAll) { 
