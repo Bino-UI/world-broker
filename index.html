@@ -20,26 +20,26 @@
         .container { width: 100%; max-width: 100%; margin: 0 auto; background: #222; padding: 12px; border: 4px solid #fff; box-shadow: 4px 4px 0px #000; position: relative; }
         h1 { color: #ffcc00; text-align: center; font-size: 22px; border-bottom: 4px dashed #555; padding-bottom: 12px; margin-top: 5px; margin-bottom: 15px; text-shadow: 2px 2px 0px #000; }
 
-        /* 튜토리얼 VN(비주얼 노벨) 화면 전용 스타일 */
+        /* 튜토리얼 VN 화면 전용 스타일 */
         #vn-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: #000; z-index: 10000; display: flex; flex-direction: column;
-            justify-content: flex-end; transition: background-image 1s ease-in-out, opacity 1s ease-out;
+            justify-content: flex-end; transition: background-image 0.5s ease-in-out, opacity 1s ease-out;
             background-size: cover; background-position: center;
         }
         
+        /* 캐릭터 좌측 하단 배치 */
         .vn-character {
-            position: absolute; bottom: 150px; left: 50%; transform: translateX(-50%);
-            width: 160px; /* 모바일 화면에 맞게 크기 대폭 축소 */
-            image-rendering: pixelated; 
+            position: absolute; bottom: 150px; left: 15px; /* 좌측 정렬로 변경 */
+            width: 140px; image-rendering: pixelated; 
             filter: drop-shadow(0 0 15px rgba(0,0,0,0.8));
-            animation: breathe 3s infinite ease-in-out;
+            animation: breathe-left 3s infinite ease-in-out;
             z-index: 10001;
         }
         
-        @keyframes breathe {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(-3px); }
+        @keyframes breathe-left {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
         }
 
         .vn-dialog-container {
@@ -189,7 +189,7 @@
     
     <!-- 튜토리얼 씬 레이어 -->
     <div id="vn-screen" onclick="nextDialog()">
-        <img src="./broker_senior.png" class="vn-character" alt="브로커 선배" onerror="this.src=''; this.alt='(이미지 로드 실패: broker_senior.png)'">
+        <img src="./broker_senior.png" class="vn-character" alt="브로커 선배" onerror="this.src=''; this.alt='(이미지 에러)'">
         
         <div class="vn-dialog-container">
             <div class="vn-dialog-box">
@@ -359,6 +359,17 @@
     let typeInterval;
     let isTutorialActive = true;
 
+    // 💡 이미지 미리 불러오기 (로딩 깜빡임 방지)
+    window.onload = () => {
+        const preloadedImages = [];
+        ['./bg_alley.png', './bg_warehouse.png', './broker_senior.png'].forEach(src => {
+            let img = new Image();
+            img.src = src;
+            preloadedImages.push(img);
+        });
+        showCurrentDialog(); // 준비 완료 후 첫 대사 출력
+    };
+
     function typeWriter(text, elementId, speed) {
         if (isTyping) return;
         isTyping = true;
@@ -398,7 +409,7 @@
                 vnScreen.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.8)), url('./${dialog.bg}')`;
             }
             
-            typeWriter(dialog.text, 'vn-text', 25); // 타이핑 속도를 살짝 늦춤 (몰입감)
+            typeWriter(dialog.text, 'vn-text', 25); 
         } else {
             endTutorial();
         }
@@ -437,14 +448,13 @@
     let guideStep = 0;
     
     function startInteractiveGuide() {
-        advanceGuide(1); // 1단계 시작
+        advanceGuide(1); 
     }
 
     function advanceGuide(step) {
         guideStep = step;
         let guideBox = document.getElementById('in-game-guide-box');
         
-        // 기존 반짝임 모두 제거
         document.querySelectorAll('.highlight-pulse').forEach(el => el.classList.remove('highlight-pulse'));
 
         if (step === 1) {
@@ -454,7 +464,6 @@
         } 
         else if (step === 2) {
             guideBox.innerHTML = "☝️ 권총이나 AK-47의 <strong>[매입]</strong> 버튼을 1번 누르세요.";
-            // 첫 번째 매입 버튼에 반짝임 추가 (updateUI 후에 렌더링되므로 약간의 딜레이 필요)
             setTimeout(() => {
                 let firstBuyBtn = document.querySelector('.btn-buy');
                 if(firstBuyBtn) firstBuyBtn.classList.add('highlight-pulse');
@@ -480,27 +489,23 @@
             document.getElementById('turn-action-btn').classList.add('highlight-pulse');
         }
         else if (step === 7) {
-            guideBox.style.display = 'none'; // 가이드 종료
+            guideBox.style.display = 'none'; 
             addLog("🟢 기초 가이드가 모두 완료되었습니다. 행운을 빕니다!");
         }
     }
 
-    // 윈도우 로드 시 첫 대사 출력
-    window.onload = () => {
-        showCurrentDialog();
-    };
-
     /* =========================================
-       3. 기존 게임 로직 (가이드 연동 추가)
+       3. 기존 게임 로직 
        ========================================= */
+    // 💡 효과음(SFX) 경로 및 에러 처리 보완
     function playSfx(name) {
         if (name !== 'click') {
-            let clickAudio = new Audio('click.mp3');
-            clickAudio.play().catch(e => {}); 
+            let clickAudio = new Audio('./click.mp3');
+            clickAudio.play().catch(e => console.log('SFX 재생 실패 (파일 누락 혹은 브라우저 차단):', e)); 
         }
         if (name) {
-            let mainAudio = new Audio(name + '.mp3');
-            mainAudio.play().catch(e => {}); 
+            let mainAudio = new Audio('./' + name + '.mp3');
+            mainAudio.play().catch(e => console.log('SFX 재생 실패 (파일 누락 혹은 브라우저 차단):', e)); 
         }
     }
     
