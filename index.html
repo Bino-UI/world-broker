@@ -8,7 +8,7 @@
         @import url('https://cdn.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css');
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; border-radius: 0 !important; font-family: 'Galmuri11', sans-serif !important; }
-        body { background-color: #111; color: #ddd; padding: 10px; margin: 0; transition: all 0.5s; }
+        body { background-color: #111; color: #ddd; padding: 10px; margin: 0; transition: all 0.5s; overflow-x: hidden; }
 
         body.cia-mode { animation: ciaAlert 1s infinite; }
         @keyframes ciaAlert {
@@ -17,8 +17,61 @@
             100% { box-shadow: inset 0 0 0px red; border: 4px solid transparent; }
         }
 
-        .container { width: 100%; max-width: 100%; margin: 0 auto; background: #222; padding: 12px; border: 4px solid #fff; box-shadow: 4px 4px 0px #000; }
+        .container { width: 100%; max-width: 100%; margin: 0 auto; background: #222; padding: 12px; border: 4px solid #fff; box-shadow: 4px 4px 0px #000; position: relative; }
         h1 { color: #ffcc00; text-align: center; font-size: 22px; border-bottom: 4px dashed #555; padding-bottom: 12px; margin-top: 5px; margin-bottom: 15px; text-shadow: 2px 2px 0px #000; }
+
+        /* 튜토리얼 전용 스타일 시작 */
+        #vn-screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 10000; display: flex; flex-direction: column;
+            justify-content: flex-end; padding: 20px; transition: opacity 1s ease-out;
+            overflow: hidden;
+        }
+        
+        #vn-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover; background-position: center;
+            filter: brightness(0.3) contrast(1.2); /* 텍스트 가독성을 위해 어둡게 처리 */
+            transition: background-image 0.5s ease-in-out;
+            z-index: 1;
+        }
+
+        .vn-character {
+            position: absolute; top: 10%; left: 50%; transform: translateX(-50%);
+            width: 80%; max-width: 320px; image-rendering: pixelated; 
+            filter: drop-shadow(0 0 20px rgba(0,0,0,0.8));
+            animation: breathe 3s infinite ease-in-out;
+            z-index: 2;
+        }
+        
+        @keyframes breathe {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        .vn-dialog-box {
+            background: rgba(10, 10, 10, 0.95); border: 4px solid #fff;
+            padding: 20px; min-height: 140px; position: relative;
+            box-shadow: 4px 4px 0 #000, inset 0 0 10px rgba(0,255,0,0.1);
+            cursor: pointer; z-index: 3;
+        }
+
+        .vn-name {
+            position: absolute; top: -16px; left: -4px;
+            background: #fff; color: #000; font-weight: bold; font-size: 16px;
+            padding: 4px 12px; border: 4px solid #000; box-shadow: 4px 4px 0 #000;
+        }
+
+        .vn-text {
+            color: #ddd; font-size: 15px; line-height: 1.6;
+            text-shadow: 1px 1px 0 #000; min-height: 48px;
+        }
+        
+        .vn-next-indicator {
+            position: absolute; bottom: 10px; right: 15px;
+            color: #ffcc00; font-size: 12px; animation: blink 1s infinite;
+        }
+        /* 튜토리얼 전용 스타일 끝 */
 
         .top-panel { display: flex; flex-direction: column; gap: 5px; background: #000; padding: 12px; border: 2px solid #555; margin-bottom: 10px; }
         .top-panel-row { display: flex; justify-content: space-between; align-items: center; width: 100%; }
@@ -116,43 +169,58 @@
 
 <audio id="bgm-player" src="bgm.mp3" loop preload="auto"></audio>
 
-<div id="tutorial-modal" class="modal-overlay">
-    <div class="modal-box" style="border-color:#0f0; box-shadow: 8px 8px 0px #050;">
-        <div class="modal-title" style="color:#0f0;">📖 초보자 작전 가이드</div>
-        <div class="modal-text">
-            <strong style="color:#fa0;">1. 기본 흐름</strong><br>
-            [거점]에서 무기와 용병을 사고, 턴을 넘겨 [아프리카/중동]으로 이동해 비싸게 팔거나 의뢰를 깨서 돈을 버는 게임입니다.<br><br>
-            <strong style="color:#fa0;">2. 상하차 시스템 (중요!)</strong><br>
-            산 무기는 '창고'로 갑니다. 맵 화면의 <strong>[물류 상하차]</strong> 탭에서 <strong>[하차] [상차]</strong> 버튼으로 무기를 직접 트럭에 실어야 작전지로 가져갈 수 있습니다.<br><br>
-            <strong style="color:#fa0;">3. 목표 타겟팅 이동</strong><br>
-            작전지도에서 [아프리카]나 [중동] 버튼을 누르고, 하단의 <strong>[출발]</strong> 버튼을 눌러야 이동이 시작됩니다.<br><br>
-            <strong style="color:#fa0;">4. 무기 반환 룰</strong><br>
-            의뢰에 개인 화기(권총, 저격총 등)를 투입해 성공하면, 소모되지 않고 트럭으로 다시 돌아옵니다! (단, 수류탄, 로켓 등 폭발물은 소모됨)<br><br>
-            <strong style="color:#fa0;">5. 호위 병력 (이벤트 대비)</strong><br>
-            게임을 진행하다 보면 암살자나 적의 기습에 대비해 항상 일정 수의 <strong>[용병]</strong>을 부대에 대기시켜 두어야 목숨을 부지할 수 있습니다.
-        </div>
-        <button class="modal-btn" style="background:#004400;" onclick="closeModal('tutorial-modal')">확인 완료</button>
-    </div>
-</div>
-
-<div id="interpol-modal" class="modal-overlay">
-    <div class="modal-box">
-        <div class="modal-title" style="color:#f00;">🚨 인터폴 적발</div>
-        <div class="modal-text" style="text-align: center;">"불법 무기 밀수 정황 포착.<br>조용히 <strong>$3,000</strong>을 주면 눈감아주지."</div>
-        <button class="modal-btn" onclick="resolveInterpol('pay')">뇌물 지불 (-$3,000)</button>
-        <button class="modal-btn danger" onclick="resolveInterpol('refuse')">도주 시도 (50% 체포)</button>
-    </div>
-</div>
-
-<div id="news-modal" class="modal-overlay">
-    <div class="modal-box" id="news-box" style="border-color:#ccaa00; box-shadow: 8px 8px 0px #550;">
-        <div class="modal-title" id="news-title" style="color:#ccaa00;">📰 속보</div>
-        <div class="modal-text" id="news-text" style="text-align: center;">내용</div>
-        <button class="modal-btn" onclick="closeModal('news-modal'); updateUI();">확인</button>
-    </div>
-</div>
-
 <div class="container">
+    
+    <!-- 튜토리얼 씬 레이어 (게임 시작 시 기본 표시) -->
+    <div id="vn-screen" onclick="nextDialog()">
+        <div id="vn-bg"></div>
+        <!-- 캐릭터 파일명 적용 (broker_senior.jpg) -->
+        <img src="broker_senior.jpg" class="vn-character" alt="브로커 선배" id="vn-char-img" onerror="this.src='42ca589e-f73a-44d3-8752-3ea5e3db6943.jpg'">
+        
+        <div class="vn-dialog-box">
+            <div class="vn-name" id="vn-name">브로커 선배</div>
+            <div class="vn-text" id="vn-text">...</div>
+            <div class="vn-next-indicator">▼ Click</div>
+        </div>
+    </div>
+
+    <!-- 기존 튜토리얼 모달 -->
+    <div id="tutorial-modal" class="modal-overlay">
+        <div class="modal-box" style="border-color:#0f0; box-shadow: 8px 8px 0px #050;">
+            <div class="modal-title" style="color:#0f0;">📖 초보자 작전 가이드</div>
+            <div class="modal-text">
+                <strong style="color:#fa0;">1. 기본 흐름</strong><br>
+                [거점]에서 무기와 용병을 사고, 턴을 넘겨 [아프리카/중동]으로 이동해 비싸게 팔거나 의뢰를 깨서 돈을 버는 게임입니다.<br><br>
+                <strong style="color:#fa0;">2. 상하차 시스템 (중요!)</strong><br>
+                산 무기는 '창고'로 갑니다. 맵 화면의 <strong>[물류 상하차]</strong> 탭에서 <strong>[하차] [상차]</strong> 버튼으로 무기를 직접 트럭에 실어야 작전지로 가져갈 수 있습니다.<br><br>
+                <strong style="color:#fa0;">3. 목표 타겟팅 이동</strong><br>
+                작전지도에서 [아프리카]나 [중동] 버튼을 누르고, 하단의 <strong>[출발]</strong> 버튼을 눌러야 이동이 시작됩니다.<br><br>
+                <strong style="color:#fa0;">4. 무기 반환 룰</strong><br>
+                의뢰에 개인 화기(권총, 저격총 등)를 투입해 성공하면, 소모되지 않고 트럭으로 다시 돌아옵니다! (단, 수류탄, 로켓 등 폭발물은 소모됨)<br><br>
+                <strong style="color:#fa0;">5. 호위 병력 (이벤트 대비)</strong><br>
+                게임을 진행하다 보면 암살자나 적의 기습에 대비해 항상 일정 수의 <strong>[용병]</strong>을 부대에 대기시켜 두어야 목숨을 부지할 수 있습니다.
+            </div>
+            <button class="modal-btn" style="background:#004400;" onclick="closeModal('tutorial-modal')">확인 완료</button>
+        </div>
+    </div>
+
+    <div id="interpol-modal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-title" style="color:#f00;">🚨 인터폴 적발</div>
+            <div class="modal-text" style="text-align: center;">"불법 무기 밀수 정황 포착.<br>조용히 <strong>$3,000</strong>을 주면 눈감아주지."</div>
+            <button class="modal-btn" onclick="resolveInterpol('pay')">뇌물 지불 (-$3,000)</button>
+            <button class="modal-btn danger" onclick="resolveInterpol('refuse')">도주 시도 (50% 체포)</button>
+        </div>
+    </div>
+
+    <div id="news-modal" class="modal-overlay">
+        <div class="modal-box" id="news-box" style="border-color:#ccaa00; box-shadow: 8px 8px 0px #550;">
+            <div class="modal-title" id="news-title" style="color:#ccaa00;">📰 속보</div>
+            <div class="modal-text" id="news-text" style="text-align: center;">내용</div>
+            <button class="modal-btn" onclick="closeModal('news-modal'); updateUI();">확인</button>
+        </div>
+    </div>
+
     <h1>THE GLOBAL BROKER</h1>
     
     <div class="top-panel">
@@ -256,14 +324,109 @@
 </div>
 
 <script>
-    // 🌟 효과음 경로를 모두 Sound/ 폴더 안으로 수정했습니다.
+    /* =========================================
+       튜토리얼 시스템 로직 (배경 전환 추가)
+       ========================================= */
+    const tutorialDialogs = [
+        // 뒷골목 배경에서 시작
+        { name: "???", text: "신입이냐?", bg: "bg_alley.jpg" },
+        { name: "브로커 선배", text: "표정을 보아하니 아직 피비린내도 못 맡아본 애송이군.<br>내 밑으로 들어온 걸 환영한다.", bg: "bg_alley.jpg" },
+        { name: "브로커 선배", text: "착각하지 마라. 여긴 총알이 날아다니는 전장이 아니다.<br><strong style='color:#0f0;'>돈이 오가는 시장</strong>이지.", bg: "bg_alley.jpg" },
+        // 폐창고 배경으로 전환
+        { name: "브로커 선배", text: "여기가 네가 앞으로 일할 거점이다.<br><strong>[암시장]</strong>에서 무기를 싸게 사서, <strong>[작전지도]</strong>를 통해 아프리카나 중동으로 날아가 비싸게 파는 거다.", bg: "bg_warehouse.jpg" },
+        { name: "브로커 선배", text: "중요한 건 <strong style='color:#fa0;'>'상하차'</strong>야.<br>산 무기는 일단 창고에 쌓인다. 네가 직접 트럭에 상차(싣기)를 해야 현지로 가져갈 수 있어.", bg: "bg_warehouse.jpg" },
+        { name: "브로커 선배", text: "그리고 명심해. 호위할 <strong>[용병]</strong> 없이 혼자 돌아다니다간 암살자의 표적이 되기 십상이다. 목숨값은 아끼지 마라.", bg: "bg_warehouse.jpg" },
+        { name: "브로커 선배", text: "진짜 브로커는 총을 파는 사람이 아니라...<br>세계를 움직이는 사람이다. <strong style='color:#f00;'>살아남아서 증명해 봐.</strong>", bg: "bg_warehouse.jpg" }
+    ];
+
+    let currentDialogIndex = 0;
+    let isTyping = false;
+    let typeInterval;
+    let isTutorialActive = true;
+
+    function typeWriter(text, elementId, speed) {
+        if (isTyping) return;
+        isTyping = true;
+        let i = 0;
+        let htmlBuffer = "";
+        let inHTMLTag = false;
+        
+        document.getElementById(elementId).innerHTML = "";
+        
+        typeInterval = setInterval(() => {
+            let char = text.charAt(i);
+            
+            if (char === '<') inHTMLTag = true;
+            htmlBuffer += char;
+            if (char === '>') inHTMLTag = false;
+            
+            if (!inHTMLTag) {
+                document.getElementById(elementId).innerHTML = htmlBuffer;
+            }
+            
+            i++;
+            if (i >= text.length) {
+                clearInterval(typeInterval);
+                isTyping = false;
+            }
+        }, speed);
+    }
+
+    function showCurrentDialog() {
+        if (currentDialogIndex < tutorialDialogs.length) {
+            let dialog = tutorialDialogs[currentDialogIndex];
+            
+            // 배경 이미지가 지정되어 있다면 배경 변경
+            if (dialog.bg) {
+                document.getElementById('vn-bg').style.backgroundImage = `url('${dialog.bg}')`;
+            }
+
+            document.getElementById('vn-name').innerText = dialog.name;
+            typeWriter(dialog.text, 'vn-text', 20); 
+        } else {
+            endTutorial();
+        }
+    }
+
+    function nextDialog() {
+        if (!isTutorialActive) return;
+        
+        if (isTyping) {
+            clearInterval(typeInterval);
+            document.getElementById('vn-text').innerHTML = tutorialDialogs[currentDialogIndex].text;
+            isTyping = false;
+        } else {
+            currentDialogIndex++;
+            showCurrentDialog();
+            playSfx('click');
+        }
+    }
+
+    function endTutorial() {
+        isTutorialActive = false;
+        const vnScreen = document.getElementById('vn-screen');
+        vnScreen.style.opacity = '0';
+        setTimeout(() => {
+            vnScreen.style.display = 'none';
+            addLog("🟢 튜토리얼 종료. 암시장에 오신 것을 환영합니다.");
+        }, 1000);
+    }
+
+    window.onload = () => {
+        showCurrentDialog();
+    };
+
+
+    /* =========================================
+       기존 게임 로직
+       ========================================= */
     function playSfx(name) {
         if (name !== 'click') {
-            let clickAudio = new Audio('Sound/click.mp3');
+            let clickAudio = new Audio('click.mp3');
             clickAudio.play().catch(e => {}); 
         }
         if (name) {
-            let mainAudio = new Audio('Sound/' + name + '.mp3');
+            let mainAudio = new Audio(name + '.mp3');
             mainAudio.play().catch(e => {}); 
         }
     }
@@ -836,11 +999,6 @@
 
     generateMarketData(); updateUI();
 
-    document.body.addEventListener('click', function() {
-        if (!bgmPlaying) {
-            toggleBGM();
-        }
-    }, { once: true });
 </script>
 
 </body>
