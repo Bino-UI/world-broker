@@ -25,7 +25,10 @@
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: #000; z-index: 10000; display: flex; flex-direction: column;
             justify-content: flex-end; transition: background-image 0.5s ease-in-out, opacity 1s ease-out;
-            background-size: cover; background-position: center;
+            /* 배경이 잘리더라도 중앙이 잘 보이도록 수정 */
+            background-size: cover; 
+            background-position: center top; 
+            background-repeat: no-repeat;
         }
         
         /* 캐릭터 좌측 하단 배치 */
@@ -500,12 +503,12 @@
     // 💡 효과음(SFX) 경로 및 에러 처리 보완
     function playSfx(name) {
         if (name !== 'click') {
-            let clickAudio = new Audio('./click.mp3');
-            clickAudio.play().catch(e => console.log('SFX 재생 실패 (파일 누락 혹은 브라우저 차단):', e)); 
+            let clickAudio = new Audio('./Sound/click.mp3'); // Sound 폴더 경로로 수정
+            clickAudio.play().catch(e => console.log('SFX 재생 실패:', e)); 
         }
         if (name) {
-            let mainAudio = new Audio('./' + name + '.mp3');
-            mainAudio.play().catch(e => console.log('SFX 재생 실패 (파일 누락 혹은 브라우저 차단):', e)); 
+            let mainAudio = new Audio('./Sound/' + name + '.mp3'); // Sound 폴더 경로로 수정
+            mainAudio.play().catch(e => console.log('SFX 재생 실패:', e)); 
         }
     }
     
@@ -1074,6 +1077,14 @@
     }
 
     generateMarketData(); updateUI();
+
+    // 💡 브라우저 정책 우회: 첫 화면 클릭 시 BGM 자동 재생
+    document.body.addEventListener('click', function initBGM() {
+        if (!bgmPlaying) {
+            toggleBGM();
+        }
+        document.body.removeEventListener('click', initBGM); // 한 번 실행 후 이벤트 제거
+    }, { once: true });
 
 </script>
 
