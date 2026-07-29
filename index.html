@@ -9,7 +9,7 @@
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; border-radius: 0 !important; font-family: 'Galmuri11', sans-serif !important; }
         html, body { height: 100%; height: 100dvh; overflow: hidden; margin: 0; padding: 0; }
-        body { background-color: #111; color: #ddd; transition: all 0.5s; }
+        body { background-color: #111; color: #ddd; transition: all 0.5s; display: flex; flex-direction: column; align-items: center; }
 
         body.cia-mode { animation: ciaAlert 1s infinite; }
         @keyframes ciaAlert {
@@ -18,105 +18,62 @@
             100% { box-shadow: inset 0 0 0px red; border: 4px solid transparent; }
         }
 
-        .container { width: 100%; height: 100%; max-width: 600px; margin: 0 auto; background: #222; padding: 10px; border: 4px solid #fff; box-shadow: 4px 4px 0px #000; position: relative; display: flex; flex-direction: column; }
-        h1 { flex-shrink: 0; color: #ffcc00; text-align: center; font-size: 22px; border-bottom: 4px dashed #555; padding-bottom: 8px; margin: 0 0 10px 0; text-shadow: 2px 2px 0px #000; }
+        .container { width: 100%; max-width: 600px; height: 100%; display: flex; flex-direction: column; background: #222; padding: 10px; border-left: 4px solid #fff; border-right: 4px solid #fff; position: relative; }
+        h1 { flex-shrink: 0; color: #ffcc00; text-align: center; font-size: 22px; border-bottom: 4px dashed #555; padding-bottom: 8px; margin: 5px 0 10px 0; text-shadow: 2px 2px 0px #000; }
 
-        /* 튜토리얼 VN(비주얼 노벨) 화면 전용 스타일 */
         #vn-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: #000; z-index: 10000; display: flex; flex-direction: column;
-            justify-content: flex-end; transition: background-image 0.5s ease-in-out, opacity 1s ease-out;
-            /* 배경이 잘리더라도 중앙이 잘 보이도록 수정 */
-            background-size: cover; 
-            background-position: center top; 
-            background-repeat: no-repeat;
+            justify-content: flex-end; transition: background-image 1s ease-in-out, opacity 1s ease-out;
+            background-size: cover; background-position: center top; background-repeat: no-repeat;
         }
         
-        /* 캐릭터 좌측 하단 배치 */
         .vn-character {
-            position: absolute; bottom: 150px; left: 15px; /* 좌측 정렬로 변경 */
-            width: 140px; image-rendering: pixelated; 
+            position: absolute; bottom: 140px; left: 15px; 
+            width: 150px; image-rendering: pixelated; 
             filter: drop-shadow(0 0 15px rgba(0,0,0,0.8));
             animation: breathe-left 3s infinite ease-in-out;
             z-index: 10001;
         }
         
-        @keyframes breathe-left {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-4px); }
-        }
+        @keyframes breathe-left { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
 
-        .vn-dialog-container {
-            width: 100%; padding: 15px; z-index: 10002; margin-bottom: 10px;
-        }
+        .vn-dialog-container { width: 100%; padding: 15px; z-index: 10002; margin-bottom: 10px; }
+        .vn-dialog-box { background: rgba(10, 10, 10, 0.95); border: 3px solid #fff; padding: 20px 15px; min-height: 120px; position: relative; box-shadow: 4px 4px 0 #000, inset 0 0 10px rgba(0,255,0,0.1); cursor: pointer; }
+        .vn-name { position: absolute; top: -14px; left: -3px; background: #fff; color: #000; font-weight: bold; font-size: 14px; padding: 4px 10px; border: 3px solid #000; box-shadow: 3px 3px 0 #000; }
+        .vn-text { color: #ddd; font-size: 14px; line-height: 1.6; text-shadow: 1px 1px 0 #000; margin-top: 5px; }
+        .vn-next-indicator { position: absolute; bottom: 8px; right: 12px; color: #ffcc00; font-size: 11px; animation: blink 1s infinite; }
 
-        .vn-dialog-box {
-            background: rgba(10, 10, 10, 0.95); border: 3px solid #fff;
-            padding: 20px 15px; min-height: 120px; position: relative;
-            box-shadow: 4px 4px 0 #000, inset 0 0 10px rgba(0,255,0,0.1);
-            cursor: pointer;
-        }
+        @keyframes pulse-highlight { 0% { box-shadow: 0 0 0 0 rgba(0, 255, 0, 0.7); border-color: #0f0; } 70% { box-shadow: 0 0 0 6px rgba(0, 255, 0, 0); border-color: #fff; } 100% { box-shadow: 0 0 0 0 rgba(0, 255, 0, 0); border-color: #0f0; } }
+        .highlight-pulse { animation: pulse-highlight 1.5s infinite !important; position: relative; z-index: 100; color: #0f0 !important; font-weight: bold; }
+        #in-game-guide-box { display: none; position: fixed; top: 10px; left: 10px; right: 10px; background: rgba(0, 50, 0, 0.9); border: 2px solid #0f0; color: #fff; padding: 12px; z-index: 9000; box-shadow: 4px 4px 0px #000; font-size: 13px; text-align: center; text-shadow: 1px 1px 0px #000; }
 
-        .vn-name {
-            position: absolute; top: -14px; left: -3px;
-            background: #fff; color: #000; font-weight: bold; font-size: 14px;
-            padding: 4px 10px; border: 3px solid #000; box-shadow: 3px 3px 0 #000;
-        }
-
-        .vn-text {
-            color: #ddd; font-size: 14px; line-height: 1.6;
-            text-shadow: 1px 1px 0 #000; margin-top: 5px;
-        }
-        
-        .vn-next-indicator {
-            position: absolute; bottom: 8px; right: 12px;
-            color: #ffcc00; font-size: 11px; animation: blink 1s infinite;
-        }
-
-        /* 인게임 가이드 하이라이트 스타일 */
-        @keyframes pulse-highlight {
-            0% { box-shadow: 0 0 0 0 rgba(0, 255, 0, 0.7); border-color: #0f0; }
-            70% { box-shadow: 0 0 0 6px rgba(0, 255, 0, 0); border-color: #fff; }
-            100% { box-shadow: 0 0 0 0 rgba(0, 255, 0, 0); border-color: #0f0; }
-        }
-        .highlight-pulse { 
-            animation: pulse-highlight 1.5s infinite !important; 
-            position: relative; z-index: 100;
-            color: #0f0 !important; font-weight: bold;
-        }
-
-        #in-game-guide-box {
-            display: none; position: fixed; top: 10px; left: 10px; right: 10px;
-            background: rgba(0, 50, 0, 0.9); border: 2px solid #0f0; color: #fff;
-            padding: 12px; z-index: 9000; box-shadow: 4px 4px 0px #000; font-size: 13px;
-            text-align: center; text-shadow: 1px 1px 0px #000;
-        }
-
-        /* 기존 게임 스타일들 */
-        .top-panel { flex-shrink: 0; display: flex; flex-direction: column; gap: 5px; background: #000; padding: 12px; border: 2px solid #555; margin-bottom: 10px; }
+        .top-panel { flex-shrink: 0; display: flex; flex-direction: column; gap: 5px; background: #000; padding: 10px; border: 2px solid #555; margin-bottom: 8px; }
         .top-panel-row { display: flex; justify-content: space-between; align-items: center; width: 100%; }
-        .stat { font-size: 14px; color: #ffcc00; }
-
-        .level-badge { background: #000; padding: 6px 10px; color: #fff; font-size: 14px; border: 2px solid #ccaa00; text-shadow: 2px 2px 0px #000; }
+        .stat { font-size: 13px; color: #ffcc00; }
+        .level-badge { background: #000; padding: 4px 8px; color: #fff; font-size: 13px; border: 2px solid #ccaa00; text-shadow: 1px 1px 0px #000; }
         .level-badge.illuminati { background: #300; color: #fcc; border-color: #f00; box-shadow: 0 0 10px #f00; }
 
         .util-btns { display: flex; gap: 6px; }
-        .util-btn { background: #333; color: #fff; border: 2px solid #fff; padding: 4px 8px; font-size: 12px; cursor: pointer; box-shadow: 2px 2px 0px #000; }
+        .util-btn { background: #333; color: #fff; border: 2px solid #fff; padding: 4px 8px; font-size: 11px; cursor: pointer; box-shadow: 2px 2px 0px #000; }
         .util-btn:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #000; }
 
-        .faction-panel { flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; background: #000; padding: 10px; margin-bottom: 12px; border: 2px dashed #555; font-size: 12px; }
+        .faction-panel { flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; background: #000; padding: 8px; margin-bottom: 8px; border: 2px dashed #555; font-size: 11px; }
         .faction-row { display: flex; justify-content: space-between; }
 
-        .nav-menu { flex-shrink: 0; display: flex; gap: 6px; margin-bottom: 12px; }
-        .nav-btn { flex: 1; background: #333; color: #fff; border: 2px solid #fff; padding: 14px 2px; font-size: 14px; cursor: pointer; text-align: center; box-shadow: 2px 2px 0px #000; }
+        .nav-menu { flex-shrink: 0; display: flex; gap: 4px; margin-bottom: 8px; }
+        .nav-btn { flex: 1; background: #333; color: #fff; border: 2px solid #fff; padding: 10px 2px; font-size: 12px; cursor: pointer; text-align: center; box-shadow: 2px 2px 0px #000; }
         .nav-btn.active { background: #ccaa00; color: #000; border-color: #fff; font-weight: bold; }
         .nav-btn:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #000; } 
 
-        .game-panel { display: none; background: #000; padding: 12px; border: 2px solid #fff; flex: 1; overflow-y: auto; margin-bottom: 10px; box-shadow: inset 0 0 10px #222; }
+        .game-panel { display: none; background: #000; padding: 12px; border: 2px solid #fff; flex: 1; overflow-y: auto; min-height: 0; margin-bottom: 10px; box-shadow: inset 0 0 10px #222; }
         .game-panel.active-view { display: block; }
+        /* 스크롤바 디자인 */
+        .game-panel::-webkit-scrollbar { width: 6px; }
+        .game-panel::-webkit-scrollbar-thumb { background: #555; border: 1px solid #000; }
 
         .tactical-map-container {
-            width: 100%; height: 220px; background-color: #001100;
+            width: 100%; height: 260px; background-color: #001100;
             position: relative; border: 2px solid #0f0; margin-bottom: 15px;
             background-image: linear-gradient(#003300 2px, transparent 2px), linear-gradient(90deg, #003300 2px, transparent 2px);
             background-size: 20px 20px; overflow: hidden;
@@ -130,47 +87,45 @@
 
         .map-node { position: absolute; transform: translate(-50%, -50%); text-align: center; z-index: 10; cursor: pointer; }
         .map-node .dot { width: 12px; height: 12px; background: #555; border: 2px solid #000; margin: 0 auto 4px; box-shadow: 2px 2px 0px #000; transition: all 0.2s; }
-        .map-node.basecamp .dot { background: #0f0; }
-        .map-node.africa .dot { background: #fa0; }
-        .map-node.mideast .dot { background: #f00; }
         
-        .map-node.current-loc .dot { outline: 2px dashed #0f0; outline-offset: 4px; }
-        .map-node.selected-loc .dot { border: 2px solid #fff; box-shadow: 0 0 15px #fff, 2px 2px 0px #000; animation: blink 0.8s steps(2) infinite; }
-        @keyframes blink { 50% { opacity: 0.3; } }
+        /* 맵 노드 컬러링 */
+        .map-node .dot.base { background: #0f0; border-radius: 50% !important; border-color:#fff;}
+        .map-node .dot.region { background: #f00; }
         
-        .map-node .label { background: #000; border: 2px solid #555; padding: 2px 6px; font-size: 10px; color: #aaa; white-space: nowrap; box-shadow: 2px 2px 0px #000; pointer-events: none; }
+        .map-node.locked { opacity: 0.4; filter: grayscale(100%); pointer-events: none; }
+        .map-node.current-loc .dot { outline: 2px dashed #0f0; outline-offset: 4px; animation: blink 1s steps(2) infinite; }
+        .map-node.selected-loc .dot { border: 2px solid #fff; box-shadow: 0 0 15px #fff, 2px 2px 0px #000; }
+        
+        .map-node .label { background: #000; border: 2px solid #555; padding: 2px 4px; font-size: 9px; color: #aaa; white-space: nowrap; box-shadow: 2px 2px 0px #000; pointer-events: none; }
         .map-node.current-loc .label { border-color: #0f0; color: #0f0; font-weight: bold; }
         .map-node.selected-loc .label { border-color: #fff; color: #fff; font-weight: bold; }
 
         .location-status { text-align: center; margin-bottom: 15px; font-size: 14px; color: #0f0; background: #000; padding: 12px; border: 2px solid #0f0; box-shadow: 2px 2px 0px #005500; }
 
-        .item-list-grid { display: flex; flex-direction: column; gap: 12px; }
-        .item-card { background: #222; border: 2px solid #888; padding: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 3px 3px 0px #000; }
-        .item-info { font-size: 13px; line-height: 1.6; flex: 1; }
+        .item-list-grid { display: flex; flex-direction: column; gap: 10px; }
+        .item-card { background: #222; border: 2px solid #888; padding: 10px; display: flex; justify-content: space-between; align-items: center; box-shadow: 3px 3px 0px #000; }
+        .item-info { font-size: 12px; line-height: 1.5; flex: 1; }
 
-        .btn-sm { background: #444; color: white; border: 2px solid #fff; padding: 10px 14px; cursor: pointer; font-size: 13px; box-shadow: 2px 2px 0px #000; }
+        .btn-sm { background: #444; color: white; border: 2px solid #fff; padding: 8px 12px; cursor: pointer; font-size: 12px; box-shadow: 2px 2px 0px #000; }
         .btn-sm:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #000; }
         .btn-buy { background: #008800; } 
-        .btn-sell { background: #880000; padding: 10px; font-size: 12px;} 
+        .btn-sell { background: #880000; padding: 8px; font-size: 11px;} 
         .btn-action { background: #004488; margin-top: 10px;}
-        .btn-loc { background: #222; border-color: #777; color: #aaa; }
-        .btn-loc.active { background: #004488; border-color: #fff; color: #fff; font-weight: bold; }
 
-        .mission-card { background: #111; border-left: 6px solid #ccaa00; border-right: 2px solid #444; border-top: 2px solid #444; border-bottom: 2px solid #444; padding: 12px; margin-bottom: 12px; font-size: 13px; box-shadow: 3px 3px 0px #000; }
-        .complete-btn { background: #006600; color: white; width: 100%; border: 2px solid #0f0; padding: 14px; cursor: pointer; font-size: 14px; margin-top: 10px; text-shadow: 1px 1px 0px #000; }
+        .mission-card { background: #111; border-left: 6px solid #ccaa00; border-right: 2px solid #444; border-top: 2px solid #444; border-bottom: 2px solid #444; padding: 12px; margin-bottom: 12px; font-size: 12px; box-shadow: 3px 3px 0px #000; }
+        .complete-btn { background: #006600; color: white; width: 100%; border: 2px solid #0f0; padding: 12px; cursor: pointer; font-size: 13px; margin-top: 10px; text-shadow: 1px 1px 0px #000; }
 
-        .t-btn { background: #444; color: white; border: 2px solid #888; padding: 8px 10px; font-family: monospace !important; font-size: 12px; cursor: pointer; }
+        .t-btn { background: #444; color: white; border: 2px solid #888; padding: 6px 8px; font-family: monospace !important; font-size: 11px; cursor: pointer; }
         .t-btn:active { background: #fff; color: #000; }
         .t-btn.macro { background: #004488; font-weight: bold; }
 
         .disabled { opacity: 0.2; pointer-events: none; }
         .banned-item { opacity: 0.5; border-color: #f00; background: #300 !important; }
-        .category-header { color: #0f0; font-size: 15px; margin: 15px 0 8px 0; border-bottom: 2px dashed #0f0; padding-bottom: 4px; text-shadow: 1px 1px 0px #000; }
+        .category-header { color: #0f0; font-size: 14px; margin: 15px 0 8px 0; border-bottom: 2px dashed #0f0; padding-bottom: 4px; text-shadow: 1px 1px 0px #000; }
 
-        .turn-btn { flex-shrink: 0; background: #a00; color: white; width: 100%; padding: 14px; font-size: 18px; border: 4px solid #f00; cursor: pointer; text-shadow: 2px 2px 0px #000; margin-bottom: 5px; box-shadow: 0 4px 0px #500; }
+        .turn-btn { flex-shrink: 0; background: #a00; color: white; width: 100%; padding: 16px; font-size: 16px; border: 4px solid #f00; cursor: pointer; text-shadow: 2px 2px 0px #000; margin-bottom: 5px; box-shadow: 0 4px 0px #500; transition: background 0.2s; }
         .turn-btn:active { transform: translateY(4px); box-shadow: 0 0px 0px #500; }
 
-        /* 토스트 알림 메시지 (기존 하단 로그 대체) */
         #toast-container { position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column-reverse; gap: 8px; pointer-events: none; width: 90%; max-width: 400px; }
         .toast-msg { background: rgba(0, 20, 0, 0.95); color: #0f0; border: 2px solid #0f0; padding: 12px; font-size: 13px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.8); animation: fadeinout 3s forwards; }
         .toast-msg.danger { color: #fff; background: rgba(50, 0, 0, 0.95); border-color: #f00; }
@@ -183,23 +138,24 @@
         .modal-btn { background: #222; color: #fff; border: 2px solid #fff; padding: 14px; width: 100%; margin: 6px 0; cursor: pointer; font-size: 15px; box-shadow: 2px 2px 0px #000; flex-shrink: 0; }
         .modal-btn:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #000; }
         .modal-btn.danger { background: #800; border-color: #f00; color: #fff; }
-
-        .modal-text::-webkit-scrollbar { width: 6px; }
-        .modal-text::-webkit-scrollbar-thumb { background: #fff; border: 1px solid #000; }
         
         .merc-badge { display: inline-block; padding: 4px 6px; margin: 2px 4px 2px 0; border: 1px solid #555; background: #222; font-size: 11px; box-shadow: 1px 1px 0px #000; }
+        .lock-overlay { display:flex; flex-direction:column; justify-content:center; align-items:center; height: 100%; color:#ff4444; font-weight:bold; font-size:14px; text-align:center; padding:20px; border:2px dashed #f00; background:#200;}
     </style>
 </head>
 <body>
 
 <audio id="bgm-player" src="./bgm.mp3" loop preload="auto"></audio>
+<div style="display:none;">
+    <img src="./bg_alley.png" alt="preload">
+    <img src="./bg_warehouse.png" alt="preload">
+</div>
 
 <div class="container">
     
     <!-- 튜토리얼 씬 레이어 -->
     <div id="vn-screen" onclick="nextDialog()">
-        <img src="./broker_senior.png" class="vn-character" alt="브로커 선배" onerror="this.src=''; this.alt='(이미지 에러)'">
-        
+        <img src="./broker_senior.png" class="vn-character" alt="브로커 선배" onerror="this.src=''; this.alt='(캐릭터 이미지 누락)'">
         <div class="vn-dialog-container">
             <div class="vn-dialog-box">
                 <div class="vn-name" id="vn-name">이름</div>
@@ -217,17 +173,17 @@
             <div class="modal-title" style="color:#0f0;">📖 작전 가이드</div>
             <div class="modal-text">
                 <strong style="color:#fa0;">1. 기본 흐름</strong><br>
-                [거점]에서 무기와 용병을 사고, 턴을 넘겨 [아프리카/중동]으로 이동해 비싸게 팔거나 의뢰를 깨서 돈을 버는 게임입니다.<br><br>
+                [거점]에서 무기와 용병을 사고, 턴을 넘겨 분쟁지역으로 이동해 비싸게 팔거나 의뢰를 깨서 돈을 버는 게임입니다.<br><br>
                 <strong style="color:#fa0;">2. 상하차 시스템 (중요!)</strong><br>
-                산 무기는 '창고'로 갑니다. 맵 화면의 <strong>[물류 상하차]</strong> 탭에서 <strong>[하차] [상차]</strong> 버튼으로 무기를 직접 트럭에 실어야 작전지로 가져갈 수 있습니다.<br><br>
+                산 무기는 '창고'로 갑니다. <strong>[물류/거점]</strong> 탭에서 <strong>[하차] [상차]</strong> 버튼으로 무기를 직접 트럭에 실어야 작전지로 가져갈 수 있습니다.<br><br>
                 <strong style="color:#fa0;">3. 목표 타겟팅 이동</strong><br>
-                작전지도에서 [아프리카]나 [중동] 버튼을 누르고, 하단의 <strong>[출발]</strong> 버튼을 눌러야 이동이 시작됩니다.<br><br>
-                <strong style="color:#fa0;">4. 무기 반환 룰</strong><br>
-                의뢰에 개인 화기(권총, 저격총 등)를 투입해 성공하면, 소모되지 않고 트럭으로 다시 돌아옵니다! (단, 수류탄, 로켓 등 폭발물은 소모됨)<br><br>
+                <strong>[작전지도]</strong>에서 해금된 목적지를 터치하고, 하단의 <strong>[출발]</strong> 버튼을 눌러야 이동이 시작됩니다.<br><br>
+                <strong style="color:#fa0;">4. 지역 수요 파악</strong><br>
+                카르텔은 총기를, 중동은 폭발물을, 전면전 지역은 첨단 무기를 비싸게 사줍니다.<br><br>
                 <strong style="color:#fa0;">5. 호위 병력 (이벤트 대비)</strong><br>
-                게임을 진행하다 보면 암살자나 적의 기습에 대비해 항상 일정 수의 <strong>[용병]</strong>을 부대에 대기시켜 두어야 목숨을 부지할 수 있습니다.
+                암살자나 기습에 대비해 항상 일정 수의 <strong>[용병]</strong>을 부대에 대기시키십시오.
             </div>
-            <button class="modal-btn" style="background:#004400;" onclick="closeModal('tutorial-modal')">확인</button>
+            <button class="modal-btn" style="background:#004400;" onclick="closeModal('tutorial-modal')">확인 완료</button>
         </div>
     </div>
 
@@ -259,8 +215,8 @@
                 <button class="util-btn" onclick="playSfx('click'); document.getElementById('tutorial-modal').style.display='flex'">❓ 가이드</button>
             </div>
         </div>
-        <div class="top-panel-row" style="margin-top: 5px; border-top: 2px dashed #333; padding-top: 8px;">
-            <div class="stat" style="font-size: 16px;">자금: <span id="money" style="color:#fff;">35000</span>$</div>
+        <div class="top-panel-row" style="margin-top: 5px; border-top: 2px dashed #333; padding-top: 5px;">
+            <div class="stat" style="font-size: 15px;">자금: <span id="money" style="color:#fff;">35000</span>$</div>
             <div class="stat">유지비: $<span id="upkeep" style="color:#ff6666;">0</span></div>
             <div class="stat">턴: <span id="turn-count" style="color:white;">1</span></div>
         </div>
@@ -275,9 +231,10 @@
     </div>
 
     <div class="nav-menu">
-        <button class="nav-btn active" id="menu-map" onclick="playSfx('click'); switchTab('map')">🗺️ 작전지도</button>
-        <button class="nav-btn" id="menu-weapon" onclick="playSfx('click'); switchTab('weapon')">💼 암시장</button>
-        <button class="nav-btn" id="menu-merc" onclick="playSfx('click'); switchTab('merc')">🪖 인력소</button>
+        <button class="nav-btn active" id="menu-map" onclick="playSfx('click'); switchTab('map')">🗺️ 맵</button>
+        <button class="nav-btn" id="menu-base" onclick="playSfx('click'); switchTab('base')">🚚 물류</button>
+        <button class="nav-btn" id="menu-weapon" onclick="playSfx('click'); switchTab('weapon')">💼 시장</button>
+        <button class="nav-btn" id="menu-merc" onclick="playSfx('click'); switchTab('merc')">🪖 인력</button>
     </div>
 
     <div id="panel-map" class="game-panel active-view">
@@ -286,36 +243,19 @@
             <svg class="smuggle-routes" viewBox="0 0 1000 350" preserveAspectRatio="none">
                 <path d="M 0,0 L 1000,0 L 1000,140 L 910,130 L 850,140 L 780,120 L 740,145 L 700,120 L 670,125 L 650,105 L 610,110 L 590,80 L 550,75 L 530,95 L 480,90 L 460,110 L 410,105 L 420,135 L 390,130 L 350,150 L 310,135 L 290,150 L 250,130 L 210,150 L 180,110 L 140,115 L 120,80 L 70,85 L 50,40 L 0,30 Z" class="map-continent" />
                 <path d="M 0,160 L 40,150 L 90,175 L 130,160 L 190,185 L 260,180 L 320,195 L 400,190 L 440,210 L 430,225 L 445,240 L 435,255 L 405,250 L 395,270 L 420,295 L 400,350 L 0,350 Z" class="map-continent" />
-                <line x1="530" y1="75" x2="250" y2="220" class="route-line" />
-                <line x1="530" y1="75" x2="520" y2="165" class="route-line" />
+                <line x1="750" y1="157" x2="480" y2="245" class="route-line" />
+                <line x1="750" y1="157" x2="800" y2="227" class="route-line" />
+                <line x1="750" y1="157" x2="550" y2="105" class="route-line" />
+                <line x1="550" y1="105" x2="600" y2="87" class="route-line" />
             </svg>
-            <div class="map-node basecamp" id="node-basecamp" style="top: 25%; left: 53%;" onclick="selectLocation('basecamp')"><div class="dot"></div><div class="label">거점</div></div>
-            <div class="map-node africa" id="node-africa" style="top: 65%; left: 25%;" onclick="selectLocation('africa')"><div class="dot"></div><div class="label">아프리카</div></div>
-            <div class="map-node mideast" id="node-midEast" style="top: 50%; left: 55%;" onclick="selectLocation('midEast')"><div class="dot"></div><div class="label">중동</div></div>
+            <div id="map-nodes-container"></div>
         </div>
 
-        <div class="location-status" id="loc-desc">🏰 위치: 거점 (보급/상하차)</div>
+        <div class="location-status" id="loc-desc">🏰 위치: 동아시아 거점 (물류/시장 활성화)</div>
         
-        <div id="basecamp-actions" style="margin-bottom: 15px;">
-            <div style="background:#1a1a1a; border:2px solid #444; padding:10px; margin-bottom:10px;">
-                <h3 style="color:#88ff88; font-size:14px; margin:0 0 10px 0; border-bottom:2px dashed #555; padding-bottom:5px;">🏢 물류 상하차</h3>
-                <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size:12px;">
-                    <span style="color:#aaa;">창고: 무제한</span>
-                    <span style="color:#ffcc00; font-weight:bold;">트럭: <span id="weight-status">0</span> / <span id="max-weight">20</span></span>
-                </div>
-                <div id="transfer-list"></div>
-                <button class="btn-sm btn-action" style="width:100%; border-color:#555; background:#222;" onclick="upgradeTruck()">트럭 용량 +10 개조 ($3,000)</button>
-            </div>
-            <div style="display:flex; gap:10px;">
-                <button class="btn-sm btn-loc" id="btn-loc-africa" style="flex:1; padding:12px;" onclick="selectLocation('africa')">📍 아프리카 선택</button>
-                <button class="btn-sm btn-loc" id="btn-loc-mideast" style="flex:1; padding:12px;" onclick="selectLocation('midEast')">📍 중동 선택</button>
-            </div>
-        </div>
-
         <div id="conflict-actions" style="display:none;">
-            <button class="btn-sm btn-loc" id="btn-loc-basecamp" style="width:100%; margin-bottom:15px; padding:12px;" onclick="selectLocation('basecamp')">📍 거점 복귀 선택</button>
             <div style="background:#1a1a1a; padding: 10px; border:2px solid #444; margin-bottom:15px;">
-                <h3 style="color:#ff8888; font-size:14px; margin: 0 0 10px 0;">💵 트럭 화물 현지 매각</h3>
+                <h3 style="color:#ff8888; font-size:14px; margin: 0 0 10px 0;">💵 현지 수요 매각 (트럭 화물)</h3>
                 <div id="sell-list" class="item-list-grid"></div>
             </div>
             <div style="background:#1a1a1a; padding: 10px; border:2px solid #444;">
@@ -325,43 +265,61 @@
         </div>
     </div>
 
+    <div id="panel-base" class="game-panel">
+        <div id="base-lock-overlay" class="lock-overlay" style="display:none;">
+            ⚠️ 현재 분쟁 지역에 있습니다.<br>안전한 [아지트 거점]으로 복귀해야<br>물류 상하차를 진행할 수 있습니다.
+        </div>
+        <div id="base-content">
+            <h2 class="category-header" style="margin-top:0;">🏢 본부 창고 및 트럭 물류</h2>
+            <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size:12px; background:#111; padding:10px; border:1px solid #333;">
+                <span style="color:#aaa;">본부 창고: 무제한</span>
+                <span style="color:#ffcc00; font-weight:bold;">트럭 적재량: <span id="weight-status">0</span> / <span id="max-weight">20</span></span>
+            </div>
+            <div id="transfer-list"></div>
+            <button class="btn-sm btn-action" style="width:100%; border-color:#555; background:#222; margin-top:15px;" onclick="upgradeTruck()">🚚 트럭 화물칸 +10 개조 ($3,000)</button>
+        </div>
+    </div>
+
     <div id="panel-weapon" class="game-panel">
-        <h2 class="category-header" style="margin-top:0;">💼 무기 암시장</h2>
-        <div id="basecamp-weapon-lock-msg" style="color:#ff4444; font-weight:bold; font-size:13px; margin-bottom:12px; display:none;">⚠️ 거점에서만 매입이 가능합니다.</div>
-        <div id="weapons-list" class="item-list-grid"></div>
+        <div id="weapon-lock-overlay" class="lock-overlay" style="display:none;">
+            ⚠️ 현재 분쟁 지역에 있습니다.<br>[아지트 거점]의 보안 채널에서만<br>무기를 매입할 수 있습니다.
+        </div>
+        <div id="weapon-content">
+            <h2 class="category-header" style="margin-top:0;">💼 무기 매입 네트워크</h2>
+            <div id="weapons-list" class="item-list-grid"></div>
+        </div>
     </div>
 
     <div id="panel-merc" class="game-panel">
         <h2 class="category-header" style="margin-top:0;">🪖 내 부대 현황</h2>
         <div id="my-mercs" style="margin-bottom:15px; border-bottom:2px dashed #444; padding-bottom:15px; line-height:1.6;"></div>
 
-        <h2 class="category-header" style="margin-top:0;">🪖 인력 및 첩보망 계약</h2>
-        <div id="basecamp-merc-lock-msg" style="color:#ff4444; font-weight:bold; font-size:13px; margin-bottom:12px; display:none;">⚠️ 거점에서만 계약이 가능합니다.</div>
-        <div id="spy-action-box" style="display:none; background:#220022; border:2px solid #f0f; padding:12px; margin-bottom:15px; box-shadow: 3px 3px 0px #000;">
-            <h3 style="color:#f0f; margin:0 0 8px 0; font-size:14px;">👁️‍🗨️ 정세 조작 공작</h3>
-            <p style="font-size:12px; color:#aaa; margin:0 0 10px 0; line-height: 1.5;">스파이를 투입해 고급 무기 시세를 폭등시킵니다.</p>
-            <button class="btn-sm" style="width:100%; background:#606; border-color:#f0f;" onclick="useSpyForMarket()">국지전 도발 (스파이 1명 소모)</button>
+        <div id="merc-lock-overlay" class="lock-overlay" style="display:none; height:150px;">
+            ⚠️ 거점에서만 계약이 가능합니다.
         </div>
-        <div id="merc-market" class="item-list-grid"></div>
+        <div id="merc-content">
+            <h2 class="category-header" style="margin-top:0;">🪖 인력 및 첩보망 계약</h2>
+            <div id="spy-action-box" style="display:none; background:#220022; border:2px solid #f0f; padding:12px; margin-bottom:15px; box-shadow: 3px 3px 0px #000;">
+                <h3 style="color:#f0f; margin:0 0 8px 0; font-size:14px;">👁️‍🗨️ 정세 조작 공작</h3>
+                <p style="font-size:12px; color:#aaa; margin:0 0 10px 0; line-height: 1.5;">스파이를 투입해 무기 수요를 폭등시킵니다.</p>
+                <button class="btn-sm" style="width:100%; background:#606; border-color:#f0f;" onclick="useSpyForMarket()">국지전 도발 (스파이 1 소모)</button>
+            </div>
+            <div id="merc-market" class="item-list-grid"></div>
+        </div>
     </div>
 
     <button class="turn-btn" id="turn-action-btn" onclick="executeTurn()">⏳ 제자리 턴 넘기기</button>
 
 </div>
 
-<!-- 토스트 알림 메시지 컨테이너 -->
 <div id="toast-container"></div>
 
 <script>
-    /* =========================================
-       1. 튜토리얼 (스토리 연출) 시스템
-       ========================================= */
-    // 여기에 스토리를 짜오시면 됩니다. bg는 배경 이미지 파일명입니다.
     const tutorialDialogs = [
         { name: "???", bg: "bg_alley.png", text: "신입이냐?" },
         { name: "브로커 선배", bg: "bg_alley.png", text: "표정을 보아하니 아직 피비린내도 못 맡아본 애송이군.<br>내 밑으로 들어온 걸 환영한다." },
         { name: "브로커 선배", bg: "bg_alley.png", text: "착각하지 마라. 여긴 총알이 날아다니는 전장이 아니다.<br><strong style='color:#0f0;'>돈이 오가는 시장</strong>이지." },
-        { name: "브로커 선배", bg: "bg_warehouse.png", text: "여기가 우리의 '비밀 거점'이다.<br>앞으로 여기서 무기를 매입하고, 현지로 가져갈 준비를 하게 될 거다." },
+        { name: "브로커 선배", bg: "bg_warehouse.png", text: "여기가 우리의 '동아시아 거점'이다.<br>앞으로 여기서 무기를 매입하고, 현지로 가져갈 준비를 하게 될 거다." },
         { name: "브로커 선배", bg: "bg_warehouse.png", text: "진짜 브로커는 총을 파는 사람이 아니라...<br>세계를 움직이는 사람이다. <strong style='color:#f00;'>살아남아서 증명해 봐.</strong>" }
     ];
 
@@ -370,42 +328,21 @@
     let typeInterval;
     let isTutorialActive = true;
 
-    // 💡 이미지 미리 불러오기 (로딩 깜빡임 방지)
-    window.onload = () => {
-        const preloadedImages = [];
-        ['./bg_alley.png', './bg_warehouse.png', './broker_senior.png'].forEach(src => {
-            let img = new Image();
-            img.src = src;
-            preloadedImages.push(img);
-        });
-        showCurrentDialog(); // 준비 완료 후 첫 대사 출력
-    };
-
     function typeWriter(text, elementId, speed) {
         if (isTyping) return;
         isTyping = true;
-        let i = 0;
-        let htmlBuffer = "";
-        let inHTMLTag = false;
-        
+        let i = 0, htmlBuffer = "", inHTMLTag = false;
         document.getElementById(elementId).innerHTML = "";
         
         typeInterval = setInterval(() => {
             let char = text.charAt(i);
-            
             if (char === '<') inHTMLTag = true;
             htmlBuffer += char;
             if (char === '>') inHTMLTag = false;
             
-            if (!inHTMLTag) {
-                document.getElementById(elementId).innerHTML = htmlBuffer;
-            }
-            
+            if (!inHTMLTag) document.getElementById(elementId).innerHTML = htmlBuffer;
             i++;
-            if (i >= text.length) {
-                clearInterval(typeInterval);
-                isTyping = false;
-            }
+            if (i >= text.length) { clearInterval(typeInterval); isTyping = false; }
         }, speed);
     }
 
@@ -413,14 +350,9 @@
         if (currentDialogIndex < tutorialDialogs.length) {
             let dialog = tutorialDialogs[currentDialogIndex];
             document.getElementById('vn-name').innerText = dialog.name;
-            
-            // 대사에 맞춰 배경화면 부드럽게 변경
             let vnScreen = document.getElementById('vn-screen');
-            if (dialog.bg) {
-                vnScreen.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.8)), url('./${dialog.bg}')`;
-            }
-            
-            typeWriter(dialog.text, 'vn-text', 25); 
+            if (dialog.bg) vnScreen.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.9)), url('./${dialog.bg}')`;
+            typeWriter(dialog.text, 'vn-text', 25);
         } else {
             endTutorial();
         }
@@ -428,7 +360,6 @@
 
     function nextDialog() {
         if (!isTutorialActive) return;
-        
         if (isTyping) {
             clearInterval(typeInterval);
             document.getElementById('vn-text').innerHTML = tutorialDialogs[currentDialogIndex].text;
@@ -447,105 +378,75 @@
         setTimeout(() => {
             vnScreen.style.display = 'none';
             addLog("🟢 통신 종료. 작전 권한이 이양되었습니다.");
-            
-            // 튜토리얼 끝나자마자 인게임 가이드(버튼 깜빡임) 시작!
             startInteractiveGuide();
         }, 1000);
     }
 
-    /* =========================================
-       2. 인게임 네비게이션 가이드 (반짝임 효과)
-       ========================================= */
     let guideStep = 0;
-    
-    function startInteractiveGuide() {
-        advanceGuide(1); 
-    }
-
+    function startInteractiveGuide() { advanceGuide(1); }
     function advanceGuide(step) {
         guideStep = step;
         let guideBox = document.getElementById('in-game-guide-box');
-        
         document.querySelectorAll('.highlight-pulse').forEach(el => el.classList.remove('highlight-pulse'));
 
-        if (step === 1) {
-            guideBox.style.display = 'block';
-            guideBox.innerHTML = "☝️ 가장 먼저, 무기를 사기 위해 <strong>[💼 암시장]</strong> 탭을 누르세요.";
-            document.getElementById('menu-weapon').classList.add('highlight-pulse');
-        } 
-        else if (step === 2) {
-            guideBox.innerHTML = "☝️ 권총이나 AK-47의 <strong>[매입]</strong> 버튼을 1번 누르세요.";
-            setTimeout(() => {
-                let firstBuyBtn = document.querySelector('.btn-buy');
-                if(firstBuyBtn) firstBuyBtn.classList.add('highlight-pulse');
-            }, 100);
-        }
-        else if (step === 3) {
-            guideBox.innerHTML = "☝️ 무기를 샀습니다! 이제 <strong>[🗺️ 작전지도]</strong> 탭으로 돌아가세요.";
-            document.getElementById('menu-map').classList.add('highlight-pulse');
-        }
-        else if (step === 4) {
-            guideBox.innerHTML = "☝️ 방금 산 무기는 창고에 있습니다. 트럭으로 <strong>[상차 ▶]</strong> 하세요.";
-            setTimeout(() => {
-                let transferArea = document.getElementById('transfer-list');
-                if(transferArea) transferArea.classList.add('highlight-pulse');
-            }, 100);
-        }
-        else if (step === 5) {
-            guideBox.innerHTML = "☝️ 트럭에 무기를 실었습니다! 아래에서 <strong>[📍 아프리카 선택]</strong>을 누르세요.";
-            document.getElementById('btn-loc-africa').classList.add('highlight-pulse');
-        }
-        else if (step === 6) {
-            guideBox.innerHTML = "☝️ 목적지를 골랐습니다. 마지막으로 맨 아래 <strong>[출발]</strong> 버튼을 누르세요!";
-            document.getElementById('turn-action-btn').classList.add('highlight-pulse');
-        }
-        else if (step === 7) {
-            guideBox.style.display = 'none'; 
-            addLog("🟢 기초 가이드가 모두 완료되었습니다. 행운을 빕니다!");
-        }
+        if (step === 1) { guideBox.style.display = 'block'; guideBox.innerHTML = "☝️ 가장 먼저, 무기를 사기 위해 <strong>[💼 시장]</strong> 탭을 누르세요."; document.getElementById('menu-weapon').classList.add('highlight-pulse'); } 
+        else if (step === 2) { guideBox.innerHTML = "☝️ 권총이나 AK-47의 <strong>[매입]</strong> 버튼을 누르세요."; setTimeout(() => { let b = document.querySelector('.btn-buy'); if(b) b.classList.add('highlight-pulse'); }, 100); }
+        else if (step === 3) { guideBox.innerHTML = "☝️ <strong>[🚚 물류]</strong> 탭으로 이동해 산 무기를 트럭에 상차하세요."; document.getElementById('menu-base').classList.add('highlight-pulse'); }
+        else if (step === 4) { guideBox.innerHTML = "☝️ 트럭으로 <strong>[상차 ▶]</strong> 하세요."; setTimeout(() => { let t = document.getElementById('transfer-list'); if(t) t.classList.add('highlight-pulse'); }, 100); }
+        else if (step === 5) { guideBox.innerHTML = "☝️ <strong>[🗺️ 작전지도]</strong>로 돌아가 아프리카 노드를 누르세요."; document.getElementById('menu-map').classList.add('highlight-pulse'); }
+        else if (step === 6) { guideBox.innerHTML = "☝️ 노드를 선택했으면 아래 <strong>[출발]</strong> 버튼을 누르세요!"; document.getElementById('turn-action-btn').classList.add('highlight-pulse'); }
+        else if (step === 7) { guideBox.style.display = 'none'; addLog("🟢 기초 가이드가 모두 완료되었습니다. 행운을 빕니다!"); }
     }
 
-    /* =========================================
-       3. 기존 게임 로직 
-       ========================================= */
-    // 💡 효과음(SFX) 경로 및 에러 처리 보완
+    window.onload = () => { showCurrentDialog(); };
+
     function playSfx(name) {
-        if (name !== 'click') {
-            let clickAudio = new Audio('./Sound/click.mp3'); // Sound 폴더 경로로 수정
-            clickAudio.play().catch(e => console.log('SFX 재생 실패:', e)); 
-        }
-        if (name) {
-            let mainAudio = new Audio('./Sound/' + name + '.mp3'); // Sound 폴더 경로로 수정
-            mainAudio.play().catch(e => console.log('SFX 재생 실패:', e)); 
-        }
+        if (name !== 'click') { let clickAudio = new Audio('./Sound/click.mp3'); clickAudio.play().catch(e => {}); }
+        if (name) { let mainAudio = new Audio('./Sound/' + name + '.mp3'); mainAudio.play().catch(e => console.log('SFX 오류:', e)); }
     }
     
-    function closeModal(id) {
-        playSfx('click');
-        document.getElementById(id).style.display = 'none';
+    function closeModal(id) { playSfx('click'); document.getElementById(id).style.display = 'none'; }
+    function addLog(msg) { 
+        const toastBox = document.getElementById('toast-container');
+        if(!toastBox) return;
+        const toast = document.createElement('div');
+        toast.className = msg.includes('실패') || msg.includes('파손') || msg.includes('부족') || msg.includes('위험') ? 'toast-msg danger' : 'toast-msg';
+        toast.innerHTML = msg;
+        toastBox.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
     }
+
+    function getTruckWeight() { let w = 0; for(let k in truckInven) w += truckInven[k]; return w; }
 
     let money = 35000; let powerReputation = 0; 
     let turn = 1, maxWeight = 20;
-    let currentLocation = 'basecamp', travelTimer = 0, selectedLocation = 'basecamp'; 
+    let currentLocation = 'base_asia', travelTimer = 0, selectedLocation = 'base_asia'; 
     let interpolAnger = 0, interpolSafeTurns = 0;
     let unBannedWeapon = null, ciaActive = false, spyTargetWeapon = null;
     let bgmPlaying = false;
     let strikeEventTurns = 0, marketSurgeTurns = 0, totalWarTurns = 0, totalWarLoc = null;
 
-    const levelTitles = ["", "풋내기", "뒷골목 무기상", "지역 무기상", "다크웹 거래상", "국제 무기상", "세계 암시장 연합장", "일루미나티"];
+    const levelTitles = ["", "풋내기", "지역 브로커", "분쟁 조율자", "다크웹 거래상", "국제 무기상", "세계 암시장 연합장", "일루미나티"];
     const repThresholds = [0, 0, 10, 30, 60, 100, 150, 200]; 
-    
-    function getLevel() {
-        let l = 1;
-        for(let i=7; i>=1; i--) { if(powerReputation >= repThresholds[i]) { l = i; break; } }
-        return l;
-    }
+    function getLevel() { let l = 1; for(let i=7; i>=1; i--) { if(powerReputation >= repThresholds[i]) { l = i; break; } } return l; }
+
+    const locData = {
+        base_asia: { name: '동아시아 거점', type: 'base', reqLv: 1, x: '75%', y: '45%' },
+        base_eu:   { name: '동유럽 항구', type: 'base', reqLv: 3, x: '55%', y: '30%' },
+        base_sa:   { name: '남미 정글기지', type: 'base', reqLv: 5, x: '30%', y: '75%' },
+        
+        africa:    { name: '아프리카 (반군)', type: 'region', reqLv: 1, x: '48%', y: '70%', demand: { pistol:2.0, smg:2.0, ak47:2.5, rpg:2.0, grenade:2.0 } },
+        se_asia:   { name: '동남아 (범죄조직)', type: 'region', reqLv: 1, x: '80%', y: '65%', demand: { pistol:2.5, smg:2.5, shotgun:2.0 } },
+        mexico:    { name: '멕시코 (카르텔)', type: 'region', reqLv: 2, x: '20%', y: '55%', demand: { pistol:2.5, smg:2.5, shotgun:3.0, ak47:2.0 } },
+        mideast:   { name: '중동 (전쟁지역)', type: 'region', reqLv: 3, x: '55%', y: '50%', demand: { ak47:2.5, sniper:2.5, rpg:2.5, amr:2.0 } },
+        asia:      { name: '아시아 (삼합회)', type: 'region', reqLv: 4, x: '80%', y: '35%', demand: { pistol:3.0, sniper:3.0, amr:2.5 } },
+        europe:    { name: '유럽 (마피아)', type: 'region', reqLv: 5, x: '45%', y: '35%', demand: { smg:3.0, shotgun:3.0, sniper:3.0 } },
+        usa:       { name: '미국 (사설PMC)', type: 'region', reqLv: 6, x: '20%', y: '35%', demand: { sniper:3.0, amr:3.0, bigung:2.5 } },
+        ukraine:   { name: '우크라·러시아', type: 'region', reqLv: 7, x: '60%', y: '25%', demand: { ak47:3.0, rpg:3.0, amr:3.0, bigung:3.0, cheongung:3.0 } }
+    };
 
     const wNames = { pistol: '권총', smg: '기관단총', ak47: 'AK-47', shotgun: '샷건', grenade: '수류탄', sniper: '저격총', rpg: 'RPG-7', amr: '대물저격총', bigung: '비궁', cheongung: '천궁', uranium: '☢️농축우라늄' };
     const buyPrices = { pistol: 150, smg: 300, ak47: 500, shotgun: 800, grenade: 150, sniper: 2000, rpg: 4000, amr: 5000, bigung: 12000, cheongung: 35000, uranium: 1500000 };
-    let currentSellPricesAfrica = { pistol: 300, smg: 600, ak47: 1000, shotgun: 1200, grenade: 300, sniper: 0, rpg: 6500, amr: 0, bigung: 0, cheongung: 0, uranium: 0 };
-    let currentSellPricesMidEast = { pistol: 0, smg: 500, ak47: 1000, shotgun: 0, grenade: 250, sniper: 3800, rpg: 7000, amr: 9000, bigung: 22000, cheongung: 70000, uranium: 0 };
     const retrievableWeapons = ['pistol', 'smg', 'ak47', 'shotgun', 'sniper', 'amr'];
 
     let baseWarehouse = { pistol:0, smg:0, ak47:0, shotgun:0, sniper:0, grenade:0, amr:0, rpg:0, bigung:0, cheongung:0, uranium:0 };
@@ -560,36 +461,19 @@
         asnS: { name: "S급 고스트", hire: 25000, upkeep: 600 }, asnA: { name: "A급 암살자", hire: 12000, upkeep: 300 }, asnB: { name: "B급 청부업자", hire: 5000, upkeep: 120 },
         spy: { name: "일급 스파이", hire: 50000, upkeep: 2000 }
     };
-
     let activeMissions = [];
 
-    function addLog(msg) { 
-        const toastBox = document.getElementById('toast-container');
-        if(!toastBox) return;
-        const toast = document.createElement('div');
-        toast.className = msg.includes('실패') || msg.includes('위협') || msg.includes('파손') || msg.includes('부족') || msg.includes('위험') ? 'toast-msg danger' : 'toast-msg';
-        toast.innerHTML = msg.replace('> ', ''); // 이전 로그용 화살표 제거
-        toastBox.appendChild(toast);
-        setTimeout(() => toast.remove(), 3000);
-    }
-
     function devCheat() {
-        playSfx('click');
-        money += 1000000;
-        powerReputation += 100;
-        maxWeight += 100;
-        showNewsModal("💻 개발자 치트 활성화", "자금 +$1,000,000<br>명성 +100<br>트럭 용량 +100", false, 'telegram');
-        updateUI();
+        playSfx('click'); money += 1000000; powerReputation += 100; maxWeight += 100;
+        showNewsModal("💻 개발자 치트 활성화", "자금 +$1,000,000<br>명성 +100 (맵 확장)<br>트럭 용량 +100", false, 'telegram'); updateUI();
     }
-
-    function getTruckWeight() { let w = 0; for(let k in truckInven) w += truckInven[k]; return w; }
 
     function toggleBGM() {
         const bgm = document.getElementById('bgm-player');
         const btn = document.getElementById('bgm-btn');
         bgm.volume = 0.5;
         if (bgmPlaying) { bgm.pause(); btn.innerText = "🎵 BGM: OFF"; btn.style.background = "#333"; bgmPlaying = false; } 
-        else { bgm.play().then(() => { btn.innerText = "🎵 BGM: ON"; btn.style.background = "#006600"; bgmPlaying = true; }).catch(e => { console.error(e); }); }
+        else { bgm.play().then(() => { btn.innerText = "🎵 BGM: ON"; btn.style.background = "#006600"; bgmPlaying = true; }).catch(e => console.error(e)); }
     }
 
     function switchTab(tabName) {
@@ -597,156 +481,115 @@
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         document.getElementById('panel-' + tabName).classList.add('active-view');
         document.getElementById('menu-' + tabName).classList.add('active');
-        
-        // 가이드 연동
         if (guideStep === 1 && tabName === 'weapon') advanceGuide(2);
-        if (guideStep === 3 && tabName === 'map') advanceGuide(4);
+        if (guideStep === 3 && tabName === 'base') advanceGuide(4);
+        if (guideStep === 4 && tabName === 'map') advanceGuide(5);
     }
 
     function moveItem(k, toTruck, isAll) {
         playSfx('transfer'); 
         if(toTruck) {
-            if (isAll) {
-                let space = maxWeight - getTruckWeight();
-                let amount = Math.min(baseWarehouse[k], space);
-                if (amount > 0) { baseWarehouse[k] -= amount; truckInven[k] += amount; }
-            } else {
-                if (baseWarehouse[k] > 0 && getTruckWeight() < maxWeight) { baseWarehouse[k]--; truckInven[k]++; }
-            }
-            // 가이드 연동 (상차 성공 시)
-            if (guideStep === 4) advanceGuide(5);
+            let space = maxWeight - getTruckWeight();
+            let amount = isAll ? Math.min(baseWarehouse[k], space) : (baseWarehouse[k] > 0 && space > 0 ? 1 : 0);
+            baseWarehouse[k] -= amount; truckInven[k] += amount;
+            if (amount > 0 && guideStep === 4) advanceGuide(5);
         } else {
-            if (isAll) {
-                let amount = truckInven[k];
-                if (amount > 0) { truckInven[k] -= amount; baseWarehouse[k] += amount; }
-            } else {
-                if (truckInven[k] > 0) { truckInven[k]--; baseWarehouse[k]++; }
-            }
+            let amount = isAll ? truckInven[k] : (truckInven[k] > 0 ? 1 : 0);
+            truckInven[k] -= amount; baseWarehouse[k] += amount;
         }
         checkCIA(); updateUI();
     }
 
     function upgradeTruck() {
         playSfx('click');
-        if (currentLocation !== 'basecamp') { addLog("거점에서만 개조 가능합니다."); return; }
-        if (money >= 3000) { money -= 3000; maxWeight += 10; addLog("🚚 트럭 용량 +10 확장!"); updateUI(); } 
-        else { addLog("자금이 부족합니다."); }
+        if (money >= 3000) { money -= 3000; maxWeight += 10; addLog("🚚 트럭 용량 +10 확장!"); updateUI(); } else addLog("자금이 부족합니다.");
     }
 
     function selectLocation(targetLoc) {
         if (currentLocation === 'transit') return;
-        playSfx('click');
         let lvl = getLevel();
-        if (targetLoc === 'midEast' && lvl < 3) { addLog("⚠️ 중동 항로 차단됨 (Lv.3 필요)"); return; }
-        selectedLocation = targetLoc;
-        updateUI();
-        
-        // 가이드 연동
+        if (lvl < locData[targetLoc].reqLv) { playSfx('fail'); addLog("⚠️ 명성이 부족하여 접근할 수 없습니다."); return; }
+        playSfx('click'); selectedLocation = targetLoc; updateUI();
         if (guideStep === 5 && targetLoc === 'africa') advanceGuide(6);
     }
 
     function showNewsModal(title, text, isDanger = false, customSfx = 'telegram') {
-        playSfx(customSfx);
-        document.getElementById('news-title').innerHTML = title;
+        playSfx(customSfx); document.getElementById('news-title').innerHTML = title;
         document.getElementById('news-title').style.color = isDanger ? "#f00" : "#ccaa00";
         document.getElementById('news-box').style.borderColor = isDanger ? "#f00" : "#ccaa00";
-        document.getElementById('news-text').innerHTML = text;
-        document.getElementById('news-modal').style.display = 'flex';
+        document.getElementById('news-text').innerHTML = text; document.getElementById('news-modal').style.display = 'flex';
     }
 
     function checkCIA() {
         let hasUranium = (baseWarehouse.uranium > 0 || truckInven.uranium > 0);
-        if (hasUranium && !ciaActive) {
-            ciaActive = true; document.body.classList.add('cia-mode');
-            showNewsModal("🚨 CIA 감시망 작동 🚨", "농축 우라늄 확보 첩보 접수.<br><br>일반 작전 통제. 극비 루트로 처분하십시오!", true, 'cia');
-            generateMarketData();
-        } else if (!hasUranium && ciaActive) {
-            ciaActive = false; document.body.classList.remove('cia-mode');
-            showNewsModal("✅ 감시망 해제", "우라늄 처분 완료.", false, 'success');
-            generateMarketData();
-        }
-    }
-
-    function useSpyForMarket() {
-        playSfx('click');
-        if (currentLocation !== 'basecamp') { addLog("거점에서만 지시 가능."); return; }
-        if (myMercs.spy <= 0) { addLog("스파이가 없습니다."); return; }
-        myMercs.spy--;
-        const targets = ['rpg', 'amr', 'bigung', 'cheongung'];
-        spyTargetWeapon = targets[Math.floor(Math.random() * targets.length)];
-        showNewsModal("🕵️‍♂️ 공작 성공", `다음 턴, <strong>[${wNames[spyTargetWeapon]}]</strong> 시세가 3~4배 폭등합니다!`, false, 'telegram');
-        updateUI();
+        if (hasUranium && !ciaActive) { ciaActive = true; document.body.classList.add('cia-mode'); showNewsModal("🚨 CIA 감시망 작동 🚨", "농축 우라늄 확보 첩보 접수.<br><br>일반 작전 통제. 극비 루트로 처분하십시오!", true, 'cia'); generateMarketData(); } 
+        else if (!hasUranium && ciaActive) { ciaActive = false; document.body.classList.remove('cia-mode'); showNewsModal("✅ 감시망 해제", "우라늄 처분 완료.", false, 'success'); generateMarketData(); }
     }
 
     function updateUI() {
         let lvl = getLevel();
         document.getElementById('level-badge').innerText = `Lv.${lvl} ${levelTitles[lvl]}`;
-        if(lvl === 7) document.getElementById('level-badge').className = 'level-badge illuminati';
-        else document.getElementById('level-badge').className = 'level-badge';
-
-        let nextExp = lvl < 7 ? repThresholds[lvl+1] : "MAX";
-        document.getElementById('fac-rep').innerText = `${powerReputation} / ${nextExp}`;
-
+        document.getElementById('level-badge').className = lvl === 7 ? 'level-badge illuminati' : 'level-badge';
+        document.getElementById('fac-rep').innerText = `${powerReputation} / ${lvl < 7 ? repThresholds[lvl+1] : "MAX"}`;
         document.getElementById('turn-count').innerText = turn;
         document.getElementById('money').innerText = money.toLocaleString();
+        
         let totalUpkeep = 0; for (let k in myMercs) totalUpkeep += myMercs[k] * mercData[k].upkeep;
         document.getElementById('upkeep').innerText = totalUpkeep.toLocaleString();
-        
         document.getElementById('weight-status').innerText = getTruckWeight();
         document.getElementById('max-weight').innerText = maxWeight;
-
-        let angerPct = (interpolAnger / 5) * 100;
-        document.getElementById('fac-interpol').innerText = interpolSafeTurns > 0 ? `면제 (${interpolSafeTurns}턴)` : `${Math.floor(angerPct)}%`;
+        document.getElementById('fac-interpol').innerText = interpolSafeTurns > 0 ? `면제 (${interpolSafeTurns}턴)` : `${Math.floor((interpolAnger / 5) * 100)}%`;
         document.getElementById('fac-un').innerText = unBannedWeapon ? wNames[unBannedWeapon] : '없음';
 
-        const isBase = (currentLocation === 'basecamp');
-        document.getElementById('basecamp-actions').style.display = isBase ? 'block' : 'none';
-        document.getElementById('conflict-actions').style.display = (!isBase && currentLocation !== 'transit') ? 'block' : 'none';
-        document.getElementById('basecamp-weapon-lock-msg').style.display = isBase ? 'none' : 'block';
-        document.getElementById('basecamp-merc-lock-msg').style.display = isBase ? 'none' : 'block';
-        document.getElementById('spy-action-box').style.display = (isBase && lvl >= 6) ? 'block' : 'none';
+        let isBase = (currentLocation !== 'transit' && locData[currentLocation] && locData[currentLocation].type === 'base');
         
-        if(document.getElementById('btn-loc-mideast')) {
-            document.getElementById('btn-loc-mideast').style.opacity = (lvl >= 3) ? 1 : 0.3;
-        }
+        // 탭 락 제어
+        document.getElementById('base-content').style.display = isBase ? 'block' : 'none';
+        document.getElementById('base-lock-overlay').style.display = isBase ? 'none' : 'flex';
+        document.getElementById('weapon-content').style.display = isBase ? 'block' : 'none';
+        document.getElementById('weapon-lock-overlay').style.display = isBase ? 'none' : 'flex';
+        document.getElementById('merc-content').style.display = isBase ? 'block' : 'none';
+        document.getElementById('merc-lock-overlay').style.display = isBase ? 'none' : 'flex';
+        document.getElementById('conflict-actions').style.display = (!isBase && currentLocation !== 'transit') ? 'block' : 'none';
+        document.getElementById('spy-action-box').style.display = (isBase && lvl >= 6) ? 'block' : 'none';
 
-        ['basecamp', 'africa', 'midEast'].forEach(loc => {
-            const nodeEl = document.getElementById('node-' + loc);
-            const btnEl = document.getElementById('btn-loc-' + loc);
-            if(nodeEl) {
-                nodeEl.classList.remove('current-loc', 'selected-loc');
-                if (currentLocation !== 'transit' && loc === currentLocation) nodeEl.classList.add('current-loc');
-                if (currentLocation !== 'transit' && loc === selectedLocation && selectedLocation !== currentLocation) nodeEl.classList.add('selected-loc');
-            }
-            if(btnEl) {
-                btnEl.classList.remove('active');
-                if (loc === selectedLocation && selectedLocation !== currentLocation) btnEl.classList.add('active');
-            }
-        });
+        // 맵 노드 동적 생성
+        let mapHtml = '';
+        for(let key in locData) {
+            let loc = locData[key];
+            let isLocked = lvl < loc.reqLv;
+            let nodeClass = `map-node ${isLocked ? 'locked' : ''} ${currentLocation === key ? 'current-loc' : ''} ${selectedLocation === key ? 'selected-loc' : ''}`;
+            let dotClass = `dot ${loc.type}`; 
+            mapHtml += `<div class="${nodeClass}" style="top: ${loc.y}; left: ${loc.x};" onclick="selectLocation('${key}')">
+                <div class="${dotClass}"></div>
+                <div class="label">${loc.name}${isLocked ? ' (Lv.'+loc.reqLv+')' : ''}</div>
+            </div>`;
+        }
+        document.getElementById('map-nodes-container').innerHTML = mapHtml;
 
         if (currentLocation === 'transit') document.getElementById('loc-desc').innerText = `✈️ 이동 중... (도착까지 ${travelTimer}턴)`;
-        else if (isBase) document.getElementById('loc-desc').innerText = "🏰 위치: 거점 (보급/상하차)";
-        else document.getElementById('loc-desc').innerText = `🚨 작전지: ${currentLocation==='africa'?'아프리카':'중동'}`;
+        else document.getElementById('loc-desc').innerText = `🏰 현재 위치: ${locData[currentLocation].name}`;
 
         const actionBtn = document.getElementById('turn-action-btn');
         if (currentLocation === 'transit') {
             actionBtn.innerHTML = `⏳ 이동 중... (남은 턴: ${travelTimer})`;
             actionBtn.style.background = "#a50"; actionBtn.style.borderColor = "#f90";
         } else if (selectedLocation !== currentLocation) {
-            let cost = (selectedLocation === 'midEast') ? 1500 : (selectedLocation === 'africa' ? 1000 : 500);
-            let locName = selectedLocation === 'basecamp' ? '거점' : (selectedLocation === 'africa' ? '아프리카' : '중동');
-            actionBtn.innerHTML = `✈️ ${locName}으로 출발 (-$${cost})`;
+            let tLoc = locData[selectedLocation];
+            let cost = tLoc.reqLv * 500;
+            actionBtn.innerHTML = `✈️ [${tLoc.name}] 출발 (-$${cost})`;
             actionBtn.style.background = "#004488"; actionBtn.style.borderColor = "#0088ff";
         } else {
             actionBtn.innerHTML = `⏳ 제자리에서 턴 넘기기`;
             actionBtn.style.background = "#a00"; actionBtn.style.borderColor = "#f00";
         }
 
+        // 상하차 리스트 렌더링
         let tHtml = "";
         for(let k in wNames) {
             if (baseWarehouse[k] > 0 || truckInven[k] > 0) {
                 tHtml += `<div style="margin-bottom: 8px; background:#111; border:2px solid #555; padding:8px;">
-                    <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:13px;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:12px;">
                         <strong style="color:#fff;">${wNames[k]}</strong>
                         <span>창고 <span style="color:#aaa;">${baseWarehouse[k]}</span> | 트럭 <span style="color:#ffcc00;">${truckInven[k]}</span></span>
                     </div>
@@ -761,6 +604,7 @@
         }
         document.getElementById('transfer-list').innerHTML = tHtml || "<div style='color:#777;font-size:12px;'>창고 및 트럭에 장비가 없습니다.</div>";
 
+        // 시장 렌더링
         let wHtml = "";
         for(let k in buyPrices) {
             let amount = marketWeapons[k]; let isBanned = (k === unBannedWeapon);
@@ -769,7 +613,7 @@
                 let finalBuyPrice = (marketSurgeTurns > 0) ? Math.floor(buyPrices[k] * 1.2) : buyPrices[k];
                 wHtml += `<div class="item-card ${isBanned ? 'banned-item' : ''}">
                     <div class="item-info"><strong style="${k==='uranium'?'color:#f0f;':''}">${wNames[k]}</strong> ${isBanned ? '<span style="color:#f00;">[제재]</span>' : ''}<br><span style="color:#aaa;">매물: ${amount} / $${finalBuyPrice.toLocaleString()}</span></div>
-                    <button class="btn-sm btn-buy" onclick="buyWeapon('${k}')" ${isBanned || !isBase ? 'disabled' : ''}>매입</button>
+                    <button class="btn-sm btn-buy" onclick="buyWeapon('${k}')" ${isBanned ? 'disabled' : ''}>매입</button>
                 </div>`;
             }
         }
@@ -782,12 +626,13 @@
                 let nameColor = type.includes('S') ? '#fa0' : (type === 'spy' ? '#f0f' : (type.includes('A') ? '#fff' : '#aaa'));
                 mHtml += `<div class="item-card">
                     <div class="item-info"><strong style="color:${nameColor};">${mercData[type].name}</strong><br><span style="color:#aaa;">대기: ${amount} / $${mercData[type].hire.toLocaleString()}</span></div>
-                    <button class="btn-sm btn-action" onclick="hireMerc('${type}')" ${!isBase ? 'disabled' : ''}>고용</button>
+                    <button class="btn-sm btn-action" onclick="hireMerc('${type}')">고용</button>
                 </div>`;
             }
         }
         document.getElementById('merc-market').innerHTML = mHtml;
 
+        // 현지 매각 렌더링
         let sHtml = "";
         for(let k in currentSellPrices) {
             let price = currentSellPrices[k] || 0; let isBanned = (k === unBannedWeapon);
@@ -803,6 +648,7 @@
         }
         document.getElementById('sell-list').innerHTML = sHtml || "<span style='color:#777;'>현지에 수요가 없거나 화물이 없습니다.</span>";
 
+        // 임무 렌더링
         let reqHtml = "";
         activeMissions.forEach((mission, idx) => {
             let isEndgame = mission.type === 'endgame';
@@ -820,176 +666,58 @@
             if(myMercs[k] > 0) {
                 let badgeColor = k.includes('S') ? '#fa0' : (k === 'spy' ? '#f0f' : (k.includes('A') ? '#fff' : '#aaa'));
                 let badgeBg = k.includes('S') ? '#420' : '#222';
-                myMStr.push(`<span class="merc-badge" style="color:${badgeColor}; background:${badgeBg};">[${mercData[k].name}: ${myMercs[k]}명]</span>`);
+                myMStr.push(`<span class="merc-badge" style="color:${badgeColor}; background:${badgeBg};">[${mercData[k].name}: ${myMercs[k]}]</span>`);
             }
         }
         document.getElementById('my-mercs').innerHTML = myMStr.length > 0 ? myMStr.join('') : "<span style='color:#777;'>고용된 인력이 없습니다.</span>";
     }
 
-    function resolveInterpol(choice) {
-        document.getElementById('interpol-modal').style.display = 'none';
-        let resTitle = "", resText = "", isDangerStyle = false;
-
-        if (choice === 'pay') {
-            if (money >= 3000) {
-                money -= 3000; interpolAnger += 1;
-                resTitle = "🚨 뇌물 수수 완료";
-                resText = "단속반 요원에게 슬쩍 <strong>$3,000</strong>을 쥐여주었습니다.<br>요원들은 철수했지만, 정보부에 흔적이 남아 <span style='color:#ff4444;'>인터폴 분노가 상승</span>합니다.";
-                addLog("🚨 [인터폴] 뇌물 우회 완료.");
-            } else {
-                money = 0; interpolAnger += 2;
-                resTitle = "🚨 자금 부족 및 압류";
-                resText = "요구한 최소 뇌물이 부족합니다!<br>단속반이 분노하여 <span style='color:#f00;'>현금 지갑의 모든 잔액을 압수</span>해 갑니다.";
-                addLog("🚨 전재산 압수.");
-                isDangerStyle = true;
-            }
-        } else {
-            if (Math.random() < 0.5) {
-                money -= 8000; interpolAnger += 2; if (money < 0) money = 0;
-                resTitle = "💥 현장 체포";
-                resText = "추격팀의 포위망을 뚫지 못하고 붙잡혔습니다.<br><br><span style='color:#f00;'>벌금 $8,000 부과 및 인터폴 분노 폭등!</span>";
-                addLog("🚨 체포! 벌금 $8,000");
-                isDangerStyle = true;
-            } else {
-                resTitle = "💨 전속력 도주 성공!";
-                resText = "경비대의 시야에서 완전히 사라졌습니다!<br><br><span style='color:#0f0;'>페널티 없이 따돌렸습니다.</span>";
-                addLog("💨 도주 성공");
-            }
-        }
-
-        if (interpolAnger >= 5) {
-            interpolAnger = 5;
-            resText += "<br><br><strong style='color:#f00;'>[위험] 인터폴 적색 수배가 내려졌습니다!</strong>";
-            showNewsModal("🚨 적색 수배 발령", resText, true, 'alert'); 
-        } else {
-            showNewsModal(resTitle, resText, isDangerStyle, isDangerStyle ? 'fail' : 'success');
-        }
-        updateUI();
-    }
-
     function executeTurn() {
         playSfx('turn'); 
-        
         if (currentLocation !== 'transit' && selectedLocation !== currentLocation) {
-            let cost = (selectedLocation === 'midEast') ? 1500 : (selectedLocation === 'africa' ? 1000 : 500);
-            let turns = (selectedLocation === 'midEast') ? 2 : 1;
+            let tLoc = locData[selectedLocation];
+            let cost = tLoc.reqLv * 500;
+            let turns = Math.ceil(tLoc.reqLv / 2);
             if (money < cost) { addLog("⚠️ 자금 부족: 이동 불가."); return; }
 
             money -= cost; travelTimer = turns; currentLocation = 'transit'; 
-            let locName = selectedLocation === 'basecamp' ? '거점' : (selectedLocation === 'africa' ? '아프리카' : '중동');
-            addLog(`✈️ ${locName} 항로 진입. (${turns}턴, -$${cost})`);
-            
+            addLog(`✈️ [${tLoc.name}] 항로 진입. (${turns}턴, -$${cost})`);
             let totalUpkeep = 0; for(let k in myMercs) totalUpkeep += myMercs[k] * mercData[k].upkeep; money -= totalUpkeep;
             if (money < 0) { alert("파산! 게임오버."); return; }
-            
-            turn++;
-            updateUI();
-            
-            // 가이드 종료 조건
+            turn++; updateUI();
             if (guideStep === 6) advanceGuide(7);
-            
             return;
         }
 
         turn++; 
         if (strikeEventTurns > 0) strikeEventTurns--;
         if (marketSurgeTurns > 0) marketSurgeTurns--;
-        if (totalWarTurns > 0) {
-            totalWarTurns--;
-            if(totalWarTurns === 0) totalWarLoc = null; 
-        }
+        if (totalWarTurns > 0) { totalWarTurns--; if(totalWarTurns === 0) totalWarLoc = null; }
 
         let totalUpkeep = 0; for(let k in myMercs) totalUpkeep += myMercs[k] * mercData[k].upkeep; money -= totalUpkeep;
         if (money < 0) { alert("파산! 게임오버."); return; }
 
         if (currentLocation === 'transit') {
             travelTimer--;
-            if (strikeEventTurns > 0) {
-                addLog("🛡️ [파업 효과] 수비대 파업으로 기습을 무사 통과합니다.");
-            } else if (Math.random() < 0.15) { 
+            if (strikeEventTurns > 0) addLog("🛡️ 수비대 파업으로 기습 무사 통과.");
+            else if (Math.random() < 0.15) { 
                 let def = (myMercs.S*60) + (myMercs.A*40) + (myMercs.B*20) + (myMercs.C*10);
                 if (Math.floor(Math.random()*100) >= def) {
                     if (Math.random() < 0.5 && getTruckWeight() > 0) {
                         let avail = Object.keys(truckInven).filter(k => truckInven[k] > 0); let lost = avail[Math.floor(Math.random() * avail.length)];
                         truckInven[lost]--; addLog(`💥 기습! [${wNames[lost]}] 파손.`); checkCIA();
                     } else { money -= 2000; addLog("💥 트럭 파손! 수리비 $2,000."); }
-                } else { addLog("🛡️ 기습 방어 성공."); }
+                } else addLog("🛡️ 기습 방어 성공."); 
             }
-            if (travelTimer <= 0) { 
-                currentLocation = selectedLocation; 
-                addLog(`🛬 작전지 터치다운 완료.`); 
-                generateMarketData(); 
-            }
+            if (travelTimer <= 0) { currentLocation = selectedLocation; addLog(`🛬 작전지 터치다운 완료.`); generateMarketData(); }
         } else {
-            addLog(`⏳ ${turn}턴 대기 완료 (유지비 -$${totalUpkeep.toLocaleString()})`);
             generateMarketData(); 
         }
-        
         processFactionEvents();
-    }
-
-    function processFactionEvents() {
-        if (interpolSafeTurns > 0) interpolSafeTurns--;
-        let roll = Math.floor(Math.random() * 100) + 1; 
-
-        if (roll <= 5 && !unBannedWeapon) {
-            const highTiers = ['sniper', 'rpg', 'amr', 'bigung', 'cheongung']; unBannedWeapon = highTiers[Math.floor(Math.random() * highTiers.length)];
-            showNewsModal("🌐 UN 긴급 무기 제재", `안보리 결의안으로 <strong>[${wNames[unBannedWeapon]}]</strong> 거래가 동결됩니다.<br>제재 위원장을 처리하기 전까진 매매가 불가합니다.`, true, 'alert'); 
-        }
-        else if (roll > 5 && roll <= 12 && interpolSafeTurns === 0 && interpolAnger < 5) {
-            playSfx('alert');
-            document.getElementById('interpol-modal').style.display = 'flex'; 
-        }
-        else if (roll > 12 && roll <= 18 && currentLocation === 'basecamp') {
-            for (let k in marketWeapons) { if (marketWeapons[k] > 0 && k !== 'uranium') marketWeapons[k] += 2; }
-            showNewsModal("📦 초과 재고 덤핑", "군수공장에서 악성 재고를 시장에 긴급 덤핑했습니다!<br><br><span style='color:#0f0;'>모든 무기 매물이 +2씩 증가합니다.</span>", false, 'telegram');
-        }
-        else if (roll > 18 && roll <= 24) {
-            strikeEventTurns = 2; 
-            showNewsModal("🛡️ 국경 수비대 파업", "항로 수비대가 파업에 돌입합니다!<br><br><span style='color:#0f0;'>다음 항로 기동 시 적들의 습격(Ambush) 확률이 0%가 됩니다.</span>", false, 'telegram');
-        }
-        else if (roll > 24 && roll <= 30 && currentLocation === 'basecamp') {
-            marketSurgeTurns = 1;
-            showNewsModal("📉 블랙마켓 규제 강화", "국제 금융조사국 감시로 인해 브로커들이 몸을 사립니다.<br><br><span style='color:#f44;'>이번 턴 거점 무기 매입 단가가 20% 폭등합니다!</span>", true, 'telegram');
-        }
-        else if (roll > 30 && roll <= 37) {
-            let msg = "", isDanger = false;
-            if (myMercs.S > 0 || myMercs.asnS > 0 || myMercs.A > 0 || myMercs.asnA > 0) {
-                msg = "특수 요원들이 당신을 노리던 A급 암살자를 사전에 제압했습니다!<br><br><span style='color:#0f0;'>아무런 피해 없이 상황이 종료되었습니다.</span>";
-            } else if (myMercs.B > 0 || myMercs.C > 0 || myMercs.asnB > 0) {
-                if(myMercs.B > 0) myMercs.B--; else if(myMercs.asnB > 0) myMercs.asnB--; else myMercs.C--;
-                msg = "고용된 하급 용병들이 암살자를 막아냈지만, 교전 중 <span style='color:#f00;'>1팀이 전사</span>했습니다.";
-                isDanger = true;
-            } else {
-                money -= 15000; if(money < 0) money = 0;
-                msg = "호위 병력이 없어 암살자의 총격에 당했습니다!<br><span style='color:#f00;'>긴급 수술 및 치료비로 $15,000이 지출되었습니다.</span>";
-                isDanger = true;
-            }
-            showNewsModal("🚨 [생명 위협] 암살자 기습", `누군가 당신의 목숨을 노립니다!<br>적 예상 전투력: <strong>A급 암살자</strong><br><br>---<br>${msg}`, isDanger, isDanger ? 'fail' : 'success');
-        }
-        else if (roll > 37 && roll <= 44) {
-            totalWarLoc = (Math.random() < 0.5) ? 'africa' : 'midEast';
-            totalWarTurns = 2; 
-            let n = totalWarLoc === 'africa' ? '아프리카' : '중동';
-            showNewsModal("💥 국지전 전면전 확대", `<strong>[${n}]</strong> 전선에 대규모 전면전이 발발했습니다!<br><br><span style='color:#0f0;'>향후 2턴 동안 해당 지역의 모든 무기 매각 단가가 2배로 폭등합니다!</span>`, false, 'alert');
-            generateMarketData(); 
-        }
-        else if (roll > 44 && roll <= 49) {
-            let amt = Math.floor(Math.random() * 15000) + 10000;
-            money += amt;
-            showNewsModal("💰 다크웹 익명 후원", `해커 조직이 당신의 활약에 감명받아 송금했습니다.<br><br><span style='color:#0f0;'>자금 +$${amt.toLocaleString()} 획득!</span>`, false, 'success');
-        }
-        else if (roll > 49 && roll <= 54) {
-            if(Math.random() < 0.5) myMercs.A++; else myMercs.asnA++;
-            showNewsModal("🎖️ 베테랑 자원입대", "전설적인 A급 베테랑 요원이 당신의 부대에 무료로 합류했습니다!<br><br><span style='color:#0f0;'>A급 전력 +1 획득!</span>", false, 'success');
-        }
-
-        updateUI();
     }
 
     function generateMarketData() {
         let lvl = getLevel();
-        
         for(let k in marketWeapons) marketWeapons[k] = 0;
         marketWeapons.pistol = Math.floor(Math.random()*4)+2; marketWeapons.smg = Math.floor(Math.random()*3)+1; marketWeapons.ak47 = Math.floor(Math.random()*3)+1; marketWeapons.shotgun = Math.floor(Math.random()*2)+1; marketWeapons.grenade = Math.floor(Math.random()*5)+2;
         if (lvl >= 3) { marketWeapons.sniper = Math.floor(Math.random()*2)+1; marketWeapons.rpg = Math.floor(Math.random()*2); marketWeapons.amr = Math.floor(Math.random()*2); }
@@ -1002,116 +730,87 @@
         if (lvl >= 5) { marketMercs.S = (Math.random()<0.2)?1:0; marketMercs.asnS = (Math.random()<0.1)?1:0; }
         if (lvl >= 6) { marketMercs.spy = (Math.random()<0.3)?1:0; }
 
-        if (currentLocation !== 'basecamp' && currentLocation !== 'transit') {
-            let baseTable = currentLocation === 'africa' ? JSON.parse(JSON.stringify(currentSellPricesAfrica)) : JSON.parse(JSON.stringify(currentSellPricesMidEast));
-            if (totalWarTurns > 0 && currentLocation === totalWarLoc) {
-                for(let k in baseTable) baseTable[k] *= 2;
+        // 동적 시세 적용 (8개 지역별 수요)
+        for(let k in currentSellPrices) currentSellPrices[k] = 0;
+        if (currentLocation !== 'transit' && locData[currentLocation].type === 'region') {
+            let demandMap = locData[currentLocation].demand;
+            for(let k in demandMap) {
+                let basePrice = buyPrices[k];
+                let multi = demandMap[k];
+                if (totalWarTurns > 0 && currentLocation === totalWarLoc) multi *= 2;
+                currentSellPrices[k] = Math.floor(basePrice * (multi + (Math.random()*0.4 - 0.2)));
             }
-            if (spyTargetWeapon) {
-                baseTable[spyTargetWeapon] = buyPrices[spyTargetWeapon] * (Math.floor(Math.random() * 2) + 3);
-                addLog(`🔥 [공작] ${wNames[spyTargetWeapon]} 시세 폭등!`); spyTargetWeapon = null;
-            }
-            currentSellPrices = baseTable;
-        } else { for(let k in currentSellPrices) currentSellPrices[k] = 0; }
+            if (spyTargetWeapon) { currentSellPrices[spyTargetWeapon] = buyPrices[spyTargetWeapon] * (Math.floor(Math.random() * 2) + 3); addLog(`🔥 공작 성공! ${wNames[spyTargetWeapon]} 폭등!`); spyTargetWeapon = null; }
+        }
 
         activeMissions = [];
         if (ciaActive) {
             activeMissions.push({ title: "☢️ 극비 우라늄 처분", req: { spy:1, asnS:1, S:1, uranium:1 }, reqText: "스파이1, S암살1, S전술1, 우라늄1", reward: 10000000, penalty: 2000000, baseChance: 30, type: 'endgame' });
-        } else {
-            if (currentLocation === 'africa') {
-                activeMissions.push({ title: "소규모 반군 토벌", req: {C:1, ak47:1}, reqText: "C급 1, AK-47 1", reward: 5000, penalty: 1000, baseChance: 80 });
-                if(lvl >= 2) activeMissions.push({ title: "군벌 야간 독살", req: {asnB:1, pistol:1}, reqText: "B급 암살 1, 권총 1", reward: 18000, penalty: 3000, baseChance: 70 });
-            } else if (currentLocation === 'midEast') {
-                activeMissions.push({ title: "장성 저격", req: {asnA:1, sniper:1}, reqText: "A급 암살 1, 저격총 1", reward: 45000, penalty: 15000, baseChance: 60 });
-                if(lvl >= 4) activeMissions.push({ title: "장갑차 타격", req: {A:1, rpg:2, amr:1}, reqText: "A급 1, RPG 2, 대물 1", reward: 80000, penalty: 25000, baseChance: 50 });
-                if(lvl >= 5) activeMissions.push({ title: "스텔스 요격", req: {S:1, bigung:1, cheongung:1}, reqText: "S급 1, 비궁 1, 천궁 1", reward: 250000, penalty: 80000, baseChance: 45 });
-            }
+        } else if (currentLocation !== 'transit' && locData[currentLocation].type === 'region') {
+            let rLv = locData[currentLocation].reqLv;
+            if (rLv <= 1) activeMissions.push({ title: "소규모 반군 토벌", req: {C:1, ak47:1}, reqText: "C급 1, AK-47 1", reward: 6000, penalty: 1000, baseChance: 80 });
+            if (rLv === 2) activeMissions.push({ title: "카르텔 야간 기습", req: {B:1, shotgun:2}, reqText: "B급 1, 샷건 2", reward: 15000, penalty: 3000, baseChance: 75 });
+            if (rLv === 3) activeMissions.push({ title: "장성 저격", req: {asnA:1, sniper:1}, reqText: "A급 암살 1, 저격총 1", reward: 45000, penalty: 10000, baseChance: 65 });
+            if (rLv >= 4 && rLv <= 5) activeMissions.push({ title: "장갑차 타격", req: {A:1, rpg:2, amr:1}, reqText: "A급 1, RPG 2, 대물 1", reward: 80000, penalty: 25000, baseChance: 55 });
+            if (rLv >= 6) activeMissions.push({ title: "스텔스 요격", req: {S:1, bigung:1, cheongung:1}, reqText: "S급 1, 비궁 1, 천궁 1", reward: 250000, penalty: 80000, baseChance: 45 });
+            
             if (unBannedWeapon) activeMissions.unshift({ title: `🌐 UN 위원장 제거`, req: {asnA:1, pistol:1}, reqText: "A급 암살 1, 권총 1", reward: 50000, penalty: 10000, baseChance: 70, type: 'un_revenge' });
             if (interpolAnger >= 5) activeMissions.unshift({ title: `🚨 인터폴 팀장 암살`, req: {asnS:1, sniper:1}, reqText: "S급 암살 1, 저격총 1", reward: 120000, penalty: 40000, baseChance: 65, type: 'interpol_revenge' });
         }
     }
 
-    function buyWeapon(k) { 
-        if (k === unBannedWeapon || currentLocation !== 'basecamp') return;
-        playSfx('buy'); 
-        let finalCost = (marketSurgeTurns > 0) ? Math.floor(buyPrices[k] * 1.2) : buyPrices[k];
-        if (marketWeapons[k] > 0 && money >= finalCost) { money -= finalCost; marketWeapons[k]--; baseWarehouse[k]++; checkCIA(); updateUI(); } 
-        
-        // 가이드 연동
-        if (guideStep === 2) advanceGuide(3);
+    function processFactionEvents() {
+        if (interpolSafeTurns > 0) interpolSafeTurns--;
+        let roll = Math.floor(Math.random() * 100) + 1; 
+        if (roll <= 5 && !unBannedWeapon) { const highTiers = ['sniper', 'rpg', 'amr', 'bigung', 'cheongung']; unBannedWeapon = highTiers[Math.floor(Math.random() * highTiers.length)]; showNewsModal("🌐 UN 긴급 제재", `<strong>[${wNames[unBannedWeapon]}]</strong> 거래가 동결됩니다.`, true, 'alert'); }
+        else if (roll > 5 && roll <= 12 && interpolSafeTurns === 0 && interpolAnger < 5) { playSfx('alert'); document.getElementById('interpol-modal').style.display = 'flex'; }
+        else if (roll > 30 && roll <= 37) {
+            let msg = "", isDanger = false;
+            if (myMercs.S > 0 || myMercs.asnS > 0 || myMercs.A > 0 || myMercs.asnA > 0) { msg = "특수 요원들이 암살자를 제압했습니다! 피해 없음."; } 
+            else if (myMercs.B > 0 || myMercs.C > 0 || myMercs.asnB > 0) { if(myMercs.B > 0) myMercs.B--; else if(myMercs.asnB > 0) myMercs.asnB--; else myMercs.C--; msg = "용병들이 막아냈지만 1팀이 전사했습니다."; isDanger = true; } 
+            else { money -= 15000; if(money < 0) money = 0; msg = "호위 병력이 없어 총격에 당했습니다! 치료비 $15,000 지출."; isDanger = true; }
+            showNewsModal("🚨 암살자 기습", `적 예상 전투력: <strong>A급 암살자</strong><br>---<br>${msg}`, isDanger, isDanger ? 'fail' : 'success');
+        }
+        updateUI();
     }
 
-    function sellWeapon(k, isAll) { 
-        if (k === unBannedWeapon || truckInven[k] <= 0 || currentSellPrices[k] <= 0) return;
-        playSfx('sell'); 
-        
-        let amount = isAll ? truckInven[k] : 1;
-        money += currentSellPrices[k] * amount; 
-        truckInven[k] -= amount; 
-        checkCIA(); updateUI(); 
-    }
-
-    function hireMerc(t) { 
-        if (currentLocation !== 'basecamp' || marketMercs[t] <= 0 || money < mercData[t].hire) return;
-        
-        let soundId = '';
-        if (t === 'C') soundId = 'hire_C';
-        else if (t === 'B') soundId = 'hire_B';
-        else if (t === 'A') soundId = 'hire_A';
-        else if (t === 'S') soundId = 'hire_S';
-        else if (t === 'asnB') soundId = 'asn_B';
-        else if (t === 'asnA') soundId = 'asn_A';
-        else if (t === 'asnS') soundId = 'asn_S';
-        else if (t === 'spy') soundId = 'spy';
-        
-        playSfx(soundId);
-        
-        money -= mercData[t].hire; marketMercs[t]--; myMercs[t]++; updateUI(); 
-    }
+    function buyWeapon(k) { if (k === unBannedWeapon) return; playSfx('buy'); let finalCost = (marketSurgeTurns > 0) ? Math.floor(buyPrices[k] * 1.2) : buyPrices[k]; if (marketWeapons[k] > 0 && money >= finalCost) { money -= finalCost; marketWeapons[k]--; baseWarehouse[k]++; checkCIA(); updateUI(); if (guideStep === 2) advanceGuide(3); } }
+    function sellWeapon(k, isAll) { if (k === unBannedWeapon || truckInven[k] <= 0 || currentSellPrices[k] <= 0) return; playSfx('sell'); let amount = isAll ? truckInven[k] : 1; money += currentSellPrices[k] * amount; truckInven[k] -= amount; checkCIA(); updateUI(); }
+    function hireMerc(t) { if (marketMercs[t] <= 0 || money < mercData[t].hire) return; let sid = t.includes('C')?'hire_C':(t.includes('B')?'hire_B':(t.includes('A')?'hire_A':(t==='spy'?'spy':'hire_S'))); playSfx(sid); money -= mercData[t].hire; marketMercs[t]--; myMercs[t]++; updateUI(); }
 
     function completeMission(idx) {
         let m = activeMissions[idx]; let reqKeys = Object.keys(m.req);
-        for(let k of reqKeys) {
-            if (mercData[k]) { if (myMercs[k] < m.req[k]) { addLog("병력 부족!"); playSfx('click'); return; } } 
-            else { if (truckInven[k] < m.req[k]) { addLog(`트럭에 [${wNames[k]}] 부족!`); playSfx('click'); return; } }
-        }
+        for(let k of reqKeys) { if (mercData[k]) { if (myMercs[k] < m.req[k]) { addLog("병력 부족!"); playSfx('click'); return; } } else { if (truckInven[k] < m.req[k]) { addLog(`[${wNames[k]}] 부족!`); playSfx('click'); return; } } }
         for(let k of reqKeys) { if (mercData[k]) myMercs[k] -= m.req[k]; else truckInven[k] -= m.req[k]; }
-
         let roll = Math.floor(Math.random() * 100) + 1;
         let bonus = (myMercs.S*10) + (myMercs.A*5) + (myMercs.asnS*15) + (myMercs.spy*20);
         let finalChance = Math.min(95, m.baseChance + bonus + Math.floor(powerReputation/5));
-        
         if (roll <= finalChance) { 
-            playSfx('success');
-            money += m.reward; powerReputation += 2;
-            for(let k of reqKeys) {
-                if (mercData[k]) myMercs[k] += m.req[k];
-                else if (retrievableWeapons.includes(k)) truckInven[k] += m.req[k];
-            }
-            addLog(`🟢 [성공] 부대 복귀 완료. +$${m.reward.toLocaleString()}`); 
-
-            if (m.type === 'un_revenge') { unBannedWeapon = null; showNewsModal("🌐 제재 해제 성공", "무기 금지 조치가 해제되었습니다.", false, 'success'); } 
-            else if (m.type === 'interpol_revenge') { interpolAnger = 0; interpolSafeTurns = 5; showNewsModal("🚨 단속 무력화 성공", "특수 추적팀장 제거 완료! 향후 5턴간 인터폴 단속 면제.", false, 'success'); } 
-            else if (m.type === 'endgame') { powerReputation += 50; checkCIA(); showNewsModal("☢️ 일루미나티 달성", "극비 처분 완수. 세계 정부의 통제권을 완전히 장악했습니다.", true, 'cia'); }
-        } else { 
-            playSfx('fail');
-            money -= m.penalty; 
-            addLog(`🔴 [실패] 부대 전멸... -$${m.penalty.toLocaleString()}`); 
-        }
+            playSfx('success'); money += m.reward; powerReputation += 2;
+            for(let k of reqKeys) { if (mercData[k]) myMercs[k] += m.req[k]; else if (retrievableWeapons.includes(k)) truckInven[k] += m.req[k]; }
+            addLog(`🟢 [성공] +$${m.reward.toLocaleString()}`); 
+            if (m.type === 'un_revenge') { unBannedWeapon = null; showNewsModal("🌐 제재 해제", "금지 조치 해제됨.", false, 'success'); } 
+            else if (m.type === 'interpol_revenge') { interpolAnger = 0; interpolSafeTurns = 5; showNewsModal("🚨 단속 무력화", "5턴간 인터폴 단속 면제.", false, 'success'); } 
+            else if (m.type === 'endgame') { powerReputation += 50; checkCIA(); showNewsModal("☢️ 일루미나티", "세계 정부 장악.", true, 'cia'); }
+        } else { playSfx('fail'); money -= m.penalty; addLog(`🔴 [실패] 부대 전멸... -$${m.penalty.toLocaleString()}`); }
         activeMissions.splice(idx, 1); checkCIA(); updateUI();
     }
 
-    generateMarketData(); updateUI();
-
-    // 💡 브라우저 정책 우회: 첫 화면 클릭 시 BGM 자동 재생
-    document.body.addEventListener('click', function initBGM() {
-        if (!bgmPlaying) {
-            toggleBGM();
+    function resolveInterpol(c) {
+        document.getElementById('interpol-modal').style.display = 'none'; let isD = false;
+        if (c === 'pay') {
+            if (money >= 3000) { money -= 3000; interpolAnger += 1; addLog("🚨 뇌물 무마 완료"); } 
+            else { money = 0; interpolAnger += 2; addLog("🚨 전재산 압수!"); isD = true; }
+        } else {
+            if (Math.random() < 0.5) { money -= 8000; interpolAnger += 2; if (money < 0) money = 0; addLog("🚨 체포! 벌금 $8,000"); isD = true; } 
+            else addLog("💨 도주 성공");
         }
-        document.body.removeEventListener('click', initBGM); // 한 번 실행 후 이벤트 제거
-    }, { once: true });
+        if (interpolAnger >= 5) { interpolAnger = 5; showNewsModal("🚨 적색 수배 발령", "인터폴 수배가 내려졌습니다!", true, 'alert'); }
+        updateUI();
+    }
 
+    document.body.addEventListener('click', function() { if (!bgmPlaying) toggleBGM(); }, { once: true });
+    generateMarketData(); updateUI();
 </script>
-
 </body>
 </html>
