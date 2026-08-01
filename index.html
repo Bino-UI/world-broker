@@ -7,8 +7,9 @@
     <style>
         @import url('https://cdn.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css');
 
+        /* 기본 설정 및 스크롤 방지 (앱 레이아웃) */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; border-radius: 0 !important; font-family: 'Galmuri11', sans-serif !important; }
-        html, body { height: 100%; margin: 0; padding: 0; background-color: #111; color: #ddd; overflow: hidden; }
+        html, body { height: 100%; margin: 0; padding: 0; background-color: #111; color: #ddd; overflow: hidden; /* 전체 화면 스크롤 금지 */ }
 
         body.cia-mode { animation: ciaAlert 1s infinite; }
         @keyframes ciaAlert {
@@ -17,8 +18,10 @@
             100% { box-shadow: inset 0 0 0px red; border: 4px solid transparent; }
         }
 
+        /* 앱 컨테이너: 100vh 꽉 채우기 */
         .app-container { display: flex; flex-direction: column; height: 100%; width: 100%; max-width: 600px; margin: 0 auto; background: #222; border-left: 2px solid #555; border-right: 2px solid #555; }
         
+        /* 튜토리얼 VN 화면 */
         #vn-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; z-index: 10000; display: flex; flex-direction: column; justify-content: flex-end; transition: background-image 1s ease-in-out, opacity 1s ease-out; background-size: cover; background-position: center top; }
         .vn-character { position: absolute; bottom: 140px; left: 15px; width: 150px; image-rendering: pixelated; filter: drop-shadow(0 0 15px rgba(0,0,0,0.8)); animation: breathe 3s infinite ease-in-out; z-index: 10001; }
         @keyframes breathe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
@@ -28,14 +31,17 @@
         .vn-text { color: #ddd; font-size: 13px; line-height: 1.5; text-shadow: 1px 1px 0 #000; margin-top: 5px; }
         .vn-next-indicator { position: absolute; bottom: 8px; right: 12px; color: #ffcc00; font-size: 10px; animation: blink 1s infinite; }
 
+        /* 토스트 팝업 (로그창 대체) */
         .toast-msg { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: rgba(0, 50, 0, 0.95); border: 2px solid #0f0; color: #fff; padding: 10px 16px; z-index: 9999; box-shadow: 2px 2px 0 #000; font-size: 12px; font-weight: bold; text-align: center; white-space: nowrap; animation: fadeup 0.3s ease-out, fadeout 0.5s ease-in 2.5s forwards; }
         @keyframes fadeup { from { bottom: 60px; opacity: 0; } to { bottom: 80px; opacity: 1; } }
         @keyframes fadeout { from { opacity: 1; } to { opacity: 0; } }
 
+        /* 인게임 가이드 알림창 */
         @keyframes pulse-highlight { 0% { box-shadow: 0 0 0 0 rgba(0, 255, 0, 0.7); border-color: #0f0; } 70% { box-shadow: 0 0 0 4px rgba(0, 255, 0, 0); border-color: #fff; } 100% { box-shadow: 0 0 0 0 rgba(0, 255, 0, 0); border-color: #0f0; } }
         .highlight-pulse { animation: pulse-highlight 1.5s infinite !important; position: relative; z-index: 100; color: #0f0 !important; font-weight: bold; }
         #in-game-guide-box { display: none; position: fixed; top: 10px; left: 10px; right: 10px; background: rgba(0, 50, 0, 0.95); border: 2px solid #0f0; color: #fff; padding: 10px; z-index: 9000; box-shadow: 4px 4px 0px #000; font-size: 12px; text-align: center; }
 
+        /* 상단 고정 영역 (레이아웃 압축) */
         .top-fixed-area { flex-shrink: 0; padding: 6px; background: #111; }
         .top-header { display: flex; justify-content: space-between; align-items: center; background: #000; border: 2px solid #555; padding: 6px; margin-bottom: 4px; }
         .level-badge { background: #222; padding: 4px 8px; color: #ffcc00; font-size: 11px; border: 1px solid #ccaa00; white-space: nowrap; }
@@ -53,11 +59,12 @@
         .nav-btn { flex: 1; background: #333; color: #fff; border: 2px solid #fff; padding: 10px 0; font-size: 11px; cursor: pointer; text-align: center; transition: background 0.2s; white-space: nowrap; }
         .nav-btn.active { background: #ccaa00; color: #000; border-color: #fff; font-weight: bold; }
 
+        /* 가운데 스크롤 영역 */
         .scrollable-content { flex: 1; overflow-y: auto; padding: 6px; background: #222; }
         .game-panel { display: none; background: #000; padding: 8px; border: 2px solid #fff; min-height: 100%; }
         .game-panel.active-view { display: block; }
 
-        /* 맵 높이를 320px로 확장하여 모바일에서 핀이 겹치지 않고 잘 터치되도록 최적화 */
+        /* 작전지도 최적화 */
         .tactical-map-container { width: 100%; height: 320px; background-color: #001100; position: relative; border: 2px solid #0f0; margin-bottom: 10px; background-image: linear-gradient(#003300 1px, transparent 1px), linear-gradient(90deg, #003300 1px, transparent 1px); background-size: 15px 15px; overflow: hidden; }
         .radar-scan { position: absolute; top: 50%; left: 50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, transparent 70%, rgba(0, 255, 0, 0.4) 100%); transform: translate(-50%, -50%); animation: scan 4s steps(60) infinite; pointer-events: none; z-index: 3; }
         @keyframes scan { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
@@ -73,6 +80,15 @@
 
         .location-status { text-align: center; margin-bottom: 10px; font-size: 12px; font-weight: bold; color: #0f0; background: #000; padding: 8px; border: 1px solid #0f0; }
 
+        /* 신규: 맵 위 시설 버튼 스타일 */
+        .facility-btn { position: absolute; bottom: 10px; background: #111; border: 2px solid #fff; padding: 6px; font-size: 18px; cursor: pointer; z-index: 20; box-shadow: 2px 2px 0px #000; transition: transform 0.1s, box-shadow 0.1s; }
+        .facility-btn.base { left: 50%; transform: translateX(-50%); }
+        .facility-btn.barracks { left: 10px; }
+        .facility-btn.transport { right: 10px; }
+        .facility-btn:active { transform: translateY(2px); box-shadow: 0px 0px 0px #000; }
+        .facility-btn.base:active { transform: translateX(-50%) translateY(2px); }
+
+        /* 공통 리스트 아이템 UI 압축 */
         .item-list-grid { display: flex; flex-direction: column; gap: 6px; }
         .item-card { background: #1a1a1a; border: 1px solid #555; padding: 8px; display: flex; justify-content: space-between; align-items: center; }
         .item-info { font-size: 11px; line-height: 1.4; flex: 1; padding-right: 5px; }
@@ -88,11 +104,12 @@
         .banned-item { opacity: 0.5; border-color: #f00; background: #300 !important; }
         .category-header { color: #0f0; font-size: 13px; margin: 10px 0 6px 0; border-bottom: 1px dashed #0f0; padding-bottom: 4px; }
 
+        /* 하단 고정 액션 버튼 */
         .bottom-action-area { flex-shrink: 0; padding: 6px; background: #111; border-top: 2px solid #555; }
         .turn-btn { background: #a00; color: white; width: 100%; padding: 14px; font-size: 15px; font-weight: bold; border: 2px solid #f00; cursor: pointer; text-shadow: 1px 1px 0px #000; box-shadow: 0 4px 0px #500; transition: transform 0.1s, box-shadow 0.1s; }
         .turn-btn:active { transform: translateY(4px); box-shadow: 0 0px 0px #500; }
 
-        /* 모달 및 기타 배지 */
+        /* 모달 및 기타 */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; justify-content: center; align-items: center; padding: 15px; }
         .modal-box { background: #000; border: 2px solid #f00; padding: 15px; width: 100%; max-width: 320px; text-align: center; max-height: 80vh; display: flex; flex-direction: column; }
         .modal-title { font-size: 16px; margin-bottom: 10px; text-shadow: 1px 1px 0px #000; }
@@ -109,6 +126,7 @@
 
 <div class="app-container">
     
+    <!-- 튜토리얼 씬 레이어 -->
     <div id="vn-screen" onclick="nextDialog()">
         <img src="./broker_senior.png" class="vn-character" alt="브로커 선배" onerror="this.src=''; this.alt=''">
         <div class="vn-dialog-container">
@@ -155,6 +173,20 @@
         </div>
     </div>
 
+    <!-- 신규: 시설 오버레이 팝업 모달 -->
+    <div id="facility-modal" class="modal-overlay">
+        <div class="modal-box" style="border-color:#fff;">
+            <div class="modal-title" id="fac-modal-title">시설 이름</div>
+            <div class="modal-text" style="text-align: center;">
+                <div style="font-size:14px; color:#ffcc00; margin-bottom:10px; font-weight:bold;">현재 레벨: <span id="fac-modal-level">Lv.1</span></div>
+                <div id="fac-modal-desc" style="color:#aaa; line-height:1.5;">시설 설명</div>
+            </div>
+            <button class="modal-btn" style="background:#004488;" onclick="showToast('준비 중인 기능입니다.')">업그레이드</button>
+            <button class="modal-btn danger" onclick="closeModal('facility-modal')">닫기</button>
+        </div>
+    </div>
+
+    <!-- 상단 고정 영역 -->
     <div class="top-fixed-area">
         <div class="top-header">
             <span class="level-badge" id="level-badge">Lv.1</span>
@@ -184,6 +216,7 @@
         </div>
     </div>
 
+    <!-- 스크롤 가능 콘텐츠 영역 -->
     <div class="scrollable-content">
         
         <!-- 1. 작전지도 탭 -->
@@ -193,6 +226,11 @@
             <div class="tactical-map-container" id="radar-map-panel">
                 <div class="radar-scan"></div>
                 <div id="dynamic-map-nodes"></div>
+                
+                <!-- 신규: 시설 오버레이 버튼 -->
+                <button class="facility-btn barracks" onclick="openFacilityModal('barracks')" title="막사">🪖</button>
+                <button class="facility-btn base" onclick="openFacilityModal('base')" title="본부">🏚</button>
+                <button class="facility-btn transport" onclick="openFacilityModal('transport')" title="운송">🚛</button>
             </div>
 
             <div id="conflict-actions" style="display:none;">
@@ -281,6 +319,7 @@
 
     </div> <!-- scrollable-content END -->
 
+    <!-- 하단 고정 액션 버튼 -->
     <div class="bottom-action-area">
         <button class="turn-btn" id="turn-action-btn" onclick="executeTurn()">⏳ 턴 넘기기</button>
     </div>
@@ -380,6 +419,28 @@
     function cheatMode() {
         playSfx('success'); money += 1000000; powerReputation += 100;
         updateUI(); showToast("💡 치트: 자금 +100만, 랭킹 +100");
+    }
+
+    // 신규: 시설 오버레이 모달 열기 함수 (실제 로직은 제외)
+    function openFacilityModal(type) {
+        playSfx('click');
+        let title = "", level = "Lv.1", desc = "";
+        
+        if (type === 'base') {
+            title = "🏚 본부";
+            desc = "조직의 핵심 관리 시설입니다.<br>확장 시 여러 부가 효과가 제공됩니다.";
+        } else if (type === 'barracks') {
+            title = "🪖 막사";
+            desc = "용병들을 훈련하고 대기시키는 시설입니다.<br>확장 시 고용 가능 인원이 늘어납니다.";
+        } else if (type === 'transport') {
+            title = "🚛 운송 관리소";
+            desc = "물류 네트워크를 관리합니다.<br>확장 시 최대 적재량이 증가합니다.";
+        }
+
+        document.getElementById('fac-modal-title').innerText = title;
+        document.getElementById('fac-modal-level').innerText = level;
+        document.getElementById('fac-modal-desc').innerHTML = desc;
+        document.getElementById('facility-modal').style.display = 'flex';
     }
 
     let money = 35000; let powerReputation = 0; let bgmPlaying = false;
