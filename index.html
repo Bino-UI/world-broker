@@ -7,9 +7,8 @@
     <style>
         @import url('https://cdn.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css');
 
-        /* 기본 설정 및 스크롤 방지 (앱 레이아웃) */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; border-radius: 0 !important; font-family: 'Galmuri11', sans-serif !important; }
-        html, body { height: 100%; margin: 0; padding: 0; background-color: #111; color: #ddd; overflow: hidden; /* 전체 화면 스크롤 금지 */ }
+        html, body { height: 100%; margin: 0; padding: 0; background-color: #111; color: #ddd; overflow: hidden; }
 
         body.cia-mode { animation: ciaAlert 1s infinite; }
         @keyframes ciaAlert {
@@ -18,10 +17,8 @@
             100% { box-shadow: inset 0 0 0px red; border: 4px solid transparent; }
         }
 
-        /* 앱 컨테이너: 100vh 꽉 채우기 */
         .app-container { display: flex; flex-direction: column; height: 100%; width: 100%; max-width: 600px; margin: 0 auto; background: #222; border-left: 2px solid #555; border-right: 2px solid #555; }
         
-        /* 튜토리얼 VN 화면 */
         #vn-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; z-index: 10000; display: flex; flex-direction: column; justify-content: flex-end; transition: background-image 1s ease-in-out, opacity 1s ease-out; background-size: cover; background-position: center top; }
         .vn-character { position: absolute; bottom: 140px; left: 15px; width: 150px; image-rendering: pixelated; filter: drop-shadow(0 0 15px rgba(0,0,0,0.8)); animation: breathe 3s infinite ease-in-out; z-index: 10001; }
         @keyframes breathe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
@@ -31,17 +28,14 @@
         .vn-text { color: #ddd; font-size: 13px; line-height: 1.5; text-shadow: 1px 1px 0 #000; margin-top: 5px; }
         .vn-next-indicator { position: absolute; bottom: 8px; right: 12px; color: #ffcc00; font-size: 10px; animation: blink 1s infinite; }
 
-        /* 토스트 팝업 (로그창 대체) */
         .toast-msg { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: rgba(0, 50, 0, 0.95); border: 2px solid #0f0; color: #fff; padding: 10px 16px; z-index: 9999; box-shadow: 2px 2px 0 #000; font-size: 12px; font-weight: bold; text-align: center; white-space: nowrap; animation: fadeup 0.3s ease-out, fadeout 0.5s ease-in 2.5s forwards; }
         @keyframes fadeup { from { bottom: 60px; opacity: 0; } to { bottom: 80px; opacity: 1; } }
         @keyframes fadeout { from { opacity: 1; } to { opacity: 0; } }
 
-        /* 인게임 가이드 알림창 */
         @keyframes pulse-highlight { 0% { box-shadow: 0 0 0 0 rgba(0, 255, 0, 0.7); border-color: #0f0; } 70% { box-shadow: 0 0 0 4px rgba(0, 255, 0, 0); border-color: #fff; } 100% { box-shadow: 0 0 0 0 rgba(0, 255, 0, 0); border-color: #0f0; } }
         .highlight-pulse { animation: pulse-highlight 1.5s infinite !important; position: relative; z-index: 100; color: #0f0 !important; font-weight: bold; }
         #in-game-guide-box { display: none; position: fixed; top: 10px; left: 10px; right: 10px; background: rgba(0, 50, 0, 0.95); border: 2px solid #0f0; color: #fff; padding: 10px; z-index: 9000; box-shadow: 4px 4px 0px #000; font-size: 12px; text-align: center; }
 
-        /* 상단 고정 영역 (레이아웃 압축) */
         .top-fixed-area { flex-shrink: 0; padding: 6px; background: #111; }
         .top-header { display: flex; justify-content: space-between; align-items: center; background: #000; border: 2px solid #555; padding: 6px; margin-bottom: 4px; }
         .level-badge { background: #222; padding: 4px 8px; color: #ffcc00; font-size: 11px; border: 1px solid #ccaa00; white-space: nowrap; }
@@ -59,12 +53,10 @@
         .nav-btn { flex: 1; background: #333; color: #fff; border: 2px solid #fff; padding: 10px 0; font-size: 11px; cursor: pointer; text-align: center; transition: background 0.2s; white-space: nowrap; }
         .nav-btn.active { background: #ccaa00; color: #000; border-color: #fff; font-weight: bold; }
 
-        /* 가운데 스크롤 영역 */
-        .scrollable-content { flex: 1; overflow-y: auto; padding: 6px; background: #222; }
-        .game-panel { display: none; background: #000; padding: 8px; border: 2px solid #fff; min-height: 100%; }
+        .scrollable-content { flex: 1; overflow-y: auto; padding: 6px; background: #222; display: flex; flex-direction: column; }
+        .game-panel { display: none; background: #000; padding: 8px; border: 2px solid #fff; flex: 1; }
         .game-panel.active-view { display: block; }
 
-        /* 작전지도 최적화 */
         .tactical-map-container { width: 100%; height: 320px; background-color: #001100; position: relative; border: 2px solid #0f0; margin-bottom: 10px; background-image: linear-gradient(#003300 1px, transparent 1px), linear-gradient(90deg, #003300 1px, transparent 1px); background-size: 15px 15px; overflow: hidden; }
         .radar-scan { position: absolute; top: 50%; left: 50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, transparent 70%, rgba(0, 255, 0, 0.4) 100%); transform: translate(-50%, -50%); animation: scan 4s steps(60) infinite; pointer-events: none; z-index: 3; }
         @keyframes scan { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
@@ -80,15 +72,6 @@
 
         .location-status { text-align: center; margin-bottom: 10px; font-size: 12px; font-weight: bold; color: #0f0; background: #000; padding: 8px; border: 1px solid #0f0; }
 
-        /* 신규: 맵 위 시설 버튼 스타일 */
-        .facility-btn { position: absolute; bottom: 10px; background: #111; border: 2px solid #fff; padding: 6px; font-size: 18px; cursor: pointer; z-index: 20; box-shadow: 2px 2px 0px #000; transition: transform 0.1s, box-shadow 0.1s; }
-        .facility-btn.base { left: 50%; transform: translateX(-50%); }
-        .facility-btn.barracks { left: 10px; }
-        .facility-btn.transport { right: 10px; }
-        .facility-btn:active { transform: translateY(2px); box-shadow: 0px 0px 0px #000; }
-        .facility-btn.base:active { transform: translateX(-50%) translateY(2px); }
-
-        /* 공통 리스트 아이템 UI 압축 */
         .item-list-grid { display: flex; flex-direction: column; gap: 6px; }
         .item-card { background: #1a1a1a; border: 1px solid #555; padding: 8px; display: flex; justify-content: space-between; align-items: center; }
         .item-info { font-size: 11px; line-height: 1.4; flex: 1; padding-right: 5px; }
@@ -104,29 +87,66 @@
         .banned-item { opacity: 0.5; border-color: #f00; background: #300 !important; }
         .category-header { color: #0f0; font-size: 13px; margin: 10px 0 6px 0; border-bottom: 1px dashed #0f0; padding-bottom: 4px; }
 
-        /* 하단 고정 액션 버튼 */
-        .bottom-action-area { flex-shrink: 0; padding: 6px; background: #111; border-top: 2px solid #555; }
+        /* 하단 고정 액션 버튼 (글로벌 뷰에서 숨김 처리) */
+        .bottom-action-area { display: none; }
         .turn-btn { background: #a00; color: white; width: 100%; padding: 14px; font-size: 15px; font-weight: bold; border: 2px solid #f00; cursor: pointer; text-shadow: 1px 1px 0px #000; box-shadow: 0 4px 0px #500; transition: transform 0.1s, box-shadow 0.1s; }
         .turn-btn:active { transform: translateY(4px); box-shadow: 0 0px 0px #500; }
 
-        /* 모달 및 기타 */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; justify-content: center; align-items: center; padding: 15px; }
-        .modal-box { background: #000; border: 2px solid #f00; padding: 15px; width: 100%; max-width: 320px; text-align: center; max-height: 80vh; display: flex; flex-direction: column; }
+        .modal-box { background: #000; border: 2px solid #f00; padding: 15px; width: 100%; max-width: 380px; text-align: center; max-height: 90vh; display: flex; flex-direction: column; }
         .modal-title { font-size: 16px; margin-bottom: 10px; text-shadow: 1px 1px 0px #000; }
         .modal-text { color: #fff; font-size: 12px; margin-bottom: 15px; line-height: 1.5; overflow-y: auto; text-align: left; }
         .modal-btn { background: #222; color: #fff; border: 1px solid #fff; padding: 10px; width: 100%; margin: 4px 0; cursor: pointer; font-size: 13px; flex-shrink: 0; }
         .modal-btn.danger { background: #800; border-color: #f00; color: #fff; }
         .merc-badge { display: inline-block; padding: 2px 4px; margin: 2px 2px 0 0; border: 1px solid #555; background: #222; font-size: 10px; }
+
+        .main-facility-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 12px;
+            height: 100%;
+            padding: 10px;
+        }
+        .facility-btn-main {
+            background: #111;
+            border: 3px solid #555;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px #000;
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+        .facility-btn-main:active {
+            transform: translate(2px, 2px);
+            box-shadow: 0px 0px 0px #000;
+        }
+        .facility-icon {
+            font-size: 45px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 0px #000;
+        }
+        .facility-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+        }
+        .facility-sub {
+            font-size: 11px;
+            color: #aaa;
+            margin-top: 6px;
+        }
     </style>
 </head>
 <body>
 
-<!-- 오디오 리소스 -->
 <audio id="bgm-player" src="./bgm.mp3" loop preload="auto"></audio>
 
 <div class="app-container">
     
-    <!-- 튜토리얼 씬 레이어 -->
     <div id="vn-screen" onclick="nextDialog()">
         <img src="./broker_senior.png" class="vn-character" alt="브로커 선배" onerror="this.src=''; this.alt=''">
         <div class="vn-dialog-container">
@@ -138,7 +158,6 @@
         </div>
     </div>
 
-    <!-- 인게임 가이드 알림창 -->
     <div id="in-game-guide-box">가이드 내용</div>
 
     <div id="tutorial-modal" class="modal-overlay">
@@ -173,20 +192,102 @@
         </div>
     </div>
 
-    <!-- 신규: 시설 오버레이 팝업 모달 -->
-    <div id="facility-modal" class="modal-overlay">
-        <div class="modal-box" style="border-color:#fff;">
-            <div class="modal-title" id="fac-modal-title">시설 이름</div>
-            <div class="modal-text" style="text-align: center;">
-                <div style="font-size:14px; color:#ffcc00; margin-bottom:10px; font-weight:bold;">현재 레벨: <span id="fac-modal-level">Lv.1</span></div>
-                <div id="fac-modal-desc" style="color:#aaa; line-height:1.5;">시설 설명</div>
+    <!-- 본부(전술지도) 모달 -->
+    <div id="hq-modal" class="modal-overlay">
+        <div class="modal-box" style="border-color:#0f0; padding:10px; max-height:95vh;">
+            <div class="modal-title" style="color:#0f0; margin-bottom:5px;">🗺️ 전술 지도 (작전 통제실)</div>
+            
+            <div style="flex:1; overflow-y:auto; padding-right:5px; margin-bottom:10px; text-align:left;">
+                <div class="location-status" id="loc-desc">🏰 위치: 안전한 거점 (대기 중)</div>
+                
+                <div class="tactical-map-container" id="radar-map-panel">
+                    <div class="radar-scan"></div>
+                    <div id="dynamic-map-nodes"></div>
+                </div>
+
+                <div id="conflict-actions" style="display:none;">
+                    <button class="btn-sm" style="width:100%; margin-bottom:10px; background:#002200; border-color:#0f0; color:#0f0;" onclick="selectLocation('basecamp')">📍 본부로 복귀 장전</button>
+                    
+                    <div style="background:#1a1a1a; padding: 8px; border:1px solid #444; margin-bottom:10px;">
+                        <h3 style="color:#ff8888; font-size:12px; margin: 0 0 6px 0;">💵 화물기 적재물 현지 매각</h3>
+                        <div id="sell-list" class="item-list-grid"></div>
+                    </div>
+
+                    <div style="background:#1a1a1a; padding: 8px; border:1px solid #444; margin-bottom:10px;">
+                        <h3 style="color:#f0f; font-size:12px; margin: 0 0 6px 0;">🌍 시장 조작 (영향력 행사)</h3>
+                        <div class="item-list-grid">
+                            <button class="btn-sm" style="background:#303; border-color:#f0f;" onclick="executeIntervention('rebel')">반군 무장 지원 (-$10k)</button>
+                            <button class="btn-sm" style="background:#303; border-color:#f0f;" onclick="executeIntervention('terror')">소요사태 조장 (스파이 1)</button>
+                            <button class="btn-sm" style="background:#303; border-color:#f0f;" onclick="executeIntervention('gov')">고문파견 (A급전술 1)</button>
+                        </div>
+                    </div>
+
+                    <div style="background:#1a1a1a; padding: 8px; border:1px solid #444;">
+                        <h3 style="color:#ffcc00; font-size:12px; margin: 0 0 6px 0;">⚔️ 블랙옵스 의뢰</h3>
+                        <div id="missions-list"></div>
+                    </div>
+                </div>
+                
+                <div id="basecamp-map-msg" style="text-align:center; color:#aaa; font-size:11px; margin-top:5px;">
+                    지도에서 타겟을 선택하고 하단의 [출발]을 누르십시오.
+                </div>
             </div>
-            <button class="modal-btn" style="background:#004488;" onclick="showToast('준비 중인 기능입니다.')">업그레이드</button>
-            <button class="modal-btn danger" onclick="closeModal('facility-modal')">닫기</button>
+
+            <!-- 턴 종료 버튼 이동됨 -->
+            <div style="flex-shrink:0;">
+                <button class="turn-btn" id="turn-action-btn" onclick="executeTurn()">⏳ 턴 넘기기</button>
+                <button class="modal-btn danger" style="margin-top:8px;" onclick="closeModal('hq-modal')">전술지도 닫기</button>
+            </div>
         </div>
     </div>
 
-    <!-- 상단 고정 영역 -->
+    <!-- 막사 모달 -->
+    <div id="barracks-modal" class="modal-overlay">
+        <div class="modal-box" style="border-color:#fa0;">
+            <div class="modal-title" style="color:#fa0;">🪖 용병 막사</div>
+            <div class="modal-text" style="text-align:center;">
+                <div style="font-size:16px; margin-bottom:15px;">현재 대기 용병: <span id="barracks-merc-total" style="color:#fff; font-weight:bold;">0</span>명</div>
+                <div style="background:#111; padding:10px; border:1px solid #555; margin-bottom:15px; font-size:11px; color:#aaa;">
+                    작전 투입 및 기지 방어를 위한 필수 전력입니다.<br>인력 탭에서 용병을 고용하세요.
+                </div>
+            </div>
+            <button class="modal-btn" style="background:#004488;" onclick="closeModal('barracks-modal'); switchTab('merc');">용병 고용소 이동</button>
+            <button class="modal-btn" style="background:#333; color:#888;" onclick="showToast('준비 중인 기능입니다.')">막사 시설 업그레이드</button>
+            <button class="modal-btn danger" onclick="closeModal('barracks-modal')">닫기</button>
+        </div>
+    </div>
+
+    <!-- 운송 모달 -->
+    <div id="transport-modal" class="modal-overlay">
+        <div class="modal-box" style="border-color:#8af;">
+            <div class="modal-title" style="color:#8af;">🚛 운송 관리국</div>
+            <div class="modal-text" style="text-align:center;">
+                <div style="font-size:14px; margin-bottom:8px;">운송 인프라: <span id="trans-modal-name" style="color:#fff; font-weight:bold;">지하창고</span></div>
+                <div style="font-size:14px; margin-bottom:15px;">최대 적재량: <span id="trans-modal-weight" style="color:#ffcc00; font-weight:bold;">20</span>칸</div>
+            </div>
+            <button class="modal-btn" style="background:#004488;" onclick="closeModal('transport-modal'); switchTab('base');">물류 탭으로 이동</button>
+            <button class="modal-btn" style="background:#333; color:#888;" onclick="showToast('물류 탭에서 본부를 업그레이드 하세요.')">운송 수단 업그레이드</button>
+            <button class="modal-btn danger" onclick="closeModal('transport-modal')">닫기</button>
+        </div>
+    </div>
+
+    <!-- 정보국 모달 -->
+    <div id="intel-modal" class="modal-overlay">
+        <div class="modal-box" style="border-color:#f0f;">
+            <div class="modal-title" style="color:#f0f;">🛰 정보국</div>
+            <div class="modal-text" style="text-align:left;">
+                <h4 style="color:#0f0; border-bottom:1px dashed #0f0; padding-bottom:5px; margin-bottom:10px; font-size:13px; text-align:center;">글로벌 정세 브리핑</h4>
+                <div style="background:#111; padding:12px; border:1px solid #444;">
+                    <p id="intel-news" style="font-size:12px; color:#aaa; line-height:1.6; margin:0;">
+                        현재 전 세계 암시장은 평온합니다.<br>특별한 국제 제재나 분쟁 징후가 없습니다.
+                    </p>
+                </div>
+            </div>
+            <button class="modal-btn danger" onclick="closeModal('intel-modal')">닫기</button>
+        </div>
+    </div>
+
+
     <div class="top-fixed-area">
         <div class="top-header">
             <span class="level-badge" id="level-badge">Lv.1</span>
@@ -208,7 +309,7 @@
         </div>
 
         <div class="nav-menu">
-            <button class="nav-btn active" id="menu-map" onclick="switchTab('map')">🗺️맵</button>
+            <button class="nav-btn active" id="menu-map" onclick="switchTab('map')">🏚메인</button>
             <button class="nav-btn" id="menu-base" onclick="switchTab('base')">📦물류</button>
             <button class="nav-btn" id="menu-weapon" onclick="switchTab('weapon')">💼시장</button>
             <button class="nav-btn" id="menu-merc" onclick="switchTab('merc')">🪖인력</button>
@@ -216,48 +317,31 @@
         </div>
     </div>
 
-    <!-- 스크롤 가능 콘텐츠 영역 -->
     <div class="scrollable-content">
         
-        <!-- 1. 작전지도 탭 -->
-        <div id="panel-map" class="game-panel active-view">
-            <div class="location-status" id="loc-desc">🏰 위치: 안전한 거점 (대기 중)</div>
-            
-            <div class="tactical-map-container" id="radar-map-panel">
-                <div class="radar-scan"></div>
-                <div id="dynamic-map-nodes"></div>
-                
-                <!-- 신규: 시설 오버레이 버튼 -->
-                <button class="facility-btn barracks" onclick="openFacilityModal('barracks')" title="막사">🪖</button>
-                <button class="facility-btn base" onclick="openFacilityModal('base')" title="본부">🏚</button>
-                <button class="facility-btn transport" onclick="openFacilityModal('transport')" title="운송">🚛</button>
-            </div>
-
-            <div id="conflict-actions" style="display:none;">
-                <button class="btn-sm" style="width:100%; margin-bottom:10px; background:#002200; border-color:#0f0; color:#0f0;" onclick="selectLocation('basecamp')">📍 본부로 복귀 장전</button>
-                
-                <div style="background:#1a1a1a; padding: 8px; border:1px solid #444; margin-bottom:10px;">
-                    <h3 style="color:#ff8888; font-size:12px; margin: 0 0 6px 0;">💵 화물기 적재물 현지 매각</h3>
-                    <div id="sell-list" class="item-list-grid"></div>
-                </div>
-
-                <div style="background:#1a1a1a; padding: 8px; border:1px solid #444; margin-bottom:10px;">
-                    <h3 style="color:#f0f; font-size:12px; margin: 0 0 6px 0;">🌍 시장 조작 (영향력 행사)</h3>
-                    <div class="item-list-grid">
-                        <button class="btn-sm" style="background:#303; border-color:#f0f;" onclick="executeIntervention('rebel')">반군 무장 지원 (-$10,000)</button>
-                        <button class="btn-sm" style="background:#303; border-color:#f0f;" onclick="executeIntervention('terror')">소요사태 조장 (스파이 1 소모)</button>
-                        <button class="btn-sm" style="background:#303; border-color:#f0f;" onclick="executeIntervention('gov')">고문파견 (A급전술 1 소모)</button>
-                    </div>
-                </div>
-
-                <div style="background:#1a1a1a; padding: 8px; border:1px solid #444;">
-                    <h3 style="color:#ffcc00; font-size:12px; margin: 0 0 6px 0;">⚔️ 블랙옵스 의뢰</h3>
-                    <div id="missions-list"></div>
-                </div>
-            </div>
-            
-            <div id="basecamp-map-msg" style="text-align:center; color:#aaa; font-size:11px; margin-top:5px;">
-                지도에서 타겟을 선택하고 하단의 [출발]을 누르십시오.
+        <!-- 1. 메인 비밀기지 탭 (기존 맵 탭을 대체) -->
+        <div id="panel-map" class="game-panel active-view" style="padding:0; border:none; background:transparent;">
+            <div class="main-facility-grid">
+                <button class="facility-btn-main" style="border-color:#0f0;" onclick="openFacilityPopup('hq')">
+                    <div class="facility-icon">🏚</div>
+                    <div class="facility-name">본부</div>
+                    <div class="facility-sub" style="color:#0f0;">전술지도 / 작전통제</div>
+                </button>
+                <button class="facility-btn-main" style="border-color:#fa0;" onclick="openFacilityPopup('barracks')">
+                    <div class="facility-icon">🪖</div>
+                    <div class="facility-name">막사</div>
+                    <div class="facility-sub" style="color:#fa0;">용병 / 호위 병력</div>
+                </button>
+                <button class="facility-btn-main" style="border-color:#8af;" onclick="openFacilityPopup('transport')">
+                    <div class="facility-icon">🚛</div>
+                    <div class="facility-name">운송</div>
+                    <div class="facility-sub" style="color:#8af;">물류 / 화물기 적재</div>
+                </button>
+                <button class="facility-btn-main" style="border-color:#f0f;" onclick="openFacilityPopup('intel')">
+                    <div class="facility-icon">🛰</div>
+                    <div class="facility-name">정보국</div>
+                    <div class="facility-sub" style="color:#f0f;">정세 / 이벤트 로그</div>
+                </button>
             </div>
         </div>
 
@@ -319,10 +403,6 @@
 
     </div> <!-- scrollable-content END -->
 
-    <!-- 하단 고정 액션 버튼 -->
-    <div class="bottom-action-area">
-        <button class="turn-btn" id="turn-action-btn" onclick="executeTurn()">⏳ 턴 넘기기</button>
-    </div>
 </div>
 
 <script>
@@ -339,7 +419,6 @@
     let typeInterval;
     let isTutorialActive = true;
 
-    // 배경 이미지 프리로딩
     const preloadImages = ['bg_alley.png', 'bg_warehouse.png'];
     preloadImages.forEach(src => { let img = new Image(); img.src = './' + src; });
 
@@ -404,8 +483,8 @@
         else if (step === 2) { guideBox.innerHTML = "☝️ <strong>[매입]</strong> 버튼을 누르세요."; setTimeout(() => { let firstBuyBtn = document.querySelector('.btn-buy'); if(firstBuyBtn) firstBuyBtn.classList.add('highlight-pulse'); }, 100); }
         else if (step === 3) { guideBox.innerHTML = "☝️ <strong>[📦 물류]</strong> 탭으로 이동하세요."; document.getElementById('menu-base').classList.add('highlight-pulse'); }
         else if (step === 4) { guideBox.innerHTML = "☝️ 무기를 화물기로 <strong>[상차 ▶]</strong> 하세요."; setTimeout(() => { let transferArea = document.getElementById('transfer-list'); if(transferArea) transferArea.classList.add('highlight-pulse'); }, 100); }
-        else if (step === 5) { guideBox.innerHTML = "☝️ <strong>[🗺️ 맵]</strong> 탭으로 돌아가세요."; document.getElementById('menu-map').classList.add('highlight-pulse'); }
-        else if (step === 6) { guideBox.innerHTML = "☝️ 지역 핀을 누르고 아래 <strong>[출발]</strong>을 누르세요!"; document.getElementById('turn-action-btn').classList.add('highlight-pulse'); }
+        else if (step === 5) { guideBox.innerHTML = "☝️ <strong>[🏚 메인]</strong> 탭으로 돌아가세요."; document.getElementById('menu-map').classList.add('highlight-pulse'); }
+        else if (step === 6) { guideBox.innerHTML = "☝️ <strong>[본부]</strong>를 눌러 전술 지도를 펴고 출발하세요!"; document.querySelector('.facility-btn-main').classList.add('highlight-pulse'); }
         else if (step === 7) { guideBox.style.display = 'none'; showToast("🟢 가이드 완료."); }
     }
     window.onload = () => { showCurrentDialog(); };
@@ -416,36 +495,25 @@
         let toast = document.createElement('div'); toast.className = 'toast-msg'; toast.innerHTML = msg;
         document.body.appendChild(toast); setTimeout(() => { toast.remove(); }, 3000);
     }
+    
+    // 신규 모달 팝업 함수
+    function openFacilityPopup(type) {
+        playSfx('click');
+        document.getElementById(type + '-modal').style.display = 'flex';
+        if(type === 'hq' && guideStep === 6) {
+            document.querySelector('.facility-btn-main').classList.remove('highlight-pulse');
+            let tBtn = document.getElementById('turn-action-btn');
+            if(tBtn) tBtn.classList.add('highlight-pulse');
+        }
+    }
+
     function cheatMode() {
         playSfx('success'); money += 1000000; powerReputation += 100;
         updateUI(); showToast("💡 치트: 자금 +100만, 랭킹 +100");
     }
 
-    // 신규: 시설 오버레이 모달 열기 함수 (실제 로직은 제외)
-    function openFacilityModal(type) {
-        playSfx('click');
-        let title = "", level = "Lv.1", desc = "";
-        
-        if (type === 'base') {
-            title = "🏚 본부";
-            desc = "조직의 핵심 관리 시설입니다.<br>확장 시 여러 부가 효과가 제공됩니다.";
-        } else if (type === 'barracks') {
-            title = "🪖 막사";
-            desc = "용병들을 훈련하고 대기시키는 시설입니다.<br>확장 시 고용 가능 인원이 늘어납니다.";
-        } else if (type === 'transport') {
-            title = "🚛 운송 관리소";
-            desc = "물류 네트워크를 관리합니다.<br>확장 시 최대 적재량이 증가합니다.";
-        }
-
-        document.getElementById('fac-modal-title').innerText = title;
-        document.getElementById('fac-modal-level').innerText = level;
-        document.getElementById('fac-modal-desc').innerHTML = desc;
-        document.getElementById('facility-modal').style.display = 'flex';
-    }
-
     let money = 35000; let powerReputation = 0; let bgmPlaying = false;
     
-    // 본부 7단계 시스템
     let baseLevel = 0;
     const baseTiers = [
         { name: "지하창고", cost: 0, weight: 20, desc: "기본 창고" },
@@ -502,7 +570,6 @@
     const mercData = { S: { name: "S급전술", hire: 20000, upkeep: 5000 }, A: { name: "A급전술", hire: 8000, upkeep: 200 }, B: { name: "B급정규", hire: 3000, upkeep: 80 }, C: { name: "C급민병", hire: 800, upkeep: 20 }, asnS: { name: "S급고스트", hire: 25000, upkeep: 600 }, asnA: { name: "A급암살", hire: 12000, upkeep: 300 }, asnB: { name: "B급청부", hire: 5000, upkeep: 120 }, spy: { name: "일급스파이", hire: 50000, upkeep: 2000 } };
     let activeMissions = [];
 
-    // 조직 & 에셋 데이터
     let orgUpgrades = { staff_broker: false, staff_logistics: false, staff_accountant: false, staff_hacker: false, conn_police: false, conn_politician: false, conn_un: false, conn_cia: false };
     const orgData = {
         staff_broker: { name: "브로커팀", cost: 50000, desc: "턴당 $2k~$5k 자동수익" }, staff_logistics: { name: "운송팀", cost: 80000, desc: "적재량 영구 +50" }, staff_accountant: { name: "회계사", cost: 150000, desc: "유지비 30% 감소" }, staff_hacker: { name: "블랙해커", cost: 200000, desc: "추적망 자동회피 확률" },
@@ -601,7 +668,9 @@
     function selectLocation(targetLoc) {
         if (currentLocation === 'transit') return;
         playSfx('click'); selectedLocation = targetLoc; updateUI();
-        if (guideStep === 6 && targetLoc !== 'basecamp') advanceGuide(7);
+        if (guideStep === 6 && targetLoc !== 'basecamp') {
+            document.getElementById('turn-action-btn').classList.add('highlight-pulse');
+        }
     }
 
     function showNewsModal(title, text, isDanger = false, customSfx = 'telegram') {
@@ -655,24 +724,47 @@
 
         const isBase = (currentLocation === 'basecamp');
         renderMapNodes(lvl);
-        document.getElementById('basecamp-map-msg').style.display = isBase ? 'block' : 'none';
-        document.getElementById('conflict-actions').style.display = (!isBase && currentLocation !== 'transit') ? 'block' : 'none';
+        
+        // HQ 모달 내 맵 컨트롤
+        if(document.getElementById('basecamp-map-msg')) document.getElementById('basecamp-map-msg').style.display = isBase ? 'block' : 'none';
+        if(document.getElementById('conflict-actions')) document.getElementById('conflict-actions').style.display = (!isBase && currentLocation !== 'transit') ? 'block' : 'none';
         
         if (currentLocation === 'transit') document.getElementById('loc-desc').innerText = `✈️ 이동 중... (도착까지 ${travelTimer}턴)`;
         else if (isBase) document.getElementById('loc-desc').innerText = "🏰 안전한 거점 (대기 중)";
         else document.getElementById('loc-desc').innerText = `🚨 작전지: ${regionsData[currentLocation].name}`;
 
         const actionBtn = document.getElementById('turn-action-btn');
-        if (currentLocation === 'transit') {
-            actionBtn.innerHTML = `⏳ 이동 중... (${travelTimer}턴)`; actionBtn.style.background = "#a50"; actionBtn.style.borderColor = "#f90";
-        } else if (selectedLocation !== currentLocation) {
-            if (selectedLocation === 'basecamp') {
-                actionBtn.innerHTML = `✈️ 본부 복귀`; actionBtn.style.background = "#004488"; actionBtn.style.borderColor = "#0088ff";
+        if(actionBtn) {
+            if (currentLocation === 'transit') {
+                actionBtn.innerHTML = `⏳ 이동 중... (${travelTimer}턴)`; actionBtn.style.background = "#a50"; actionBtn.style.borderColor = "#f90";
+            } else if (selectedLocation !== currentLocation) {
+                if (selectedLocation === 'basecamp') {
+                    actionBtn.innerHTML = `✈️ 본부 복귀`; actionBtn.style.background = "#004488"; actionBtn.style.borderColor = "#0088ff";
+                } else {
+                    actionBtn.innerHTML = `✈️ ${regionsData[selectedLocation].name} 출발 (-$${regionsData[selectedLocation].travelCost})`; actionBtn.style.background = "#004488"; actionBtn.style.borderColor = "#0088ff";
+                }
             } else {
-                actionBtn.innerHTML = `✈️ ${regionsData[selectedLocation].name} 출발 (-$${regionsData[selectedLocation].travelCost})`; actionBtn.style.background = "#004488"; actionBtn.style.borderColor = "#0088ff";
+                actionBtn.innerHTML = `⏳ 제자리 대기 턴 넘기기`; actionBtn.style.background = "#a00"; actionBtn.style.borderColor = "#f00";
             }
-        } else {
-            actionBtn.innerHTML = `⏳ 턴 넘기기`; actionBtn.style.background = "#a00"; actionBtn.style.borderColor = "#f00";
+        }
+
+        // 신규 모달 동적 데이터 세팅
+        let totalMercs = 0; for (let k in myMercs) totalMercs += myMercs[k];
+        if(document.getElementById('barracks-merc-total')) document.getElementById('barracks-merc-total').innerText = totalMercs;
+        
+        if(document.getElementById('trans-modal-name')) {
+            document.getElementById('trans-modal-name').innerText = baseTiers[baseLevel].name;
+            document.getElementById('trans-modal-weight').innerText = getMaxWeight();
+        }
+
+        if(document.getElementById('intel-news')) {
+            let intelText = "";
+            if (ciaActive) intelText += "<span style='color:#f00;'>🚨 CIA 극비 감시망 작동 중!</span><br>";
+            if (unBannedWeapon) intelText += `🌐 UN 제재: [${wNames[unBannedWeapon]}] 거래 금지<br>`;
+            if (totalWarTurns > 0) intelText += `💥 [${regionsData[totalWarLoc].name}] 전면전 발발 중! (단가 폭등)<br>`;
+            if (strikeEventTurns > 0) intelText += "🛡️ 국경 수비대 파업 중 (기습 무력화)<br>";
+            if (intelText === "") intelText = "현재 전 세계 암시장은 평온합니다.<br>특별한 국제 제재나 분쟁 징후가 없습니다.";
+            document.getElementById('intel-news').innerHTML = intelText;
         }
 
         document.getElementById('base-content').style.display = isBase ? 'block' : 'none';
@@ -720,7 +812,6 @@
         }
         document.getElementById('merc-market').innerHTML = mHtml;
 
-        // 조직, 에셋 UI
         let oStaff = "", oConn = "";
         for(let k in orgData) {
             let isConn = k.startsWith("conn_"); let isB = orgUpgrades[k];
@@ -780,6 +871,10 @@
 
     function executeTurn() {
         playSfx('turn'); 
+        
+        // HQ 모달 내에서 출발 누를 시 가이드 닫기
+        if(guideStep === 6 && selectedLocation !== 'basecamp') advanceGuide(7);
+
         if (currentLocation !== 'transit' && selectedLocation !== currentLocation) {
             let cost = selectedLocation === 'basecamp' ? 0 : regionsData[selectedLocation].travelCost;
             let baseTurns = selectedLocation === 'basecamp' ? 1 : regionsData[selectedLocation].turns;
@@ -787,7 +882,6 @@
             if (money < cost) { showToast("⚠️ 자금 부족"); return; }
             money -= cost;
             
-            // 💎 에셋 [개인 제트기] 효과
             travelTimer = myAssets.jet ? Math.max(1, baseTurns - 1) : baseTurns;
             currentLocation = 'transit'; 
             showToast(`✈️ 이륙 완료. (${travelTimer}턴)`);
@@ -834,7 +928,6 @@
         if (interpolSafeTurns > 0) interpolSafeTurns--;
         let roll = Math.floor(Math.random() * 100) + 1; localSurgeWeapon = null;
 
-        // 💎 에셋 [지하 카지노] VIP 이벤트 로직
         if (myAssets.casino && roll <= 15) { 
             let amt = Math.floor(Math.random() * 50000) + 30000; money += amt;
             showNewsModal("🎰 카지노 VIP 거래", `암흑가 VIP 수익 발생.<br><span style='color:#0f0;'>+$${amt.toLocaleString()}</span>`, false, 'success');
