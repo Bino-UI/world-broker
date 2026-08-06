@@ -60,6 +60,7 @@
         /* 작전 맵 (메인씬) */
         .base-scene { position: relative; flex: 1; width: 100%; height: 100%; min-height: 400px; background: #0a0a0a; overflow: hidden; border: 2px solid #555; display: flex; flex-direction: column; }
         
+        /* 바닥 이미지 */
         .scene-bg-floor { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; opacity: 0.8; }
         .scene-grid-floor { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: linear-gradient(rgba(0, 255, 0, 0.15) 2px, transparent 2px), linear-gradient(90deg, rgba(0, 255, 0, 0.15) 2px, transparent 2px); background-size: 40px 40px; transform: perspective(800px) rotateX(60deg) translateY(-50px); transform-origin: top center; pointer-events: none; opacity: 0.6; z-index: 2; }
         
@@ -67,6 +68,7 @@
         .scene-obj:active .facility-img { transform: translateY(3px) scale(0.95); filter: brightness(0.7); }
         .scene-obj:active .fallback-icon { transform: translateY(3px) scale(0.95); filter: brightness(0.7); }
         
+        /* 시설 이미지 */
         .facility-img { width: 90px; height: auto; image-rendering: pixelated; position: relative; z-index: 3; transition: all 0.1s; filter: drop-shadow(0px 10px 10px rgba(0,0,0,0.8)); }
         .scene-obj.hq .facility-img { width: 130px; } 
         .scene-obj.barracks .facility-img { width: 85px; }
@@ -141,12 +143,13 @@
 </head>
 <body>
 
-<audio id="bgm-player" src="./bgm.mp3" loop preload="auto"></audio>
+<audio id="bgm-player" src="./image/bgm.mp3" loop preload="auto"></audio>
 
 <div class="app-container">
     
     <div id="vn-screen" onclick="nextDialog()">
-        <img src="./image/broker_senior.png" class="vn-character" alt="브로커 선배" onerror="this.src=''; this.alt=''">
+        <img src="./image/broker_senior.png" class="vn-character" alt="브로커 선배" 
+             onload="this.style.display='block';" onerror="this.style.display='none';">
         <div class="vn-dialog-container">
             <div class="vn-dialog-box">
                 <div class="vn-name" id="vn-name">이름</div>
@@ -323,34 +326,44 @@
         <!-- 1. 메인 비밀기지 탭 (게임 씬) -->
         <div id="panel-map" class="game-panel active-view" style="padding:0; border:none; background:transparent; display:flex; flex-direction:column; height: 100%;">
             <div class="base-scene">
-                <!-- 바닥 배경 이미지 (소문자 image 폴더 연동) -->
-                <img src="./image/base_floor_lv1.png" class="scene-bg-floor" alt="기지 바닥" onerror="this.style.display='none'">
+                <!-- 자가 치유 방어 코드가 적용된 이미지 태그들 -->
+                <img src="./image/base_floor_lv1.png" class="scene-bg-floor" alt="기지 바닥" 
+                     onload="this.style.display='block';" onerror="this.style.display='none';">
+                
                 <div class="scene-grid-floor"></div>
 
                 <div class="scene-obj hq" onclick="openFacilityPopup('hq')">
                     <div class="facility-shadow"></div>
-                    <img id="img-hq" src="./image/hq_lv1.png" class="facility-img" alt="본부 이미지" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <img id="img-hq" src="./image/hq_lv1.png" class="facility-img" alt="본부 이미지"
+                         onload="this.style.display='block'; this.nextElementSibling.style.display='none';" 
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <div class="fallback-icon" style="display:none;">🏚</div>
                     <div class="obj-label">본부</div>
                 </div>
 
                 <div class="scene-obj barracks" onclick="openFacilityPopup('barracks')">
                     <div class="facility-shadow"></div>
-                    <img id="img-barracks" src="./image/barracks_lv1.png" class="facility-img" alt="막사 이미지" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <img id="img-barracks" src="./image/barracks_lv1.png" class="facility-img" alt="막사 이미지"
+                         onload="this.style.display='block'; this.nextElementSibling.style.display='none';" 
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <div class="fallback-icon" style="display:none;">🪖</div>
                     <div class="obj-label">막사</div>
                 </div>
 
                 <div class="scene-obj transport" onclick="openFacilityPopup('transport')">
                     <div class="facility-shadow"></div>
-                    <img id="img-transport" src="./image/transport_lv1.png" class="facility-img" alt="운송 이미지" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <img id="img-transport" src="./image/transport_lv1.png" class="facility-img" alt="운송 이미지"
+                         onload="this.style.display='block'; this.nextElementSibling.style.display='none';" 
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <div class="fallback-icon" style="display:none;">🚛</div>
                     <div class="obj-label">운송</div>
                 </div>
 
                 <div class="scene-obj intel" onclick="openFacilityPopup('intel')">
                     <div class="facility-shadow"></div>
-                    <img id="img-intel" src="./image/intel_lv1.png" class="facility-img" alt="정보국 이미지" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <img id="img-intel" src="./image/intel_lv1.png" class="facility-img" alt="정보국 이미지"
+                         onload="this.style.display='block'; this.nextElementSibling.style.display='none';" 
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <div class="fallback-icon" style="display:none;">🛰</div>
                     <div class="obj-label">정보국</div>
                 </div>
@@ -435,7 +448,6 @@
     let typeInterval;
     let isTutorialActive = true;
 
-    // image 폴더 기준으로 프리로드
     const preloadImages = ['bg_alley.png', 'bg_warehouse.png'];
     preloadImages.forEach(src => { let img = new Image(); img.src = './image/' + src; });
 
@@ -730,6 +742,7 @@
         let floorImg = document.querySelector('.scene-bg-floor');
         if(floorImg) floorImg.src = `./image/base_floor_lv${floorLv}.png`;
         
+        // 동적 이미지 교체 로직
         let hqImg = document.getElementById('img-hq');
         if(hqImg) hqImg.src = `./image/hq_lv${imgLv}.png`;
         
@@ -764,6 +777,8 @@
 
         const isBase = (currentLocation === 'basecamp');
         renderMapNodes(lvl);
+        
+        // 맵 이미지 업데이트 함수 호출
         updateFacilityImages();
         
         if(document.getElementById('basecamp-map-msg')) document.getElementById('basecamp-map-msg').style.display = isBase ? 'block' : 'none';
