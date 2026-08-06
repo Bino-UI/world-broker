@@ -57,38 +57,28 @@
         .game-panel { display: none; background: #000; padding: 8px; border: 2px solid #fff; flex: 1; }
         .game-panel.active-view { display: block; }
 
-        /* ========================================================
-           메인 비밀기지 씬 (Map Scene) 오브젝트 디자인
-           ======================================================== */
         .base-scene { position: relative; flex: 1; width: 100%; height: 100%; min-height: 400px; background: #0a0a0a; overflow: hidden; border: 2px solid #555; display: flex; flex-direction: column; }
         
-        /* 기지 바닥재 이미지 연출 */
         .scene-bg-floor { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; opacity: 0.8; }
         .scene-grid-floor { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: linear-gradient(rgba(0, 255, 0, 0.15) 2px, transparent 2px), linear-gradient(90deg, rgba(0, 255, 0, 0.15) 2px, transparent 2px); background-size: 40px 40px; transform: perspective(800px) rotateX(60deg) translateY(-50px); transform-origin: top center; pointer-events: none; opacity: 0.6; z-index: 2; }
         
-        /* 씬 오브젝트 위치 및 액션 */
         .scene-obj { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; cursor: pointer; z-index: 10; transition: transform 0.1s; }
         .scene-obj:active .facility-img { transform: translateY(3px) scale(0.95); filter: brightness(0.7); }
         .scene-obj:active .fallback-icon { transform: translateY(3px) scale(0.95); filter: brightness(0.7); }
         
-        /* 실제 시설물 이미지 스타일 */
         .facility-img { width: 90px; height: auto; image-rendering: pixelated; position: relative; z-index: 3; transition: all 0.1s; filter: drop-shadow(0px 10px 10px rgba(0,0,0,0.8)); }
-        .scene-obj.hq .facility-img { width: 130px; } /* 본부는 큼직하게 */
+        .scene-obj.hq .facility-img { width: 130px; } 
         .scene-obj.barracks .facility-img { width: 85px; }
         .scene-obj.transport .facility-img { width: 110px; }
         .scene-obj.intel .facility-img { width: 80px; }
         
-        /* 오브젝트 바닥 그림자 */
         .facility-shadow { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); width: 70%; height: 16px; background: rgba(0,0,0,0.8); border-radius: 50%; filter: blur(4px); z-index: 1; }
 
-        /* 대체용 이모지 (이미지 없을 시) */
         .fallback-icon { font-size: 50px; text-shadow: 0px 10px 0px rgba(0,0,0,0.8); z-index: 3; position: relative; transition: all 0.1s; }
         .scene-obj.hq .fallback-icon { font-size: 70px; }
         
-        /* 라벨 (HUD 느낌) */
         .obj-label { margin-top: -5px; background: rgba(0,0,0,0.8); color: #fff; font-size: 11px; padding: 3px 8px; border: 1px solid rgba(255,255,255,0.3); pointer-events: none; white-space: nowrap; z-index: 4; text-shadow: 1px 1px 0px #000; border-radius: 4px !important; }
         
-        /* 고정 좌표 */
         .scene-obj.hq { top: 30%; left: 50%; }
         .scene-obj.barracks { top: 60%; left: 25%; }
         .scene-obj.transport { top: 60%; left: 75%; }
@@ -96,7 +86,6 @@
         
         .scene-message-box { position: absolute; bottom: 10px; left: 10px; right: 10px; background: rgba(0, 20, 0, 0.9); border: 1px solid #0f0; color: #0f0; padding: 10px; font-size: 12px; text-align: center; z-index: 20; box-shadow: 4px 4px 0px #000; pointer-events: none; text-shadow: 1px 1px 0px #000; }
 
-        /* 전술지도 (모달 내부 레이더) */
         .tactical-map-container { width: 100%; height: 320px; background-color: #001100; position: relative; border: 2px solid #0f0; margin-bottom: 10px; background-image: linear-gradient(rgba(0, 50, 0, 0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 50, 0, 0.4) 1px, transparent 1px); background-size: 20px 20px; overflow: hidden; border-radius: 8px !important; box-shadow: inset 0 0 40px rgba(0,0,0,1); }
         .radar-rings { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 280px; height: 280px; border-radius: 50% !important; border: 2px solid rgba(0, 255, 0, 0.3); box-shadow: inset 0 0 20px rgba(0, 255, 0, 0.1); pointer-events: none; z-index: 1; }
         .radar-rings::before { content: ''; position: absolute; top: 15%; left: 15%; width: 70%; height: 70%; border-radius: 50% !important; border: 1px dashed rgba(0, 255, 0, 0.3); }
@@ -154,7 +143,7 @@
 <div class="app-container">
     
     <div id="vn-screen" onclick="nextDialog()">
-        <img src="./broker_senior.png" class="vn-character" alt="브로커 선배" onerror="this.src=''; this.alt=''">
+        <img src="./Image/broker_senior.png" class="vn-character" alt="브로커 선배" onerror="this.src=''; this.alt=''">
         <div class="vn-dialog-container">
             <div class="vn-dialog-box">
                 <div class="vn-name" id="vn-name">이름</div>
@@ -331,34 +320,34 @@
         <!-- 1. 메인 비밀기지 탭 (게임 씬) -->
         <div id="panel-map" class="game-panel active-view" style="padding:0; border:none; background:transparent; display:flex; flex-direction:column; height: 100%;">
             <div class="base-scene">
-                <!-- 바닥 배경 이미지 (Fallback 처리) -->
-                <img src="./base_floor_lv1.png" class="scene-bg-floor" alt="기지 바닥" onerror="this.style.display='none'">
+                <!-- 바닥 배경 이미지 (Image 폴더 연동) -->
+                <img src="./Image/base_floor_lv1.png" class="scene-bg-floor" alt="기지 바닥" onerror="this.style.display='none'">
                 <div class="scene-grid-floor"></div>
 
                 <div class="scene-obj hq" onclick="openFacilityPopup('hq')">
                     <div class="facility-shadow"></div>
-                    <img id="img-hq" src="./hq_lv1.png" class="facility-img" alt="본부 이미지" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <img id="img-hq" src="./Image/hq_lv1.png" class="facility-img" alt="본부 이미지" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <div class="fallback-icon" style="display:none;">🏚</div>
                     <div class="obj-label">본부</div>
                 </div>
 
                 <div class="scene-obj barracks" onclick="openFacilityPopup('barracks')">
                     <div class="facility-shadow"></div>
-                    <img id="img-barracks" src="./barracks_lv1.png" class="facility-img" alt="막사 이미지" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <img id="img-barracks" src="./Image/barracks_lv1.png" class="facility-img" alt="막사 이미지" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <div class="fallback-icon" style="display:none;">🪖</div>
                     <div class="obj-label">막사</div>
                 </div>
 
                 <div class="scene-obj transport" onclick="openFacilityPopup('transport')">
                     <div class="facility-shadow"></div>
-                    <img id="img-transport" src="./transport_lv1.png" class="facility-img" alt="운송 이미지" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <img id="img-transport" src="./Image/transport_lv1.png" class="facility-img" alt="운송 이미지" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <div class="fallback-icon" style="display:none;">🚛</div>
                     <div class="obj-label">운송</div>
                 </div>
 
                 <div class="scene-obj intel" onclick="openFacilityPopup('intel')">
                     <div class="facility-shadow"></div>
-                    <img id="img-intel" src="./intel_lv1.png" class="facility-img" alt="정보국 이미지" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <img id="img-intel" src="./Image/intel_lv1.png" class="facility-img" alt="정보국 이미지" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <div class="fallback-icon" style="display:none;">🛰</div>
                     <div class="obj-label">정보국</div>
                 </div>
@@ -443,8 +432,9 @@
     let typeInterval;
     let isTutorialActive = true;
 
+    // Image 폴더 기준으로 프리로드
     const preloadImages = ['bg_alley.png', 'bg_warehouse.png'];
-    preloadImages.forEach(src => { let img = new Image(); img.src = './' + src; });
+    preloadImages.forEach(src => { let img = new Image(); img.src = './Image/' + src; });
 
     function typeWriter(text, elementId, speed) {
         if (isTyping) return;
@@ -467,7 +457,7 @@
             let dialog = tutorialDialogs[currentDialogIndex];
             document.getElementById('vn-name').innerText = dialog.name;
             let vnScreen = document.getElementById('vn-screen');
-            if (dialog.bg) vnScreen.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.8)), url('./${dialog.bg}')`;
+            if (dialog.bg) vnScreen.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.8)), url('./Image/${dialog.bg}')`;
             typeWriter(dialog.text, 'vn-text', 20); 
         } else {
             endTutorial();
@@ -726,30 +716,28 @@
         document.getElementById('dynamic-map-nodes').innerHTML = mapHtml;
     }
 
-    // 오브젝트(이미지) 레벨 갱신
     function updateFacilityImages() {
         let bLv = baseLevel + 1; // 1~7
         let imgLv = Math.min(bLv, 5); // 이미지는 5단계까지만 있으므로 최대 5로 고정
         
-        // 바닥 이미지 로직 (3레벨, 5레벨에서 업그레이드)
         let floorLv = 1;
         if (bLv >= 5) floorLv = 3;
         else if (bLv >= 3) floorLv = 2;
 
         let floorImg = document.querySelector('.scene-bg-floor');
-        if(floorImg) floorImg.src = `./base_floor_lv${floorLv}.png`;
+        if(floorImg) floorImg.src = `./Image/base_floor_lv${floorLv}.png`;
         
         let hqImg = document.getElementById('img-hq');
-        if(hqImg) hqImg.src = `./hq_lv${imgLv}.png`;
+        if(hqImg) hqImg.src = `./Image/hq_lv${imgLv}.png`;
         
         let trImg = document.getElementById('img-transport');
-        if(trImg) trImg.src = `./transport_lv${imgLv}.png`;
+        if(trImg) trImg.src = `./Image/transport_lv${imgLv}.png`;
         
         let brImg = document.getElementById('img-barracks');
-        if(brImg) brImg.src = `./barracks_lv${imgLv}.png`;
+        if(brImg) brImg.src = `./Image/barracks_lv${imgLv}.png`;
         
         let inImg = document.getElementById('img-intel');
-        if(inImg) inImg.src = `./intel_lv${imgLv}.png`;
+        if(inImg) inImg.src = `./Image/intel_lv${imgLv}.png`;
     }
 
     function updateUI() {
@@ -775,7 +763,6 @@
         renderMapNodes(lvl);
         updateFacilityImages();
         
-        // HQ 모달 내 맵 컨트롤
         if(document.getElementById('basecamp-map-msg')) document.getElementById('basecamp-map-msg').style.display = isBase ? 'block' : 'none';
         if(document.getElementById('conflict-actions')) document.getElementById('conflict-actions').style.display = (!isBase && currentLocation !== 'transit') ? 'block' : 'none';
         
@@ -798,7 +785,6 @@
             }
         }
 
-        // 신규 모달 동적 데이터 세팅
         let totalMercs = 0; for (let k in myMercs) totalMercs += myMercs[k];
         if(document.getElementById('barracks-merc-total')) document.getElementById('barracks-merc-total').innerText = totalMercs;
         
