@@ -154,7 +154,11 @@
 </head>
 <body>
 
-<audio id="bgm-player" src="./image/bgm.mp3" loop preload="auto"></audio>
+<!-- 오디오 태그 이중 설정: Sound 폴더 우선, 그 다음 루트 폴더 -->
+<audio id="bgm-player" loop preload="auto">
+    <source src="./Sound/bgm.mp3" type="audio/mpeg">
+    <source src="./bgm.mp3" type="audio/mpeg">
+</audio>
 
 <div class="app-container">
     
@@ -185,6 +189,18 @@
                 기습에 대비해 <strong>[막사]</strong>에서 용병을 대기시켜 두어야 합니다.
             </div>
             <button class="modal-btn" style="background:#004400;" onclick="closeModal('tutorial-modal')">확인</button>
+        </div>
+    </div>
+
+    <!-- 환경 설정 모달 (새로 추가) -->
+    <div id="options-modal" class="modal-overlay" style="z-index: 10005;">
+        <div class="modal-box" style="border-color:#aaa;">
+            <div class="modal-title" style="color:#fff;">⚙️ 환경 설정</div>
+            <div class="modal-text" style="text-align: center; margin-top: 10px;">
+                <button class="modal-btn" id="modal-bgm-btn" style="background:#333; padding: 15px;" onclick="toggleBGM()">🎵 BGM: OFF</button>
+                <button class="modal-btn" id="modal-sfx-btn" style="background:#006600; padding: 15px;" onclick="toggleSFX()">🔊 효과음: ON</button>
+            </div>
+            <button class="modal-btn danger" style="margin-top: 15px;" onclick="closeModal('options-modal')">닫기</button>
         </div>
     </div>
 
@@ -221,7 +237,7 @@
             <h1 class="header-title">WorldBroker</h1>
             <div class="util-btns">
                 <button class="util-btn" onclick="cheatMode()">💡치트</button>
-                <button class="util-btn" id="bgm-btn" onclick="toggleBGM()">🎵 OFF</button>
+                <button class="util-btn" onclick="openOptions()">⚙️설정</button>
                 <button class="util-btn" onclick="document.getElementById('tutorial-modal').style.display='flex'">❓</button>
             </div>
         </div>
@@ -244,7 +260,7 @@
         </div>
     </div>
 
-    <!-- 메인 Scene (항상 깔려있는 바탕화면) -->
+    <!-- 메인 Scene (화면에 항상 고정, 배경 역할) -->
     <div id="panel-map" class="scene-container">
         <!-- 동적 바닥재 -->
         <img id="scene-bg" class="scene-bg" src="./image/base_floor_lv1.png" alt="기지 바닥" onerror="this.style.display='none';">
@@ -295,9 +311,8 @@
         </div>
     </div>
 
-
     <!-- ==========================================
-         상단 탭 팝업 패널들 (모달처럼 뜸)
+         상단 탭 팝업 패널들 (물류, 시장, 인력, 조직)
          ========================================== -->
          
     <!-- 물류 팝업 패널 -->
@@ -476,6 +491,33 @@
     preloadImages.forEach(src => { let img = new Image(); img.src = src; });
 
     /* =========================================
+       사운드/설정 시스템
+       ========================================= */
+    let sfxPlaying = true;
+    function toggleSFX() {
+        sfxPlaying = !sfxPlaying;
+        const btn = document.getElementById('modal-sfx-btn');
+        if(sfxPlaying) {
+            btn.innerText = "🔊 효과음: ON"; btn.style.background = "#006600";
+            playSfx('click'); 
+        } else {
+            btn.innerText = "🔇 효과음: OFF"; btn.style.background = "#333";
+        }
+    }
+
+    function openOptions() {
+        playSfx('click');
+        document.getElementById('options-modal').style.display = 'flex';
+    }
+
+    function playSfx(name) { 
+        if(name && sfxPlaying) { 
+            let audio = new Audio(`./Sound/${name}.mp3`); 
+            audio.play().catch(e=>{}); 
+        } 
+    }
+
+    /* =========================================
        튜토리얼 시스템
        ========================================= */
     const tutorialDialogs = [
@@ -521,7 +563,18 @@
 
     function nextDialog() {
         if (!isTutorialActive) return;
-        if (!bgmPlaying) toggleBGM(); 
+        
+        // 첫 화면 터치 시 자동 BGM 재생 (사용자가 끄지 않았을 경우)
+        if (!bgmPlaying && !bgmMuted) {
+            const bgm = document.getElementById('bgm-player');
+            bgm.volume = 0.4;
+            bgm.play().then(() => {
+                bgmPlaying = true;
+                let btn = document.getElementById('modal-bgm-btn');
+                if(btn) { btn.innerText = "🎵 BGM: ON"; btn.style.background = "#006600"; }
+            }).catch(e=>{});
+        }
+        
         if (isTyping) {
             clearInterval(typeInterval);
             document.getElementById('vn-text').innerHTML = tutorialDialogs[currentDialogIndex].text;
@@ -563,7 +616,6 @@
     /* =========================================
        유틸리티 & 탭 팝업 로직
        ========================================= */
-    function playSfx(name) { if(name) { let audio = new Audio(`./image/${name}.mp3`); audio.play().catch(e=>{}); } }
     function closeModal(id) { playSfx('click'); document.getElementById(id).style.display = 'none'; }
     function showToast(msg) {
         let toast = document.createElement('div'); toast.className = 'toast-msg'; toast.innerHTML = msg;
@@ -605,24 +657,13 @@
 
     function cheatMode() {
         playSfx('success'); 
-        
-        /* 테스트용 슈퍼 치트 적용 */
-        money += 10000000; // 1천만 달러
-        powerReputation = 200; // 일루미나티 레벨 달성
-        
-        // 모든 무기 창고에 50개씩 추가
+        money += 10000000; powerReputation = 200;
         for(let k in baseWarehouse) baseWarehouse[k] += 50; 
-        
-        // 모든 용병 50명씩 추가
         for(let k in myMercs) myMercs[k] += 50;
-        
-        // 본부 즉시 만렙(7단계) 적용
-        baseLevel = 6; 
-        updateFacilityImages();
-        
-        updateUI(); 
+        baseLevel = 6; updateFacilityImages(); updateUI(); 
         showToast("💡 [슈퍼 치트] 자금/명성 MAX, 모든 무기/용병 +50, 본부 7단계");
     }
+    
     function showAlertModal(msg) {
         document.getElementById('alert-modal-desc').innerHTML = msg;
         document.getElementById('alert-modal').style.display = 'flex';
@@ -631,7 +672,8 @@
     /* =========================================
        메인 게임 로직
        ========================================= */
-    let money = 35000; let powerReputation = 0; let bgmPlaying = false;
+    let money = 35000; let powerReputation = 0; 
+    let bgmPlaying = false; let bgmMuted = false;
     
     let baseLevel = 0;
     const baseTiers = [
@@ -704,10 +746,21 @@
     function getMaxWeight() { return baseTiers[baseLevel].weight + (orgUpgrades.staff_logistics ? 50 : 0); }
 
     function toggleBGM() {
-        const bgm = document.getElementById('bgm-player'); const btn = document.getElementById('bgm-btn');
+        const bgm = document.getElementById('bgm-player');
+        const btn = document.getElementById('modal-bgm-btn');
         bgm.volume = 0.4;
-        if (bgmPlaying) { bgm.pause(); btn.innerText = "🎵 OFF"; btn.style.background = "#333"; bgmPlaying = false; } 
-        else { bgm.play().then(() => { btn.innerText = "🎵 ON"; btn.style.background = "#006600"; bgmPlaying = true; }).catch(e => {}); }
+        if (bgmPlaying) { 
+            bgm.pause(); 
+            if(btn) { btn.innerText = "🎵 BGM: OFF"; btn.style.background = "#333"; }
+            bgmPlaying = false;
+            bgmMuted = true;
+        } else { 
+            bgm.play().then(() => { 
+                if(btn) { btn.innerText = "🎵 BGM: ON"; btn.style.background = "#006600"; }
+                bgmPlaying = true;
+                bgmMuted = false;
+            }).catch(e => {}); 
+        }
     }
 
     // 본부 레벨업에 따른 이미지 동적 교체 로직
