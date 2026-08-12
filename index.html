@@ -124,8 +124,8 @@
         /* 전술지도 모달 특수 스타일 */
         #tactical-map-modal .modal-box { max-width: 95%; width: 500px; border-color: #0f0; background: #001100; padding: 10px; }
         
-        /* 신형 글로브(지구본) 레이더 화면 */
-        .tactical-radar-screen { width: 100%; height: 280px; background-color: #001100; position: relative; border: 2px solid #0f0; margin-bottom: 10px; overflow: hidden; border-radius: 10px !important; box-shadow: inset 0 0 20px rgba(0,255,0,0.6); }
+        /* 신형 글로브(지구본) 레이더 화면 - 찌그러짐 방지(flex-shrink: 0, min-height 부여) */
+        .tactical-radar-screen { width: 100%; height: 280px; min-height: 280px; flex-shrink: 0; background-color: #001100; position: relative; border: 2px solid #0f0; margin-bottom: 10px; overflow: hidden; border-radius: 10px !important; box-shadow: inset 0 0 20px rgba(0,255,0,0.6); }
         /* 브라운관(CRT) 굴곡 효과 */
         .tactical-radar-screen::after { content: " "; display: block; position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); z-index: 2; background-size: 100% 2px, 3px 100%; pointer-events: none; }
         /* 홀로그램 세계지도 배경 */
@@ -154,8 +154,7 @@
 </head>
 <body>
 
-<!-- 오디오 태그 이중 설정: Sound 폴더 우선, 그 다음 루트 폴더 -->
-<audio id="bgm-player" loop preload="auto">
+<audio id="bgm-player" src="./Sound/bgm.mp3" loop preload="auto">
     <source src="./Sound/bgm.mp3" type="audio/mpeg">
     <source src="./bgm.mp3" type="audio/mpeg">
 </audio>
@@ -192,7 +191,7 @@
         </div>
     </div>
 
-    <!-- 환경 설정 모달 (새로 추가) -->
+    <!-- 환경 설정 모달 -->
     <div id="options-modal" class="modal-overlay" style="z-index: 10005;">
         <div class="modal-box" style="border-color:#aaa;">
             <div class="modal-title" style="color:#fff;">⚙️ 환경 설정</div>
@@ -376,10 +375,10 @@
     </div>
 
     <!-- ==========================================
-         시설 모달들 (본부, 전술지도 등) 
+         시설 모달들 (본부, 전술지도 등) - UI구조 유지를 위해 남겨둠 (직접 호출로 변경)
          ========================================== -->
 
-    <!-- 본부 모달 (기본) -->
+    <!-- 본부 모달 (기본) - 사용안함 (바로 전술지도 열림) -->
     <div id="facility-hq-modal" class="modal-overlay">
         <div class="modal-box" style="border-color:#ccaa00;">
             <div class="modal-title" style="color:#ccaa00;">🏚 <span id="hq-modal-name">지하창고</span> (Lv.<span id="hq-modal-lv">1</span>)</div>
@@ -440,7 +439,7 @@
         </div>
     </div>
 
-    <!-- 막사 모달 -->
+    <!-- 막사 모달 - 사용안함 (바로 팝업 열림) -->
     <div id="facility-barracks-modal" class="modal-overlay">
         <div class="modal-box" style="border-color:#555;">
             <div class="modal-title" style="color:#fff;">🪖 막사 (Lv.1)</div>
@@ -451,7 +450,7 @@
         </div>
     </div>
 
-    <!-- 운송 모달 -->
+    <!-- 운송 모달 - 사용안함 (바로 팝업 열림) -->
     <div id="facility-transport-modal" class="modal-overlay">
         <div class="modal-box" style="border-color:#555;">
             <div class="modal-title" style="color:#fff;">🚛 운송 수단 (Lv.<span id="transport-modal-lv">1</span>)</div>
@@ -462,7 +461,7 @@
         </div>
     </div>
 
-    <!-- 정보국 모달 -->
+    <!-- 정보국 모달 - 사용안함 (바로 팝업 열림) -->
     <div id="facility-intel-modal" class="modal-overlay">
         <div class="modal-box" style="border-color:#0cf;">
             <div class="modal-title" style="color:#0cf;">🛰 정보국 (Lv.1)</div>
@@ -605,10 +604,10 @@
 
         if (step === 1) { guideBox.style.display = 'block'; guideBox.innerHTML = "☝️ 상단의 <strong>[💼 시장]</strong> 탭을 누르세요."; document.getElementById('menu-weapon').classList.add('highlight-pulse'); } 
         else if (step === 2) { guideBox.innerHTML = "☝️ <strong>[매입]</strong> 버튼을 눌러 무기를 사세요."; setTimeout(() => { let firstBuyBtn = document.querySelector('.btn-buy'); if(firstBuyBtn) firstBuyBtn.classList.add('highlight-pulse'); }, 100); }
-        else if (step === 3) { guideBox.innerHTML = "☝️ <strong>[📦 물류]</strong> 탭을 누르세요."; document.getElementById('menu-base').classList.add('highlight-pulse'); }
-        else if (step === 4) { guideBox.innerHTML = "☝️ 무기를 화물기로 <strong>[상차 ▶]</strong> 하세요."; setTimeout(() => { let transferArea = document.getElementById('transfer-list'); if(transferArea) transferArea.classList.add('highlight-pulse'); }, 100); }
-        else if (step === 5) { guideBox.innerHTML = "☝️ <strong>[메인]</strong>으로 돌아가 중앙의 <strong>[본부]</strong> 건물을 누르세요."; document.getElementById('menu-map').classList.add('highlight-pulse'); document.getElementById('obj-hq').classList.add('highlight-pulse'); }
-        else if (step === 6) { guideBox.innerHTML = "☝️ 전술지도를 열고 지역을 선택한 뒤 <strong>[출발]</strong>을 누르세요!"; }
+        else if (step === 3) { guideBox.innerHTML = "☝️ 팝업을 닫고 <strong>[운송]</strong> 건물을 누르세요."; document.getElementById('obj-transport').classList.add('highlight-pulse'); }
+        else if (step === 4) { guideBox.innerHTML = "☝️ 운송을 눌러 무기를 상차하세요."; setTimeout(() => { let transferArea = document.getElementById('transfer-list'); if(transferArea) transferArea.classList.add('highlight-pulse'); }, 100); }
+        else if (step === 5) { guideBox.innerHTML = "☝️ 팝업을 닫고 중앙의 <strong>[본부]</strong> 건물을 누르세요."; document.getElementById('obj-hq').classList.add('highlight-pulse'); }
+        else if (step === 6) { guideBox.innerHTML = "☝️ 본부를 눌러 지역을 선택한 뒤 출발하세요."; }
         else if (step === 7) { guideBox.style.display = 'none'; showToast("🟢 가이드 완료."); }
     }
     window.onload = () => { showCurrentDialog(); };
@@ -637,8 +636,6 @@
         }
 
         if (guideStep === 1 && tabName === 'weapon') advanceGuide(2);
-        if (guideStep === 3 && tabName === 'base') advanceGuide(4);
-        if (guideStep === 5 && tabName === 'map') advanceGuide(6);
     }
     
     function closePopup() {
@@ -647,11 +644,27 @@
 
     function openFacilityModal(type) {
         playSfx('click');
-        if(guideStep === 6 && type === 'hq') { document.querySelectorAll('.highlight-pulse').forEach(el => el.classList.remove('highlight-pulse')); }
-        document.getElementById(`facility-${type}-modal`).style.display = 'flex';
+        
+        // 가이드 동선 체크
+        if(guideStep === 3 && type === 'transport') { advanceGuide(4); }
+        if(guideStep === 5 && type === 'hq') { advanceGuide(6); }
+        
+        // 펄스 하이라이트 제거
+        document.querySelectorAll('.highlight-pulse').forEach(el => el.classList.remove('highlight-pulse'));
+
+        // 시설 클릭 시 중간 모달 없이 바로 기능으로 연결 (다이렉트 오픈)
+        if (type === 'hq') {
+            openTacticalMap();
+        } else if (type === 'barracks') {
+            switchTab('merc');
+        } else if (type === 'transport') {
+            switchTab('base');
+        } else if (type === 'intel') {
+            switchTab('org');
+        }
     }
+    
     function openTacticalMap() {
-        closeModal('facility-hq-modal');
         document.getElementById('tactical-map-modal').style.display = 'flex';
     }
 
